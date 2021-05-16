@@ -13,7 +13,7 @@ import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
-public class ExpandedStorageReiPlugin implements REIPluginV0 {
+public class ReiCompat implements REIPluginV0 {
     @Override
     public ResourceLocation getPluginIdentifier() {
         return Utils.resloc("rei_plugin");

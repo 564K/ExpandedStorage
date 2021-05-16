@@ -24,6 +24,10 @@ repositories {
         url 'https://maven.shedaniel.me/'
     }
     maven {
+        name 'TerraformersMC'
+        url 'https://maven.terraformersmc.com/'
+    }
+    maven {
         name 'JitPack'
         url 'https://jitpack.io/'
         content {
@@ -46,6 +50,9 @@ dependencies {
     // For all modules
     modCompileOnly('me.shedaniel:RoughlyEnoughItems:5.10.181')
     modRuntime('me.shedaniel:RoughlyEnoughItems:5.10.181')
+
+    modCompileOnly('com.terraformersmc:modmenu:1.16.9')
+    modRuntime('com.terraformersmc:modmenu:1.16.9')
 
     implementation(project(path: ':common')) {
         transitive = false

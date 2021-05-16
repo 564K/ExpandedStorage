@@ -41,6 +41,6 @@ public class OpenSelectScreenMessage {
 
     @OnlyIn(Dist.CLIENT) // Required otherwise PickScreen will be classloaded always, even when wrapped in DistExecutor
     private void openScreen(NetworkEvent.Context context) {
-        context.enqueueWork(() -> Minecraft.getInstance().setScreen(new PickScreen(containerTypeOptions)));
+        context.enqueueWork(() -> Minecraft.getInstance().setScreen(new PickScreen(containerTypeOptions, null)));
     }
 }

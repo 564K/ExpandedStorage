@@ -14,7 +14,10 @@
       "ninjaphenix.expandedstorage.base.Main"
     ],
     "rei_plugins": [
-      "ninjaphenix.expandedstorage.base.client.ExpandedStorageReiPlugin"
+      "ninjaphenix.expandedstorage.base.client.ReiCompat"
+    ],
+    "modmenu": [
+      "ninjaphenix.expandedstorage.base.client.ModMenuCompat"
     ],
     "expandedstorage-module": [
       "ninjaphenix.expandedstorage.barrel.Main",

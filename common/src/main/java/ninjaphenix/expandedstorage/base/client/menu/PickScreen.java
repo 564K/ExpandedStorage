@@ -21,11 +21,13 @@ import java.util.Set;
 public final class PickScreen extends Screen {
     private static final Map<ResourceLocation, Tuple<ResourceLocation, Component>> buttonSettings = new HashMap<>();
     private final Set<ResourceLocation> OPTIONS;
+    private final Screen parent;
     private int TOP_PADDING;
 
-    public PickScreen(Set<ResourceLocation> options) {
+    public PickScreen(Set<ResourceLocation> options, Screen parent) {
         super(new TranslatableComponent("screen.expandedstorage.screen_picker_title"));
         OPTIONS = options;
+        this.parent = parent;
     }
 
     public static void declareButtonSettings(ResourceLocation containerType, ResourceLocation texture, Component text) {
@@ -33,8 +35,8 @@ public final class PickScreen extends Screen {
     }
 
     @Override
-    public boolean isPauseScreen() {
-        return false;
+    public void onClose() {
+        this.minecraft.setScreen(parent);
     }
 
     @Override
@@ -61,6 +63,7 @@ public final class PickScreen extends Screen {
 
     private void updatePlayerPreference(ResourceLocation selection) {
         NetworkWrapper.getInstance().c2s_setSendTypePreference(selection);
+        this.onClose();
     }
 
     @Override

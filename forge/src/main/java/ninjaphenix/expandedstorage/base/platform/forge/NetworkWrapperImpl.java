@@ -1,9 +1,12 @@
 package ninjaphenix.expandedstorage.base.platform.forge;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -86,13 +89,19 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
     }
 
     public void c2s_removeTypeSelectCallback() {
-        //noinspection InstantiationOfUtilityClass
-        CHANNEL.sendToServer(new RemovePlayerPreferenceCallbackMessage());
+        ClientPacketListener listener = Minecraft.getInstance().getConnection();
+        if (listener != null && CHANNEL.isRemotePresent(listener.getConnection())) {
+            //noinspection InstantiationOfUtilityClass
+            CHANNEL.sendToServer(new RemovePlayerPreferenceCallbackMessage());
+        }
     }
 
     public void c2s_openTypeSelectScreen() {
-        //noinspection InstantiationOfUtilityClass
-        CHANNEL.sendToServer(new RequestOpenSelectScreenMessage());
+        ClientPacketListener listener = Minecraft.getInstance().getConnection();
+        if (listener != null && CHANNEL.isRemotePresent(listener.getConnection())) {
+            //noinspection InstantiationOfUtilityClass
+            CHANNEL.sendToServer(new RequestOpenSelectScreenMessage());
+        }
     }
 
     public void c2s_setSendTypePreference(ResourceLocation selection) {
@@ -125,7 +134,10 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
         if (playerPreferenceCallback != null) {
             preferenceCallbacks.put(player.getUUID(), playerPreferenceCallback);
         }
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new OpenSelectScreenMessage(containerFactories.keySet()));
+        ServerGamePacketListenerImpl listener = player.connection;
+        if (listener != null && CHANNEL.isRemotePresent(listener.getConnection())) {
+            CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new OpenSelectScreenMessage(containerFactories.keySet()));
+        }
     }
 
     public AbstractContainerMenu createMenu(int windowId, BlockPos pos, Container container, Inventory inventory, Component containerName) {
@@ -144,7 +156,10 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
 
     @Override
     public void c2s_sendTypePreference(ResourceLocation selection) {
-        CHANNEL.sendToServer(new ContainerTypeUpdateMessage(selection));
+        ClientPacketListener listener = Minecraft.getInstance().getConnection();
+        if (listener != null && CHANNEL.isRemotePresent(listener.getConnection())) {
+            CHANNEL.sendToServer(new ContainerTypeUpdateMessage(selection));
+        }
     }
 
     public void s_setPlayerContainerType(ServerPlayer player, ResourceLocation containerType) {

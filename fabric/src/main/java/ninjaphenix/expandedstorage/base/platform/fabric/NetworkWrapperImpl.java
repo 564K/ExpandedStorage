@@ -74,11 +74,15 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
     }
 
     public void c2s_removeTypeSelectCallback() {
-        ClientPlayNetworking.send(REMOVE_TYPE_SELECT_CALLBACK, new FriendlyByteBuf(Unpooled.buffer()));
+        if (ClientPlayNetworking.canSend(REMOVE_TYPE_SELECT_CALLBACK)) {
+            ClientPlayNetworking.send(REMOVE_TYPE_SELECT_CALLBACK, new FriendlyByteBuf(Unpooled.buffer()));
+        }
     }
 
     public void c2s_openTypeSelectScreen() {
-        ClientPlayNetworking.send(OPEN_SELECT_SCREEN, new FriendlyByteBuf(Unpooled.buffer()));
+        if (ClientPlayNetworking.canSend(OPEN_SELECT_SCREEN)) {
+            ClientPlayNetworking.send(OPEN_SELECT_SCREEN, new FriendlyByteBuf(Unpooled.buffer()));
+        }
     }
 
     public void c2s_setSendTypePreference(ResourceLocation selection) {
@@ -113,13 +117,16 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
     }
 
     public void s2c_openSelectScreen(ServerPlayer player, Consumer<ResourceLocation> playerPreferenceCallback) {
-        if (playerPreferenceCallback != null) {
-            preferenceCallbacks.put(player.getUUID(), playerPreferenceCallback);
+        if (ServerPlayNetworking.canSend(player, OPEN_SELECT_SCREEN)) {
+            if (playerPreferenceCallback != null) {
+                preferenceCallbacks.put(player.getUUID(), playerPreferenceCallback);
+            }
+            FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
+            buffer.writeInt(containerFactories.size());
+            containerFactories.keySet().forEach(buffer::writeResourceLocation);
+            ServerPlayNetworking.send(player, OPEN_SELECT_SCREEN, buffer);
         }
-        FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-        buffer.writeInt(containerFactories.size());
-        containerFactories.keySet().forEach(buffer::writeResourceLocation);
-        ServerPlayNetworking.send(player, OPEN_SELECT_SCREEN, buffer);
+        // else illegal state
     }
 
     public AbstractContainerMenu createMenu(int windowId, BlockPos pos, Container container, Inventory inventory, Component containerName) {
@@ -189,7 +196,9 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
 
     @Override
     public void c2s_sendTypePreference(ResourceLocation selection) {
-        ClientPlayNetworking.send(UPDATE_PLAYER_PREFERENCE, new FriendlyByteBuf(Unpooled.buffer()).writeResourceLocation(selection));
+        if (ClientPlayNetworking.canSend(UPDATE_PLAYER_PREFERENCE)) {
+            ClientPlayNetworking.send(UPDATE_PLAYER_PREFERENCE, new FriendlyByteBuf(Unpooled.buffer()).writeResourceLocation(selection));
+        }
     }
 
     @Override
@@ -212,7 +221,7 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
                     allowed.add(containerType);
                 }
             }
-            minecraft.submit(() -> minecraft.setScreen(new PickScreen(allowed)));
+            minecraft.submit(() -> minecraft.setScreen(new PickScreen(allowed, null)));
         }
     }
 }
