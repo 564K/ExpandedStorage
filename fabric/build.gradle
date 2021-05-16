@@ -1,14 +1,19 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '5.0.0'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+}
+
+architectury {
+    fabric()
+    injectInjectables = false
+}
+
+loom {
+    silentMojangMappingsLicense()
+    useFabricMixin = true
 }
 
 configurations {
     shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
-}
-
-architectury {
-    platformSetupLoomIde()
-    fabric()
 }
 
 dependencies {
@@ -27,10 +32,11 @@ dependencies {
 }
 
 processResources {
-    inputs.property 'version', project.version
+    def props = ['version': project.version]
+    inputs.properties props
 
     filesMatching('fabric.mod.json') {
-        expand 'version': project.version
+        expand props
     }
 }
 

@@ -3,46 +3,69 @@ plugins {
     id 'dev.architectury.loom' version '0.7.2-SNAPSHOT' apply false
 }
 
+def MINECRAFT_JAVA_VERSION = JavaLanguageVersion.of(rootProject.properties.minecraft_java_version as int)
+def MOD_JAVA_VERSION = JavaLanguageVersion.of(rootProject.properties.mod_java_version as int)
+
 architectury {
     minecraft = rootProject.minecraft_version
 }
 
 subprojects {
+    apply plugin: 'architectury-plugin'
     apply plugin: 'dev.architectury.loom'
-
-    loom {
-        silentMojangMappingsLicense()
-        useFabricMixin = true
-    }
 
     dependencies {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
         mappings loom.officialMojangMappings()
     }
+
+    // MIT License, Copyright 2021 shedaniel (https://github.com/shedaniel)
+    // https://github.com/shedaniel/cloth-config-lite/blob/615f6ed8ebebb8cb973d4901565558ddc486e44c/build.gradle#L52-L57
+    // Saves a few kilobytes, json can always be pretty printed after the fact.
+    processResources {
+        doLast {
+            //noinspection SpellCheckingInspection
+            def slurper = Class.forName('groovy.json.JsonSlurper').getDeclaredConstructor().newInstance()
+            def toJson = Class.forName('groovy.json.JsonOutput').getDeclaredMethod('toJson', Map.class)
+            //noinspection GrUnresolvedAccess
+            fileTree(dir: outputs.files.asPath, include: '**/*.json').each {
+                File file ->
+                    {
+                        file.text = toJson.invoke(null, slurper.parse(file))
+                    }
+            }
+        }
+    }
 }
 
 allprojects {
     apply plugin: 'java'
-    apply plugin: 'architectury-plugin'
-    apply plugin: 'maven-publish'
 
     archivesBaseName = rootProject.archives_base_name
     version = rootProject.mod_version
     group = rootProject.maven_group
 
-    tasks.withType(JavaCompile) {
-        options.encoding = 'UTF-8'
-
-        // The Minecraft launcher currently installs Java 8 for users, so your mod probably wants to target Java 8 too
-        // JDK 9 introduced a new way of specifying this that will make sure no newer classes or methods are used.
-        // We'll use that if it's available, but otherwise we'll use the older option.
-        def targetVersion = 8
-        if (JavaVersion.current().isJava9Compatible()) {
-            options.release = targetVersion
+    java {
+        withSourcesJar()
+        toolchain {
+            languageVersion = MINECRAFT_JAVA_VERSION
         }
     }
 
-    java {
-        withSourcesJar()
+    // We specified a java version, use it when compiling our mod
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        javaCompiler.set(javaToolchains.compilerFor {
+            languageVersion = MINECRAFT_JAVA_VERSION
+        })
+        if (JavaVersion.toVersion(MOD_JAVA_VERSION.asInt()).isJava9Compatible()) {
+            it.options.release.set(rootProject.properties.source_java_version as int)
+        }
+    }
+
+    tasks.withType(JavaExec).configureEach {
+        javaLauncher.set(javaToolchains.launcherFor {
+            languageVersion = MINECRAFT_JAVA_VERSION
+        })
     }
 }
