@@ -1,0 +1,25 @@
+modLoader = "javafml"
+loaderVersion = "[35,)"
+#issueTrackerURL = ""
+license = "All Rights Reserved"
+
+[[mods]]
+modId = "expandedstorage"
+version = "${version}"
+displayName = "Expanded Storage"
+authors = "NinjaPhenix"
+logoFile = "assets/expandedstorage/icon.png"
+
+[[dependencies.expandedstorage]]
+modId = "forge"
+mandatory = true
+versionRange = "[35,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.expandedstorage]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.16.2,)"
+ordering = "NONE"
+side = "BOTH"
