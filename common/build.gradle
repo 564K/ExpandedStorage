@@ -1,3 +1,8 @@
+plugins {
+    id 'architectury-plugin'
+    id 'dev.architectury.loom'
+}
+
 architectury {
     common()
     injectInjectables = false
@@ -6,8 +11,12 @@ architectury {
 loom {
     silentMojangMappingsLicense()
     useFabricMixin = true
+    accessWidener = file('src/main/resources/expandedstorage_base.accessWidener')
 }
 
 dependencies {
+    minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+    mappings loom.officialMojangMappings()
+
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 }
