@@ -4,6 +4,8 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ExtensionPoint;
@@ -18,6 +20,7 @@ import ninjaphenix.expandedstorage.base.client.menu.ScrollableScreen;
 import ninjaphenix.expandedstorage.base.client.menu.SingleScreen;
 import ninjaphenix.expandedstorage.base.internal_api.BaseApi;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
+import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -40,6 +43,16 @@ public final class Main {
             MenuScreens.register(BaseCommon.PAGE_MENU_TYPE, PagedScreen::new);
             MenuScreens.register(BaseCommon.SCROLL_MENU_TYPE, ScrollableScreen::new);
         });
+        if (PlatformUtils.getInstance().isClient()) {
+            this.registerConfigGuiHandler();
+        }
+        new ninjaphenix.expandedstorage.barrel.Main();
+        new ninjaphenix.expandedstorage.chest.Main();
+        new ninjaphenix.expandedstorage.old_chest.Main();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void registerConfigGuiHandler() {
         ModLoadingContext.get().getActiveContainer().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () -> (minecraft, screen) -> {
             Set<ResourceLocation> values = new HashSet<>();
             values.add(Utils.SINGLE_CONTAINER_TYPE);
@@ -47,9 +60,5 @@ public final class Main {
             values.add(Utils.SCROLL_CONTAINER_TYPE);
             return new PickScreen(values, screen);
         });
-
-        new ninjaphenix.expandedstorage.barrel.Main();
-        new ninjaphenix.expandedstorage.chest.Main();
-        new ninjaphenix.expandedstorage.old_chest.Main();
     }
 }

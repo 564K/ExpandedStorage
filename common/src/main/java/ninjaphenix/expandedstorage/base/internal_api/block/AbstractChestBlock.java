@@ -142,22 +142,21 @@ public abstract class AbstractChestBlock<T extends AbstractOpenableStorageBlockE
     }
 
     public static Direction getDirectionToAttached(BlockState state) {
-        switch (state.getValue(CURSED_CHEST_TYPE)) {
-            case TOP:
-                return Direction.DOWN;
-            case BACK:
-                return state.getValue(HORIZONTAL_FACING);
-            case RIGHT:
-                return state.getValue(HORIZONTAL_FACING).getClockWise();
-            case BOTTOM:
-                return Direction.UP;
-            case FRONT:
-                return state.getValue(HORIZONTAL_FACING).getOpposite();
-            case LEFT:
-                return state.getValue(HORIZONTAL_FACING).getCounterClockWise();
-            default:
-                throw new IllegalArgumentException("BaseChestBlock#getDirectionToAttached received an unexpected state.");
+        CursedChestType value = state.getValue(CURSED_CHEST_TYPE);
+        if (value == TOP) {
+            return Direction.DOWN;
+        } else if (value == BACK) {
+            return state.getValue(HORIZONTAL_FACING);
+        } else if (value == RIGHT) {
+            return state.getValue(HORIZONTAL_FACING).getClockWise();
+        } else if (value == BOTTOM) {
+            return Direction.UP;
+        } else if (value == FRONT) {
+            return state.getValue(HORIZONTAL_FACING).getOpposite();
+        } else if (value == LEFT) {
+            return state.getValue(HORIZONTAL_FACING).getCounterClockWise();
         }
+        throw new IllegalArgumentException("BaseChestBlock#getDirectionToAttached received an unexpected state.");
     }
 
     public static DoubleBlockCombiner.BlockType getBlockType(BlockState state) {

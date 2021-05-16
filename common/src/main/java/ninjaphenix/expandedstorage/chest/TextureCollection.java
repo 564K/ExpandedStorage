@@ -24,23 +24,21 @@ public final class TextureCollection {
     }
 
     ResourceLocation getTexture(CursedChestType type) {
-        switch (type) {
-            case TOP:
-                return this.top;
-            case BOTTOM:
-                return this.bottom;
-            case FRONT:
-                return this.front;
-            case BACK:
-                return this.back;
-            case LEFT:
-                return this.left;
-            case RIGHT:
-                return this.right;
-            case SINGLE:
-                return this.single;
-            default:
-                throw new IllegalArgumentException("TextureCollection#getTexture received an unknown CursedChestType.");
+        if (type == CursedChestType.TOP) {
+            return this.top;
+        } else if (type == CursedChestType.BOTTOM) {
+            return this.bottom;
+        } else if (type == CursedChestType.FRONT) {
+            return this.front;
+        } else if (type == CursedChestType.BACK) {
+            return this.back;
+        } else if (type == CursedChestType.LEFT) {
+            return this.left;
+        } else if (type == CursedChestType.RIGHT) {
+            return this.right;
+        } else if (type == CursedChestType.SINGLE) {
+            return this.single;
         }
+        throw new IllegalArgumentException("TextureCollection#getTexture received an unknown CursedChestType.");
     }
 }

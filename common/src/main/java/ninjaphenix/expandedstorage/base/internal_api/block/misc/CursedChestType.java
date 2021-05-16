@@ -33,19 +33,18 @@ public enum CursedChestType implements StringRepresentable {
     }
 
     public CursedChestType getOpposite() {
-        switch (this) {
-            case TOP:
-                return BOTTOM;
-            case BOTTOM:
-                return TOP;
-            case FRONT:
-                return BACK;
-            case BACK:
-                return FRONT;
-            case LEFT:
-                return RIGHT;
-            case RIGHT:
-                return LEFT;
+        if (this == CursedChestType.TOP) {
+            return BOTTOM;
+        } else if (this == CursedChestType.BOTTOM) {
+            return TOP;
+        } else if (this == CursedChestType.FRONT) {
+            return BACK;
+        } else if (this == CursedChestType.BACK) {
+            return FRONT;
+        } else if (this == CursedChestType.LEFT) {
+            return RIGHT;
+        } else if (this == CursedChestType.RIGHT) {
+            return LEFT;
         }
         throw new IllegalStateException("SINGLE CursedChestType has no opposite");
     }
