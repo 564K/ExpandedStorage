@@ -8,13 +8,13 @@ import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import ninjaphenix.expandedstorage.base.client.menu.widget.ScreenSettingsButton;
 import ninjaphenix.expandedstorage.base.inventory.ScrollableContainerMenu;
 import ninjaphenix.expandedstorage.base.inventory.screen.ScrollableScreenMeta;
 import ninjaphenix.expandedstorage.base.platform.ConfigWrapper;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public final class ScrollableScreen extends AbstractScreen<ScrollableContainerMenu, ScrollableScreenMeta> {
@@ -22,7 +22,6 @@ public final class ScrollableScreen extends AbstractScreen<ScrollableContainerMe
     private final boolean SCROLLING_UNRESTRICTED;
     private boolean isDragging;
     private int topRow;
-    private ScreenSettingsButton screenSettingsButton;
 
     public ScrollableScreen(ScrollableContainerMenu container, Inventory playerInventory, Component title) {
         super(container, playerInventory, title, (screenMeta) -> (screenMeta.WIDTH * 18 + 14) / 2 - 80);
@@ -38,12 +37,6 @@ public final class ScrollableScreen extends AbstractScreen<ScrollableContainerMe
         if (HAS_SCROLLBAR) {
             isDragging = false;
             topRow = 0;
-        }
-        if (SCREEN_META.WIDTH == 9) {
-            this.screenSettingsButton = addButton(new ScreenSettingsButton(leftPos - 15, topPos + imageHeight - 22, this::renderButtonTooltip));
-        } else {
-            int y = topPos + (SCREEN_META.HEIGHT * 18) + 12;
-            this.screenSettingsButton = addButton(new ScreenSettingsButton(leftPos - 15, y, this::renderButtonTooltip));
         }
     }
 
@@ -189,12 +182,10 @@ public final class ScrollableScreen extends AbstractScreen<ScrollableContainerMe
     }
 
     public List<Rect2i> getExclusionZones() {
-        final List<Rect2i> excludedAreas = new ArrayList<>();
         if (HAS_SCROLLBAR) {
             final int height = SCREEN_META.HEIGHT * 18 + (SCREEN_META.WIDTH > 9 ? 34 : 24);
-            excludedAreas.add(new Rect2i(leftPos + imageWidth - 4, topPos, 22, height));
+            return Collections.singletonList(new Rect2i(leftPos + imageWidth - 4, topPos, 22, height));
         }
-        excludedAreas.add(new Rect2i(screenSettingsButton.x, screenSettingsButton.y, screenSettingsButton.getWidth(), screenSettingsButton.getHeight()));
-        return excludedAreas;
+        return Collections.emptyList();
     }
 }

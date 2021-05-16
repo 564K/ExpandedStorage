@@ -9,7 +9,6 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import ninjaphenix.expandedstorage.base.client.menu.widget.PageButton;
-import ninjaphenix.expandedstorage.base.client.menu.widget.ScreenSettingsButton;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.inventory.PagedContainerMenu;
 import ninjaphenix.expandedstorage.base.inventory.screen.PagedScreenMeta;
@@ -27,7 +26,6 @@ public final class PagedScreen extends AbstractScreen<PagedContainerMenu, PagedS
     private int page;
     private TranslatableComponent currentPageText;
     private float pageTextX;
-    private ScreenSettingsButton screenSettingsButton;
 
     public PagedScreen(PagedContainerMenu screenHandler, Inventory playerInventory, Component title) {
         super(screenHandler, playerInventory, title, (screenMeta) -> (screenMeta.WIDTH * 18 + 14) / 2 - 80);
@@ -106,12 +104,6 @@ public final class PagedScreen extends AbstractScreen<PagedContainerMenu, PagedS
         //final boolean inventoryProfilesLoaded = instance.isModLoaded("inventoryprofiles");
         //final boolean inventorySorterLoaded = instance.isModLoaded("inventorysorter");
         super.init();
-        if (SCREEN_META.WIDTH == 9) {
-            this.screenSettingsButton = addButton(new ScreenSettingsButton(leftPos - 15, topPos + imageHeight - 22, this::renderButtonTooltip));
-        } else {
-            int y = topPos + (SCREEN_META.HEIGHT * 18) + 12;
-            this.screenSettingsButton = addButton(new ScreenSettingsButton(leftPos - 15, y, this::renderButtonTooltip));
-        }
         if (SCREEN_META.PAGES != 1) {
             final int pageButtonsXOffset = 0;
             //if (inventoryProfilesLoaded) { pageButtonsXOffset = -12; }
@@ -176,6 +168,6 @@ public final class PagedScreen extends AbstractScreen<PagedContainerMenu, PagedS
     }
 
     public List<Rect2i> getExclusionZones() {
-        return Collections.singletonList(new Rect2i(screenSettingsButton.x, screenSettingsButton.y, screenSettingsButton.getWidth(), screenSettingsButton.getHeight()));
+        return Collections.emptyList();
     }
 }
