@@ -27,7 +27,7 @@ import java.util.function.Consumer;
 public final class Utils {
     @Internal
     public static final String MOD_ID = "expandedstorage";
-    public static final CreativeModeTab TAB = PlatformUtils.getInstance().createTab(ninjaphenix.expandedstorage.base.internal_api.BaseApi.getInstance()::tabIcon);
+    public static final CreativeModeTab TAB = PlatformUtils.getInstance().createTab(BaseApi.getInstance()::tabIcon);
     @Internal
     public static final Component ALT_USE = new TranslatableComponent("tooltip.expandedstorage.alt_use",
             new KeybindComponent("key.sneak").withStyle(ChatFormatting.GOLD),
