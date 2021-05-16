@@ -33,7 +33,7 @@
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/expanded-storage-fabric/",
     "sources": "https://github.com/NinjaPhenix/ExpandedStorage/"
   },
-  "icon": "assets/expandedstorage/icon.png",
+  "icon": "icon.png",
   "id": "expandedstorage",
   "license": "All Rights Reserved",
   "name": "Expanded Storage",

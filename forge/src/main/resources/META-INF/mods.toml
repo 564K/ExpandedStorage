@@ -8,7 +8,7 @@ modId = "expandedstorage"
 version = "${version}"
 displayName = "Expanded Storage"
 authors = "NinjaPhenix"
-logoFile = "assets/expandedstorage/icon.png"
+logoFile = "icon.png"
 
 [[dependencies.expandedstorage]]
 modId = "forge"
