@@ -9,6 +9,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.inventory.screen.ScreenMeta;
@@ -74,9 +75,26 @@ public abstract class AbstractContainerMenu_<T extends ScreenMeta> extends Abstr
         return CONTAINER;
     }
 
-    //todo: implement
     @Override
-    public ItemStack quickMoveStack(Player player, int i) {
-        return super.quickMoveStack(player, i);
+    public ItemStack quickMoveStack(Player player, int index) {
+        ItemStack originalStack = ItemStack.EMPTY;
+        Slot slot = slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack newStack = slot.getItem();
+            originalStack = newStack.copy();
+            if (index < SCREEN_META.TOTAL_SLOTS) {
+                if (!this.moveItemStackTo(newStack, SCREEN_META.TOTAL_SLOTS, SCREEN_META.TOTAL_SLOTS + 36, true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (!this.moveItemStackTo(newStack, 0, SCREEN_META.TOTAL_SLOTS, false)) {
+                return ItemStack.EMPTY;
+            }
+            if (newStack.isEmpty()) {
+                slot.set(ItemStack.EMPTY);
+            } else {
+                slot.setChanged();
+            }
+        }
+        return originalStack;
     }
 }
