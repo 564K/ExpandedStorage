@@ -18,12 +18,34 @@ configurations {
     shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
 }
 
+repositories {
+    maven {
+        name 'Shedaniel'
+        url 'https://maven.shedaniel.me/'
+    }
+    maven {
+        name 'JitPack'
+        url 'https://jitpack.io/'
+        content {
+            includeGroup 'com.github.Virtuoel'
+        }
+    }
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
     mappings loom.officialMojangMappings()
 
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
     modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+
+    // For chest module
+    modCompileOnly('com.github.Virtuoel:Statement:31a2c3f')
+    modCompileOnly('com.github.Virtuoel:Towelette:e5e39eb')
+
+    // For all modules
+    modCompileOnly('me.shedaniel:RoughlyEnoughItems:5.10.181')
+    modRuntime('me.shedaniel:RoughlyEnoughItems:5.10.181')
 
     implementation(project(path: ':common')) {
         transitive = false

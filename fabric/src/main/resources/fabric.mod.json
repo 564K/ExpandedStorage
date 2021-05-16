@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "accessWidener": "expandedstorage_base.accessWidener",
+  "breaks": {
+    "quilt_loader": "*"
+  },
+  "depends": {
+    "fabric": "*",
+    "fabricloader": ">=0.7.4",
+    "minecraft": "~1.16.2"
+  },
+  "entrypoints": {
+    "main": [
+      "ninjaphenix.expandedstorage.base.Main"
+    ],
+    "rei_plugins": [
+      "ninjaphenix.expandedstorage.base.client.ExpandedStorageReiPlugin"
+    ],
+    "expandedstorage-module": [
+      "ninjaphenix.expandedstorage.barrel.Main",
+      "ninjaphenix.expandedstorage.chest.Main",
+      "ninjaphenix.expandedstorage.old_chest.Main"
+    ]
+  },
+  "environment": "*",
+  "mixins": [
+    "expandedstorage_chest.mixins.json"
+  ],
+  "authors": [
+    "NinjaPhenix"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/expanded-storage-fabric/",
+    "sources": "https://github.com/NinjaPhenix/ExpandedStorage/"
+  },
+  "icon": "assets/expandedstorage/icon.png",
+  "id": "expandedstorage",
+  "license": "All Rights Reserved",
+  "name": "Expanded Storage",
+  "version": "${version}"
+}

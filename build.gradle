@@ -1,4 +1,5 @@
 plugins {
+    id 'dev.architectury.loom' version '0.7.2-SNAPSHOT' apply false // Architectury plugin requires loom on class path
     id 'architectury-plugin' version '3.1-SNAPSHOT'
 }
 
