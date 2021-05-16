@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:chest",
+      "required": true
+    },
+    {
+      "id": "minecraft:trapped_chest",
+      "required": true
+    },{
+      "id": "expandedstorage:wood_chest",
+      "required": true
+    }
+  ]
+}
