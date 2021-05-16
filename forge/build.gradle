@@ -18,11 +18,28 @@ configurations {
     shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
 }
 
+repositories {
+    maven {
+        // JEI maven
+        name "Progwml6 maven"
+        url "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // JEI maven - fallback
+        name "ModMaven"
+        url "https://modmaven.k-4u.nl"
+    }
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
     mappings loom.officialMojangMappings()
 
     forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
+
+    // For all modules
+    modCompileOnly "mezz.jei:jei-${rootProject.minecraft_version}:${project.jei_version}:api"
+    modRuntime "mezz.jei:jei-${rootProject.minecraft_version}:${project.jei_version}"
 
     implementation(project(path: ':common')) {
         transitive = false
