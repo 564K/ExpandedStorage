@@ -2,7 +2,7 @@
   "type": "crafting_shapeless",
   "ingredients": [
     {
-      "tag": "c:wooden_chests"
+      "item": "expandedstorage:wood_chest"
     }
   ],
   "result": {

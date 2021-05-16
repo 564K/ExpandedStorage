@@ -1,0 +1,12 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "expandedstorage:old_diamond_chest"
+    }
+  ],
+  "result": {
+    "item": "expandedstorage:diamond_chest"
+  },
+  "group": "expandedstorage:diamond_chest"
+}
