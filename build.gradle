@@ -13,6 +13,8 @@ architectury {
 subprojects {
     apply plugin: 'java'
 
+    project.buildDir = rootProject.projectDir.absolutePath + "/build/$project.name"
+
     afterEvaluate {
         // MIT License, Copyright 2021 shedaniel (https://github.com/shedaniel)
         // https://github.com/shedaniel/cloth-config-lite/blob/615f6ed8ebebb8cb973d4901565558ddc486e44c/build.gradle#L52-L57
