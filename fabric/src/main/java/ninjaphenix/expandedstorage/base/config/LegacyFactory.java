@@ -2,7 +2,6 @@ package ninjaphenix.expandedstorage.base.config;
 
 import net.minecraft.resources.ResourceLocation;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
-import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Map;
 
@@ -14,23 +13,23 @@ public final class LegacyFactory implements Converter<Map<String, Object>, Confi
     }
 
     @Override
-    public ConfigV0 fromSource(@Unmodifiable final Map<String, Object> SOURCE) {
-        final Object CONTAINER_TYPE = SOURCE.get("preferred_container_type");
-        final Object RESTRICTIVE_SCROLLING = SOURCE.get("restrictive_scrolling");
-        if (CONTAINER_TYPE instanceof String && RESTRICTIVE_SCROLLING instanceof Boolean) {
-            String temp = (String) CONTAINER_TYPE;
+    public ConfigV0 fromSource(Map<String, Object> source) {
+        Object containerType = source.get("preferred_container_type");
+        Object restrictiveScrolling = source.get("restrictive_scrolling");
+        if (containerType instanceof String && restrictiveScrolling instanceof Boolean) {
+            String temp = (String) containerType;
             if ("expandedstorage:paged".equals(temp)) {
                 temp = Utils.PAGE_CONTAINER_TYPE.toString();
             } else if ("expandedstorage:scrollable".equals(temp)) {
                 temp = Utils.SCROLL_CONTAINER_TYPE.toString();
             }
-            return new ConfigV0(ResourceLocation.tryParse(temp), (Boolean) (RESTRICTIVE_SCROLLING));
+            return new ConfigV0(ResourceLocation.tryParse(temp), (Boolean) (restrictiveScrolling));
         }
         return null;
     }
 
     @Override
-    public Map<String, Object> toSource(final ConfigV0 TARGET) {
+    public Map<String, Object> toSource(ConfigV0 target) {
         throw new UnsupportedOperationException("Legacy configs cannot be saved.");
     }
 

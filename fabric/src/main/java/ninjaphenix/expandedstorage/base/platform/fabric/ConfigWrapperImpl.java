@@ -9,11 +9,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import ninjaphenix.expandedstorage.base.BaseCommon;
-import ninjaphenix.expandedstorage.base.config.Config;
-import ninjaphenix.expandedstorage.base.config.ConfigV0;
-import ninjaphenix.expandedstorage.base.config.Converter;
-import ninjaphenix.expandedstorage.base.config.LegacyFactory;
-import ninjaphenix.expandedstorage.base.config.ResourceLocationTypeAdapter;
+import ninjaphenix.expandedstorage.base.config.*;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.platform.ConfigWrapper;
 
@@ -45,11 +41,11 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
         }.getType();
         configPath = FabricLoader.getInstance().getConfigDir().resolve(Utils.CONFIG_PATH);
         gson = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocationTypeAdapter())
-                                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                                .setPrettyPrinting()
-                                .setLenient()
-                                .create();
-        config = getConfig();
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .setPrettyPrinting()
+                .setLenient()
+                .create();
+        config = this.getConfig();
     }
 
     public boolean isScrollingUnrestricted() {
@@ -59,7 +55,7 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
     public void setScrollingRestricted(boolean value) {
         if (config.isScrollingRestricted() == value) {
             config.setScrollingRestricted(!value);
-            saveConfig(config);
+            this.saveConfig(config);
         }
     }
 
@@ -72,7 +68,7 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
                 || Utils.SCROLL_CONTAINER_TYPE.equals(containerType) || Utils.SINGLE_CONTAINER_TYPE.equals(containerType))
                 && containerType != config.getContainerType()) {
             config.setContainerType(containerType);
-            saveConfig(config);
+            this.saveConfig(config);
             return true;
         }
         return false;
@@ -96,20 +92,20 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
         ConfigV0 config = null;
         if (Files.exists(newPath)) {
             triedLoadingNewConfig = true;
-            config = loadConfig(newPath, ConfigV0.Factory.INSTANCE, false);
+            config = this.loadConfig(newPath, ConfigV0.Factory.INSTANCE, false);
         }
         if (Files.exists(oldPath)) {
             triedLoadingOldConfig = true;
             try (BufferedReader reader = Files.newBufferedReader(oldPath)) {
                 String configLines = reader.lines().collect(Collectors.joining());
                 if (config == null) {
-                    ConfigV0 oldConfig = convertToConfig(configLines, LegacyFactory.INSTANCE, oldPath);
+                    ConfigV0 oldConfig = this.convertToConfig(configLines, LegacyFactory.INSTANCE, oldPath);
                     if (oldConfig != null) {
                         config = oldConfig;
-                        saveConfig(config);
+                        this.saveConfig(config);
                     }
                 }
-                backupFile(oldPath, String.format("Failed to backup legacy Expanded Storage config, '%s'.", oldPath.getFileName().toString()), configLines);
+                this.backupFile(oldPath, String.format("Failed to backup legacy Expanded Storage config, '%s'.", oldPath.getFileName().toString()), configLines);
             } catch (IOException e) {
                 if (config == null) {
                     BaseCommon.LOGGER.warn("Failed to load legacy Expanded Storage Config, new default config will be used.", e);
@@ -121,7 +117,7 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
                 BaseCommon.LOGGER.warn("Could not load an existing config, Expanded Storage is using it's default config.");
             }
             config = new ConfigV0();
-            saveConfig(config);
+            this.saveConfig(config);
         }
         return config;
     }
@@ -148,7 +144,7 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
         } catch (JsonParseException e) {
             String configFileName = configPath.getFileName().toString();
             BaseCommon.warnThrowableMessage("Failed to convert config, backing config '{}'.", e, configFileName);
-            backupFile(configPath, String.format("Failed to backup expanded storage config which failed to read, '%s'.%n", configFileName), lines);
+            this.backupFile(configPath, String.format("Failed to backup expanded storage config which failed to read, '%s'.%n", configFileName), lines);
             return null;
         }
     }
@@ -168,12 +164,12 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
     private <T extends Config> T loadConfig(Path configPath, Converter<Map<String, Object>, T> converter, boolean isLegacy) {
         try (BufferedReader reader = Files.newBufferedReader(configPath)) {
             String configLines = reader.lines().collect(Collectors.joining());
-            return convertToConfig(configLines, converter, configPath);
+            return this.convertToConfig(configLines, converter, configPath);
         } catch (IOException e) {
             String configFileName = configPath.getFileName().toString();
             BaseCommon.warnThrowableMessage("Failed to read {}Expanded Storage config, '{}'.", e, isLegacy ? "legacy " : "", configFileName);
             e.printStackTrace();
-            backupFile(configPath, String.format("Failed to backup %sExpanded Storage config, '%s'.%n", isLegacy ? "legacy " : "", configFileName), null);
+            this.backupFile(configPath, String.format("Failed to backup %sExpanded Storage config, '%s'.%n", isLegacy ? "legacy " : "", configFileName), null);
         }
         return null;
     }

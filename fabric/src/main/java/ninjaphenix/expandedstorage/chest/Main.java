@@ -54,60 +54,60 @@ public final class Main implements ModuleInitializer {
         ResourceLocation netheriteOpenStat = BaseCommon.registerStat(Utils.resloc("open_netherite_chest"));
         // Init block properties
         BlockBehaviour.Properties woodProperties = FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD)
-                                                                      .breakByTool(FabricToolTags.AXES, Tiers.WOOD.getLevel())
-                                                                      .strength(2.5F) // End of FBS
-                                                                      .sound(SoundType.WOOD);
+                .breakByTool(FabricToolTags.AXES, Tiers.WOOD.getLevel())
+                .strength(2.5F) // End of FBS
+                .sound(SoundType.WOOD);
         BlockBehaviour.Properties pumpkinProperties = FabricBlockSettings.of(Material.VEGETABLE, MaterialColor.COLOR_ORANGE)
-                                                                         .breakByTool(FabricToolTags.AXES, Tiers.WOOD.getLevel())
-                                                                         .strength(1.0F) // End of FBS
-                                                                         .sound(SoundType.WOOD);
+                .breakByTool(FabricToolTags.AXES, Tiers.WOOD.getLevel())
+                .strength(1.0F) // End of FBS
+                .sound(SoundType.WOOD);
         BlockBehaviour.Properties christmasProperties = FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD)
-                                                                           .breakByTool(FabricToolTags.AXES, Tiers.WOOD.getLevel())
-                                                                           .strength(2.5F) // End of FBS
-                                                                           .sound(SoundType.WOOD);
+                .breakByTool(FabricToolTags.AXES, Tiers.WOOD.getLevel())
+                .strength(2.5F) // End of FBS
+                .sound(SoundType.WOOD);
         BlockBehaviour.Properties ironProperties = FabricBlockSettings.of(Material.METAL, MaterialColor.METAL)
-                                                                      .breakByTool(FabricToolTags.PICKAXES, Tiers.STONE.getLevel())
-                                                                      .requiresCorrectToolForDrops() // End of FBS
-                                                                      .strength(5.0F, 6.0F)
-                                                                      .sound(SoundType.METAL);
+                .breakByTool(FabricToolTags.PICKAXES, Tiers.STONE.getLevel())
+                .requiresCorrectToolForDrops() // End of FBS
+                .strength(5.0F, 6.0F)
+                .sound(SoundType.METAL);
         BlockBehaviour.Properties goldProperties = FabricBlockSettings.of(Material.METAL, MaterialColor.GOLD)
-                                                                      .breakByTool(FabricToolTags.PICKAXES, Tiers.STONE.getLevel())
-                                                                      .requiresCorrectToolForDrops() // End of FBS
-                                                                      .strength(3.0F, 6.0F)
-                                                                      .sound(SoundType.METAL);
+                .breakByTool(FabricToolTags.PICKAXES, Tiers.STONE.getLevel())
+                .requiresCorrectToolForDrops() // End of FBS
+                .strength(3.0F, 6.0F)
+                .sound(SoundType.METAL);
         BlockBehaviour.Properties diamondProperties = FabricBlockSettings.of(Material.METAL, MaterialColor.DIAMOND)
-                                                                         .breakByTool(FabricToolTags.PICKAXES, Tiers.IRON.getLevel())
-                                                                         .requiresCorrectToolForDrops() // End of FBS
-                                                                         .strength(5.0F, 6.0F)
-                                                                         .sound(SoundType.METAL);
+                .breakByTool(FabricToolTags.PICKAXES, Tiers.IRON.getLevel())
+                .requiresCorrectToolForDrops() // End of FBS
+                .strength(5.0F, 6.0F)
+                .sound(SoundType.METAL);
         BlockBehaviour.Properties obsidianProperties = FabricBlockSettings.of(Material.STONE, MaterialColor.COLOR_BLACK)
-                                                                          .breakByTool(FabricToolTags.PICKAXES, Tiers.DIAMOND.getLevel())
-                                                                          .requiresCorrectToolForDrops() // End of FBS
-                                                                          .strength(50.0F, 1200.0F);
+                .breakByTool(FabricToolTags.PICKAXES, Tiers.DIAMOND.getLevel())
+                .requiresCorrectToolForDrops() // End of FBS
+                .strength(50.0F, 1200.0F);
         BlockBehaviour.Properties netheriteProperties = FabricBlockSettings.of(Material.METAL, MaterialColor.COLOR_BLACK)
-                                                                           .breakByTool(FabricToolTags.PICKAXES, Tiers.DIAMOND.getLevel())
-                                                                           .requiresCorrectToolForDrops() // End of FBS
-                                                                           .strength(50.0F, 1200.0F)
-                                                                           .sound(SoundType.NETHERITE_BLOCK);
+                .breakByTool(FabricToolTags.PICKAXES, Tiers.DIAMOND.getLevel())
+                .requiresCorrectToolForDrops() // End of FBS
+                .strength(50.0F, 1200.0F)
+                .sound(SoundType.NETHERITE_BLOCK);
         // Init and register blocks
-        ChestBlock woodChestBlock = chestBlock(Utils.resloc("wood_chest"), woodOpenStat, woodTier, woodProperties);
-        ChestBlock pumpkinChestBlock = chestBlock(Utils.resloc("pumpkin_chest"), pumpkinOpenStat, pumpkinTier, pumpkinProperties);
-        ChestBlock christmasChestBlock = chestBlock(Utils.resloc("christmas_chest"), christmasOpenStat, christmasTier, christmasProperties);
-        ChestBlock ironChestBlock = chestBlock(Utils.resloc("iron_chest"), ironOpenStat, ironTier, ironProperties);
-        ChestBlock goldChestBlock = chestBlock(Utils.resloc("gold_chest"), goldOpenStat, goldTier, goldProperties);
-        ChestBlock diamondChestBlock = chestBlock(Utils.resloc("diamond_chest"), diamondOpenStat, diamondTier, diamondProperties);
-        ChestBlock obsidianChestBlock = chestBlock(Utils.resloc("obsidian_chest"), obsidianOpenStat, obsidianTier, obsidianProperties);
-        ChestBlock netheriteChestBlock = chestBlock(Utils.resloc("netherite_chest"), netheriteOpenStat, netheriteTier, netheriteProperties);
+        ChestBlock woodChestBlock = this.chestBlock(Utils.resloc("wood_chest"), woodOpenStat, woodTier, woodProperties);
+        ChestBlock pumpkinChestBlock = this.chestBlock(Utils.resloc("pumpkin_chest"), pumpkinOpenStat, pumpkinTier, pumpkinProperties);
+        ChestBlock christmasChestBlock = this.chestBlock(Utils.resloc("christmas_chest"), christmasOpenStat, christmasTier, christmasProperties);
+        ChestBlock ironChestBlock = this.chestBlock(Utils.resloc("iron_chest"), ironOpenStat, ironTier, ironProperties);
+        ChestBlock goldChestBlock = this.chestBlock(Utils.resloc("gold_chest"), goldOpenStat, goldTier, goldProperties);
+        ChestBlock diamondChestBlock = this.chestBlock(Utils.resloc("diamond_chest"), diamondOpenStat, diamondTier, diamondProperties);
+        ChestBlock obsidianChestBlock = this.chestBlock(Utils.resloc("obsidian_chest"), obsidianOpenStat, obsidianTier, obsidianProperties);
+        ChestBlock netheriteChestBlock = this.chestBlock(Utils.resloc("netherite_chest"), netheriteOpenStat, netheriteTier, netheriteProperties);
         Set<ChestBlock> blocks = ImmutableSet.copyOf(new ChestBlock[]{woodChestBlock, pumpkinChestBlock, christmasChestBlock, ironChestBlock, goldChestBlock, diamondChestBlock, obsidianChestBlock, netheriteChestBlock});
         // Init and register items
-        BlockItem woodChestItem = chestItem(woodTier, woodChestBlock);
-        BlockItem pumpkinChestItem = chestItem(pumpkinTier, pumpkinChestBlock);
-        BlockItem christmasChestItem = chestItem(christmasTier, christmasChestBlock);
-        BlockItem ironChestItem = chestItem(ironTier, ironChestBlock);
-        BlockItem goldChestItem = chestItem(goldTier, goldChestBlock);
-        BlockItem diamondChestItem = chestItem(diamondTier, diamondChestBlock);
-        BlockItem obsidianChestItem = chestItem(obsidianTier, obsidianChestBlock);
-        BlockItem netheriteChestItem = chestItem(netheriteTier, netheriteChestBlock);
+        BlockItem woodChestItem = this.chestItem(woodTier, woodChestBlock);
+        BlockItem pumpkinChestItem = this.chestItem(pumpkinTier, pumpkinChestBlock);
+        BlockItem christmasChestItem = this.chestItem(christmasTier, christmasChestBlock);
+        BlockItem ironChestItem = this.chestItem(ironTier, ironChestBlock);
+        BlockItem goldChestItem = this.chestItem(goldTier, goldChestBlock);
+        BlockItem diamondChestItem = this.chestItem(diamondTier, diamondChestBlock);
+        BlockItem obsidianChestItem = this.chestItem(obsidianTier, obsidianChestBlock);
+        BlockItem netheriteChestItem = this.chestItem(netheriteTier, netheriteChestBlock);
         Set<BlockItem> items = ImmutableSet.copyOf(new BlockItem[]{woodChestItem, pumpkinChestItem, christmasChestItem, ironChestItem, goldChestItem, diamondChestItem, obsidianChestItem, netheriteChestItem});
         // Init and register block entity type
         BlockEntityType<ChestBlockEntity> blockEntityType = new BlockEntityType<>(() -> new ChestBlockEntity(ChestCommon.getBlockEntityType(), null), ImmutableSet.copyOf(blocks), null);
@@ -124,25 +124,25 @@ public final class Main implements ModuleInitializer {
 
     private ChestBlock chestBlock(ResourceLocation blockId, ResourceLocation stat, OpenableTier tier, BlockBehaviour.Properties properties) {
         tier.blockProperties().apply(properties.dynamicShape());
-        ChestBlock rv = Registry.register(Registry.BLOCK, blockId, new ChestBlock(properties, blockId, tier.key(), stat, tier.slots()));
-        BaseApi.getInstance().registerTieredBlock(rv);
-        return rv;
+        ChestBlock block = Registry.register(Registry.BLOCK, blockId, new ChestBlock(properties, blockId, tier.key(), stat, tier.slots()));
+        BaseApi.getInstance().registerTieredBlock(block);
+        return block;
     }
 
     private BlockItem chestItem(OpenableTier tier, ChestBlock block) {
-        final Item.Properties itemProperties = tier.itemProperties().apply(new Item.Properties().tab(Utils.TAB));
+        Item.Properties itemProperties = tier.itemProperties().apply(new Item.Properties().tab(Utils.TAB));
         return Registry.register(Registry.ITEM, block.blockId(), new BlockItem(block, itemProperties));
     }
 
     private static class Client {
         private static void initialise(Set<ChestBlock> blocks, Set<BlockItem> items) {
-            final Set<ResourceLocation> textures = ChestCommon.registerChestTextures(blocks);
+            Set<ResourceLocation> textures = ChestCommon.registerChestTextures(blocks);
             ClientSpriteRegistryCallback.event(Sheets.CHEST_SHEET).register((atlasTexture, registry) -> textures.forEach(registry::register));
 
             BlockEntityRendererRegistry.INSTANCE.register(ChestCommon.getBlockEntityType(), ChestBlockEntityRenderer::new);
 
             items.forEach(item -> {
-                final ChestBlockEntity renderEntity = new ChestBlockEntity(ChestCommon.getBlockEntityType(), ((ChestBlock) item.getBlock()).blockId());
+                ChestBlockEntity renderEntity = new ChestBlockEntity(ChestCommon.getBlockEntityType(), ((ChestBlock) item.getBlock()).blockId());
                 BuiltinItemRendererRegistry.INSTANCE.register(item, (itemStack, transform, stack, source, light, overlay) ->
                         BlockEntityRenderDispatcher.instance.renderItem(renderEntity, stack, source, light, overlay));
             });

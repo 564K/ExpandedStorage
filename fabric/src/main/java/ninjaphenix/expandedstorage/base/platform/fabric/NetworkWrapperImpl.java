@@ -40,9 +40,9 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public final class NetworkWrapperImpl implements NetworkWrapper {
-    private final ResourceLocation OPEN_SELECT_SCREEN = Utils.resloc("open_select_screen");
-    private final ResourceLocation UPDATE_PLAYER_PREFERENCE = Utils.resloc("update_player_preference");
-    private final ResourceLocation REMOVE_TYPE_SELECT_CALLBACK = Utils.resloc("remove_type_select_callback");
+    private static final ResourceLocation OPEN_SELECT_SCREEN = Utils.resloc("open_select_screen");
+    private static final ResourceLocation UPDATE_PLAYER_PREFERENCE = Utils.resloc("update_player_preference");
+    private static final ResourceLocation REMOVE_TYPE_SELECT_CALLBACK = Utils.resloc("remove_type_select_callback");
 
     private final Map<UUID, Consumer<ResourceLocation>> preferenceCallbacks = new HashMap<>();
     private final Map<UUID, ResourceLocation> playerPreferences = new HashMap<>();
@@ -66,22 +66,22 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
         }
         // Register Server Receivers
         ServerPlayConnectionEvents.INIT.register((listener_init, server_unused) -> {
-            ServerPlayNetworking.registerReceiver(listener_init, OPEN_SELECT_SCREEN, this::s_handleOpenSelectScreen);
-            ServerPlayNetworking.registerReceiver(listener_init, UPDATE_PLAYER_PREFERENCE, this::s_handleUpdatePlayerPreference);
-            ServerPlayNetworking.registerReceiver(listener_init, REMOVE_TYPE_SELECT_CALLBACK, this::s_handleRemoveTypeSelectCallback);
+            ServerPlayNetworking.registerReceiver(listener_init, NetworkWrapperImpl.OPEN_SELECT_SCREEN, this::s_handleOpenSelectScreen);
+            ServerPlayNetworking.registerReceiver(listener_init, NetworkWrapperImpl.UPDATE_PLAYER_PREFERENCE, this::s_handleUpdatePlayerPreference);
+            ServerPlayNetworking.registerReceiver(listener_init, NetworkWrapperImpl.REMOVE_TYPE_SELECT_CALLBACK, this::s_handleRemoveTypeSelectCallback);
         });
         ServerPlayConnectionEvents.DISCONNECT.register((listener, server) -> this.s_setPlayerContainerType(listener.player, Utils.UNSET_CONTAINER_TYPE));
     }
 
     public void c2s_removeTypeSelectCallback() {
-        if (ClientPlayNetworking.canSend(REMOVE_TYPE_SELECT_CALLBACK)) {
-            ClientPlayNetworking.send(REMOVE_TYPE_SELECT_CALLBACK, new FriendlyByteBuf(Unpooled.buffer()));
+        if (ClientPlayNetworking.canSend(NetworkWrapperImpl.REMOVE_TYPE_SELECT_CALLBACK)) {
+            ClientPlayNetworking.send(NetworkWrapperImpl.REMOVE_TYPE_SELECT_CALLBACK, new FriendlyByteBuf(Unpooled.buffer()));
         }
     }
 
     public void c2s_openTypeSelectScreen() {
-        if (ClientPlayNetworking.canSend(OPEN_SELECT_SCREEN)) {
-            ClientPlayNetworking.send(OPEN_SELECT_SCREEN, new FriendlyByteBuf(Unpooled.buffer()));
+        if (ClientPlayNetworking.canSend(NetworkWrapperImpl.OPEN_SELECT_SCREEN)) {
+            ClientPlayNetworking.send(NetworkWrapperImpl.OPEN_SELECT_SCREEN, new FriendlyByteBuf(Unpooled.buffer()));
         }
     }
 
@@ -112,26 +112,25 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
                 }
             });
         } else {
-            s2c_openSelectScreen(player, (type) -> s2c_openMenu(player, menuFactory));
+            this.s2c_openSelectScreen(player, (type) -> s2c_openMenu(player, menuFactory));
         }
     }
 
     public void s2c_openSelectScreen(ServerPlayer player, Consumer<ResourceLocation> playerPreferenceCallback) {
-        if (ServerPlayNetworking.canSend(player, OPEN_SELECT_SCREEN)) {
+        if (ServerPlayNetworking.canSend(player, NetworkWrapperImpl.OPEN_SELECT_SCREEN)) {
             if (playerPreferenceCallback != null) {
                 preferenceCallbacks.put(player.getUUID(), playerPreferenceCallback);
             }
             FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
             buffer.writeInt(containerFactories.size());
             containerFactories.keySet().forEach(buffer::writeResourceLocation);
-            ServerPlayNetworking.send(player, OPEN_SELECT_SCREEN, buffer);
+            ServerPlayNetworking.send(player, NetworkWrapperImpl.OPEN_SELECT_SCREEN, buffer);
         }
         // else illegal state
     }
 
     public AbstractContainerMenu createMenu(int windowId, BlockPos pos, Container container, Inventory inventory, Component containerName) {
-        Player player = inventory.player;
-        UUID uuid = player.getUUID();
+        UUID uuid = inventory.player.getUUID();
         ResourceLocation playerPreference;
         if (playerPreferences.containsKey(uuid) && containerFactories.containsKey(playerPreference = playerPreferences.get(uuid))) {
             return containerFactories.get(playerPreference).create(windowId, pos, container, inventory, containerName);
@@ -140,7 +139,7 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
     }
 
     @Override
-    public void s_setPlayerContainerType(final ServerPlayer player, final ResourceLocation containerType) {
+    public void s_setPlayerContainerType(ServerPlayer player, ResourceLocation containerType) {
         UUID uuid = player.getUUID();
         if (containerFactories.containsKey(containerType)) {
             playerPreferences.put(uuid, containerType);
@@ -159,30 +158,31 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
         server.submit(() -> this.s_setPlayerContainerType(player, containerType));
     }
 
-    private void s_handleRemoveTypeSelectCallback(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl listener, FriendlyByteBuf buffer, PacketSender sender) {
+    private void s_handleRemoveTypeSelectCallback(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl listener,
+                                                  FriendlyByteBuf buffer, PacketSender sender) {
         server.submit(() -> this.removeTypeSelectCallback(player));
     }
 
     private void s_handleOpenSelectScreen(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl listener,
                                           FriendlyByteBuf buffer, PacketSender sender) {
-        final AbstractContainerMenu TEMP = player.containerMenu;
-        if (TEMP instanceof AbstractContainerMenu_<?>) {
-            final AbstractContainerMenu_<?> MENU = (AbstractContainerMenu_<?>) TEMP;
+        AbstractContainerMenu temp = player.containerMenu;
+        if (temp instanceof AbstractContainerMenu_<?>) {
+            AbstractContainerMenu_<?> menu = (AbstractContainerMenu_<?>) temp;
             server.submit(() -> this.s2c_openSelectScreen(player, (type) -> player.openMenu(new ExtendedScreenHandlerFactory() {
                 @Nullable
                 @Override
                 public AbstractContainerMenu createMenu(int windowId, Inventory inventory, Player player) {
-                    return NetworkWrapperImpl.this.createMenu(windowId, MENU.pos, MENU.getContainer(), inventory, MENU.getDisplayName());
+                    return NetworkWrapperImpl.this.createMenu(windowId, menu.pos, menu.getContainer(), inventory, menu.getDisplayName());
                 }
 
                 @Override
                 public Component getDisplayName() {
-                    return MENU.getDisplayName();
+                    return menu.getDisplayName();
                 }
 
                 @Override
                 public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buffer) {
-                    buffer.writeBlockPos(MENU.pos).writeInt(MENU.getContainer().getContainerSize());
+                    buffer.writeBlockPos(menu.pos).writeInt(menu.getContainer().getContainerSize());
                 }
             })));
         } else {
@@ -196,8 +196,8 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
 
     @Override
     public void c2s_sendTypePreference(ResourceLocation selection) {
-        if (ClientPlayNetworking.canSend(UPDATE_PLAYER_PREFERENCE)) {
-            ClientPlayNetworking.send(UPDATE_PLAYER_PREFERENCE, new FriendlyByteBuf(Unpooled.buffer()).writeResourceLocation(selection));
+        if (ClientPlayNetworking.canSend(NetworkWrapperImpl.UPDATE_PLAYER_PREFERENCE)) {
+            ClientPlayNetworking.send(NetworkWrapperImpl.UPDATE_PLAYER_PREFERENCE, new FriendlyByteBuf(Unpooled.buffer()).writeResourceLocation(selection));
         }
     }
 
@@ -208,8 +208,8 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
 
     private class Client {
         public void initialise() {
-            ClientPlayConnectionEvents.INIT.register((listener_init, client) -> ClientPlayNetworking.registerReceiver(OPEN_SELECT_SCREEN, this::c_handleOpenSelectScreen));
-            ClientPlayConnectionEvents.JOIN.register((listener_play, sender, client) -> sender.sendPacket(UPDATE_PLAYER_PREFERENCE, new FriendlyByteBuf(Unpooled.buffer()).writeResourceLocation(ConfigWrapper.getInstance().getPreferredContainerType())));
+            ClientPlayConnectionEvents.INIT.register((listener_init, client) -> ClientPlayNetworking.registerReceiver(NetworkWrapperImpl.OPEN_SELECT_SCREEN, this::c_handleOpenSelectScreen));
+            ClientPlayConnectionEvents.JOIN.register((listener_play, sender, client) -> sender.sendPacket(NetworkWrapperImpl.UPDATE_PLAYER_PREFERENCE, new FriendlyByteBuf(Unpooled.buffer()).writeResourceLocation(ConfigWrapper.getInstance().getPreferredContainerType())));
         }
 
         private void c_handleOpenSelectScreen(Minecraft minecraft, ClientPacketListener listener, FriendlyByteBuf buffer, PacketSender sender) {

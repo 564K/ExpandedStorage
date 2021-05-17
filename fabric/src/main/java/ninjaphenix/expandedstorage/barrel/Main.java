@@ -45,43 +45,43 @@ public final class Main implements ModuleInitializer {
         ResourceLocation netheriteOpenStat = BaseCommon.registerStat(Utils.resloc("open_netherite_barrel"));
         // Init block properties
         BlockBehaviour.Properties ironProperties = FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD)
-                                                                      .breakByTool(FabricToolTags.AXES, Tiers.STONE.getLevel())
-                                                                      .requiresCorrectToolForDrops() // End of FBS
-                                                                      .strength(5.0F, 6.0F)
-                                                                      .sound(SoundType.WOOD);
+                .breakByTool(FabricToolTags.AXES, Tiers.STONE.getLevel())
+                .requiresCorrectToolForDrops() // End of FBS
+                .strength(5.0F, 6.0F)
+                .sound(SoundType.WOOD);
         BlockBehaviour.Properties goldProperties = FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD)
-                                                                      .breakByTool(FabricToolTags.AXES, Tiers.STONE.getLevel())
-                                                                      .requiresCorrectToolForDrops() // End of FBS
-                                                                      .strength(3.0F, 6.0F)
-                                                                      .sound(SoundType.WOOD);
+                .breakByTool(FabricToolTags.AXES, Tiers.STONE.getLevel())
+                .requiresCorrectToolForDrops() // End of FBS
+                .strength(3.0F, 6.0F)
+                .sound(SoundType.WOOD);
         BlockBehaviour.Properties diamondProperties = FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD)
-                                                                         .breakByTool(FabricToolTags.AXES, Tiers.IRON.getLevel())
-                                                                         .requiresCorrectToolForDrops() // End of FBS
-                                                                         .strength(5.0F, 6.0F)
-                                                                         .sound(SoundType.WOOD);
+                .breakByTool(FabricToolTags.AXES, Tiers.IRON.getLevel())
+                .requiresCorrectToolForDrops() // End of FBS
+                .strength(5.0F, 6.0F)
+                .sound(SoundType.WOOD);
         BlockBehaviour.Properties obsidianProperties = FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD)
-                                                                          .breakByTool(FabricToolTags.AXES, Tiers.DIAMOND.getLevel())
-                                                                          .requiresCorrectToolForDrops() // End of FBS
-                                                                          .strength(50.0F, 1200.0F)
-                                                                          .sound(SoundType.WOOD);
+                .breakByTool(FabricToolTags.AXES, Tiers.DIAMOND.getLevel())
+                .requiresCorrectToolForDrops() // End of FBS
+                .strength(50.0F, 1200.0F)
+                .sound(SoundType.WOOD);
         BlockBehaviour.Properties netheriteProperties = FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD)
-                                                                           .breakByTool(FabricToolTags.AXES, Tiers.DIAMOND.getLevel())
-                                                                           .requiresCorrectToolForDrops() // End of FBS
-                                                                           .strength(50.0F, 1200.0F)
-                                                                           .sound(SoundType.WOOD);
+                .breakByTool(FabricToolTags.AXES, Tiers.DIAMOND.getLevel())
+                .requiresCorrectToolForDrops() // End of FBS
+                .strength(50.0F, 1200.0F)
+                .sound(SoundType.WOOD);
         // Init blocks
-        BarrelBlock ironBarrelBlock = barrelBlock(Utils.resloc("iron_barrel"), ironOpenStat, ironTier, ironProperties);
-        BarrelBlock goldBarrelBlock = barrelBlock(Utils.resloc("gold_barrel"), goldOpenStat, goldTier, goldProperties);
-        BarrelBlock diamondBarrelBlock = barrelBlock(Utils.resloc("diamond_barrel"), diamondOpenStat, diamondTier, diamondProperties);
-        BarrelBlock obsidianBarrelBlock = barrelBlock(Utils.resloc("obsidian_barrel"), obsidianOpenStat, obsidianTier, obsidianProperties);
-        BarrelBlock netheriteBarrelBlock = barrelBlock(Utils.resloc("netherite_barrel"), netheriteOpenStat, netheriteTier, netheriteProperties);
+        BarrelBlock ironBarrelBlock = this.barrelBlock(Utils.resloc("iron_barrel"), ironOpenStat, ironTier, ironProperties);
+        BarrelBlock goldBarrelBlock = this.barrelBlock(Utils.resloc("gold_barrel"), goldOpenStat, goldTier, goldProperties);
+        BarrelBlock diamondBarrelBlock = this.barrelBlock(Utils.resloc("diamond_barrel"), diamondOpenStat, diamondTier, diamondProperties);
+        BarrelBlock obsidianBarrelBlock = this.barrelBlock(Utils.resloc("obsidian_barrel"), obsidianOpenStat, obsidianTier, obsidianProperties);
+        BarrelBlock netheriteBarrelBlock = this.barrelBlock(Utils.resloc("netherite_barrel"), netheriteOpenStat, netheriteTier, netheriteProperties);
         Set<BarrelBlock> blocks = ImmutableSet.copyOf(new BarrelBlock[]{ironBarrelBlock, goldBarrelBlock, diamondBarrelBlock, obsidianBarrelBlock, netheriteBarrelBlock});
         // Init items
-        BlockItem ironBarrelItem = barrelItem(ironTier, ironBarrelBlock);
-        BlockItem goldBarrelItem = barrelItem(goldTier, goldBarrelBlock);
-        BlockItem diamondBarrelItem = barrelItem(diamondTier, diamondBarrelBlock);
-        BlockItem obsidianBarrelItem = barrelItem(obsidianTier, obsidianBarrelBlock);
-        BlockItem netheriteBarrelItem = barrelItem(netheriteTier, netheriteBarrelBlock);
+        BlockItem ironBarrelItem = this.barrelItem(ironTier, ironBarrelBlock);
+        BlockItem goldBarrelItem = this.barrelItem(goldTier, goldBarrelBlock);
+        BlockItem diamondBarrelItem = this.barrelItem(diamondTier, diamondBarrelBlock);
+        BlockItem obsidianBarrelItem = this.barrelItem(obsidianTier, obsidianBarrelBlock);
+        BlockItem netheriteBarrelItem = this.barrelItem(netheriteTier, netheriteBarrelBlock);
         //Set<BlockItem> items = ImmutableSet.copyOf(new BlockItem[]{ironBarrelItem, goldBarrelItem, diamondBarrelItem, obsidianBarrelItem, netheriteBarrelItem});
         // Init block entity type
         BlockEntityType<BarrelBlockEntity> blockEntityType = new BlockEntityType<>(() -> new BarrelBlockEntity(BarrelCommon.getBlockEntityType(), null), Collections.unmodifiableSet(blocks), null);
@@ -97,13 +97,13 @@ public final class Main implements ModuleInitializer {
     }
 
     private BarrelBlock barrelBlock(ResourceLocation blockId, ResourceLocation stat, OpenableTier tier, BlockBehaviour.Properties properties) {
-        BarrelBlock rv = Registry.register(Registry.BLOCK, blockId, new BarrelBlock(tier.blockProperties().apply(properties), blockId, tier.key(), stat, tier.slots()));
-        BaseApi.getInstance().registerTieredBlock(rv);
-        return rv;
+        BarrelBlock block = Registry.register(Registry.BLOCK, blockId, new BarrelBlock(tier.blockProperties().apply(properties), blockId, tier.key(), stat, tier.slots()));
+        BaseApi.getInstance().registerTieredBlock(block);
+        return block;
     }
 
     private BlockItem barrelItem(OpenableTier tier, BarrelBlock block) {
-        final Item.Properties itemProperties = tier.itemProperties().apply(new Item.Properties().tab(Utils.TAB));
+        Item.Properties itemProperties = tier.itemProperties().apply(new Item.Properties().tab(Utils.TAB));
         return Registry.register(Registry.ITEM, block.blockId(), new BlockItem(block, itemProperties));
     }
 }

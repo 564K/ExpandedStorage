@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
 public final class PlatformUtilsImpl implements PlatformUtils {
-    private Boolean IS_CLIENT;
+    private Boolean isClient;
 
     private PlatformUtilsImpl() {
 
@@ -41,10 +41,10 @@ public final class PlatformUtilsImpl implements PlatformUtils {
 
     @Override
     public boolean isClient() {
-        if (IS_CLIENT == null) {
-            IS_CLIENT = FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT;
+        if (isClient == null) {
+            isClient = FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT;
         }
-        return IS_CLIENT;
+        return isClient;
     }
 
     @Override

@@ -10,15 +10,15 @@ import java.util.Set;
 
 public final class MixinPlugin implements IMixinConfigPlugin {
     @Override
-    public boolean shouldApplyMixin(final String TARGET_CLASS_PATH, final String MIXIN_CLASS_PATH) {
-        if ("ninjaphenix.expandedstorage.chest.mixin.ToweletteSupport".equals(MIXIN_CLASS_PATH)) {
+    public boolean shouldApplyMixin(String targetClassPath, String mixinClassPath) {
+        if ("ninjaphenix.expandedstorage.chest.mixin.ToweletteSupport".equals(mixinClassPath)) {
             return FabricLoader.getInstance().isModLoaded("towelette");
         }
         return true;
     }
 
     @Override
-    public void onLoad(final String MIXIN_PACKAGE) {
+    public void onLoad(String mixinPackage) {
     }
 
     @Override
@@ -27,7 +27,7 @@ public final class MixinPlugin implements IMixinConfigPlugin {
     }
 
     @Override
-    public void acceptTargets(final Set<String> MY_CONFIG_TARGETS, final Set<String> OTHERS_CONFIG_TARGETS) {
+    public void acceptTargets(Set<String> myConfigTargets, Set<String> othersConfigTargets) {
     }
 
     @Override
@@ -36,12 +36,12 @@ public final class MixinPlugin implements IMixinConfigPlugin {
     }
 
     @Override
-    public void preApply(final String TARGET_CLASS_PATH, final ClassNode TARGET_CLASS, final String MIXIN_CLASS_PATH, final IMixinInfo MIXIN_INFO) {
+    public void preApply(String targetClassPath, ClassNode targetClass, String mixinClassPath, IMixinInfo mixinInfo) {
 
     }
 
     @Override
-    public void postApply(final String TARGET_CLASS_PATH, final ClassNode TARGET_CLASS, final String MIXIN_CLASS_PATH, final IMixinInfo MIXIN_INFO) {
+    public void postApply(String targetClassPath, ClassNode targetClass, String mixinClassPath, IMixinInfo mixinInfo) {
 
     }
 }
