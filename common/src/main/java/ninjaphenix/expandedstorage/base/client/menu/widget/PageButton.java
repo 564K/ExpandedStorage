@@ -3,7 +3,6 @@ package ninjaphenix.expandedstorage.base.client.menu.widget;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -27,10 +26,9 @@ public class PageButton extends Button {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void renderButton(PoseStack stack, int mouseX, int mouseY, float delta) {
-        Minecraft.getInstance().getTextureManager().bind(PageButton.TEXTURE);
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, alpha);
+        RenderSystem.setShaderTexture(0, PageButton.TEXTURE);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);

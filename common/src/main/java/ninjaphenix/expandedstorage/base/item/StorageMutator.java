@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -54,7 +55,7 @@ public class StorageMutator extends Item {
 
     private static MutationMode getMode(ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
-        if (!tag.contains("mode", Utils.NBT_BYTE_TYPE)) {
+        if (!tag.contains("mode", Tag.TAG_BYTE)) {
             tag.putByte("mode", (byte) 0);
         }
         return MutationMode.from(tag.getByte("mode"));
@@ -187,7 +188,7 @@ public class StorageMutator extends Item {
             level.setBlockAndUpdate(pos, newState);
             BlockEntity newEntity = level.getBlockEntity(pos);
             //noinspection ConstantConditions
-            newEntity.load(newState, ContainerHelper.saveAllItems(newEntity.save(new CompoundTag()), invData));
+            newEntity.load(ContainerHelper.saveAllItems(newEntity.save(new CompoundTag()), invData));
         }
     }
 

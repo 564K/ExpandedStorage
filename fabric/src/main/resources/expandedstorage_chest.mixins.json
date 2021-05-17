@@ -6,6 +6,9 @@
   "mixins": [
     "ToweletteSupport"
   ],
+  "client": [
+    "ModelLayersMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   },

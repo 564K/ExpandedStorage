@@ -1,77 +1,39 @@
 package ninjaphenix.expandedstorage.chest.block.misc;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoubleBlockCombiner;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.ChestLidController;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import ninjaphenix.expandedstorage.base.internal_api.block.misc.AbstractOpenableStorageBlockEntity;
+import ninjaphenix.expandedstorage.base.internal_api.inventory.CompoundWorldlyContainer;
 import ninjaphenix.expandedstorage.chest.block.ChestBlock;
 
-public final class ChestBlockEntity extends AbstractOpenableStorageBlockEntity implements TickableBlockEntity {
-    private int viewerCount;
-    private float lastAnimationAngle;
-    private float animationAngle;
-    private int ticksOpen;
+public final class ChestBlockEntity extends AbstractOpenableStorageBlockEntity {
+    private final ChestLidController chestLidController;
 
-    public ChestBlockEntity(BlockEntityType<ChestBlockEntity> blockEntityType, ResourceLocation blockId) {
-        super(blockEntityType, blockId);
+    public ChestBlockEntity(BlockEntityType<ChestBlockEntity> blockEntityType, BlockPos pos, BlockState state) {
+        super(blockEntityType, pos, state, ((ChestBlock) state.getBlock()).blockId());
+        chestLidController = new ChestLidController();
     }
 
-    private static int tickViewerCount(Level level, ChestBlockEntity entity, int ticksOpen, int x, int y, int z, int viewCount) {
-        if (!level.isClientSide() && viewCount != 0 && (ticksOpen + x + y + z) % 200 == 0) {
-            return AbstractOpenableStorageBlockEntity.countViewers(level, entity, x, y, z);
-        }
-        return viewCount;
+    public static void lidAnimateTick(Level level, BlockPos pos, BlockState state, ChestBlockEntity blockEntity) {
+        blockEntity.chestLidController.tickLid();
     }
 
-    @Override
-    public boolean triggerEvent(int event, int value) {
-        if (event == ChestBlock.SET_OPEN_COUNT_EVENT) {
-            viewerCount = value;
-            return true;
-        }
-        return super.triggerEvent(event, value);
-    }
-
-    // Client only
-    public float getLidOpenness(float f) {
-        return Mth.lerp(f, lastAnimationAngle, animationAngle);
-    }
-
-    @Override
-    @SuppressWarnings("ConstantConditions")
-    public void tick() {
-        viewerCount = tickViewerCount(level, this, ++ticksOpen, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), viewerCount);
-        lastAnimationAngle = animationAngle;
-        if (viewerCount > 0 && animationAngle == 0.0F) {
-            this.playSound(SoundEvents.CHEST_OPEN);
-        }
-        if (viewerCount == 0 && animationAngle > 0.0F || viewerCount > 0 && animationAngle < 1.0F) {
-            animationAngle = Mth.clamp(animationAngle + (viewerCount > 0 ? 0.1F : -0.1F), 0, 1);
-            if (animationAngle < 0.5F && lastAnimationAngle >= 0.5F) {
-                this.playSound(SoundEvents.CHEST_CLOSE);
-            }
-        }
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    private void playSound(SoundEvent soundEvent) {
-        BlockState state = this.getBlockState();
+    private static void playSound(Level level, BlockPos pos, BlockState state, SoundEvent soundEvent) {
         DoubleBlockCombiner.BlockType mergeType = ChestBlock.getBlockType(state);
         Vec3 soundPos;
         if (mergeType == DoubleBlockCombiner.BlockType.SINGLE) {
-            soundPos = Vec3.atCenterOf(worldPosition);
+            soundPos = Vec3.atCenterOf(pos);
         } else if (mergeType == DoubleBlockCombiner.BlockType.FIRST) {
-            soundPos = Vec3.atCenterOf(worldPosition).add(Vec3.atLowerCornerOf(ChestBlock.getDirectionToAttached(state).getNormal()).scale(0.5D));
+            soundPos = Vec3.atCenterOf(pos).add(Vec3.atLowerCornerOf(ChestBlock.getDirectionToAttached(state).getNormal()).scale(0.5D));
         } else {
             return;
         }
@@ -79,31 +41,36 @@ public final class ChestBlockEntity extends AbstractOpenableStorageBlockEntity i
     }
 
     @Override
-    public void startOpen(Player player) {
-        if (player.isSpectator()) {
-            return;
-        }
-        if (viewerCount < 0) {
-            viewerCount = 0;
-        }
-        viewerCount++;
-        this.onInvOpenOrClose();
+    protected void onOpen(Level level, BlockPos pos, BlockState state) {
+        ChestBlockEntity.playSound(level, pos, state, SoundEvents.CHEST_OPEN);
     }
 
     @Override
-    public void stopOpen(final Player player) {
-        if (player.isSpectator()) {
-            return;
-        }
-        viewerCount--;
-        this.onInvOpenOrClose();
+    protected void onClose(Level level, BlockPos pos, BlockState state) {
+        ChestBlockEntity.playSound(level, pos, state, SoundEvents.CHEST_CLOSE);
     }
 
-    @SuppressWarnings("ConstantConditions")
-    private void onInvOpenOrClose() {
-        if (this.getBlockState().getBlock() instanceof ChestBlock block) {
-            level.blockEvent(worldPosition, block, ChestBlock.SET_OPEN_COUNT_EVENT, viewerCount);
-            level.updateNeighborsAt(worldPosition, block);
+    @Override
+    protected void openerCountChanged(Level level, BlockPos pos, BlockState state, int i, int j) {
+        level.blockEvent(pos, state.getBlock(), 1, j);
+    }
+
+    @Override
+    protected boolean isOwnContainer(Container container) {
+        return container == this || container instanceof CompoundWorldlyContainer compoundContainer && compoundContainer.consistsPartlyOf(this);
+    }
+
+    @Override
+    public boolean triggerEvent(int event, int value) {
+        if (event == ChestBlock.SET_OPEN_COUNT_EVENT) {
+            chestLidController.shouldBeOpen(value > 0);
+            return true;
         }
+        return super.triggerEvent(event, value);
+    }
+
+    // Client only
+    public float getLidOpenness(float f) {
+        return chestLidController.getOpenness(f);
     }
 }

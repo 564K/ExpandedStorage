@@ -1,11 +1,13 @@
 package ninjaphenix.expandedstorage.base.internal_api.block.misc;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
@@ -13,12 +15,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import ninjaphenix.expandedstorage.base.internal_api.block.AbstractOpenableStorageBlock;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.AbstractContainerMenu_;
-import ninjaphenix.expandedstorage.base.internal_api.inventory.CompoundWorldlyContainer;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.Nullable;
@@ -30,26 +31,78 @@ import java.util.function.IntUnaryOperator;
 @Experimental
 public abstract class AbstractOpenableStorageBlockEntity extends AbstractStorageBlockEntity implements WorldlyContainer {
     private final ResourceLocation blockId;
+    private final ContainerOpenersCounter openersCounter;
     protected Component containerName;
     private int slots;
     private NonNullList<ItemStack> inventory;
     private int[] slotsForFace;
 
-    public AbstractOpenableStorageBlockEntity(BlockEntityType<?> blockEntityType, ResourceLocation blockId) {
-        super(blockEntityType);
+    public AbstractOpenableStorageBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state, ResourceLocation blockId) {
+        super(blockEntityType, pos, state);
+        this.openersCounter = new ContainerOpenersCounter() {
+            @Override
+            protected void onOpen(Level level, BlockPos pos, BlockState state) {
+                AbstractOpenableStorageBlockEntity.this.onOpen(level, pos, state);
+            }
+
+            @Override
+            protected void onClose(Level level, BlockPos pos, BlockState state) {
+                AbstractOpenableStorageBlockEntity.this.onClose(level, pos, state);
+            }
+
+            @Override
+            protected void openerCountChanged(Level level, BlockPos pos, BlockState state, int i, int j) {
+                // Does this respect method overriding?
+                AbstractOpenableStorageBlockEntity.this.openerCountChanged(level, pos, state, i, j);
+            }
+
+            @Override
+            protected boolean isOwnContainer(Player player) {
+                if (player.containerMenu instanceof AbstractContainerMenu_<?>) {
+                    return AbstractOpenableStorageBlockEntity.this.isOwnContainer(((AbstractContainerMenu_<?>) player.containerMenu).getContainer());
+                } else {
+                    return false;
+                }
+            }
+        };
         this.blockId = blockId;
         if (blockId != null) {
             this.initialise(blockId);
         }
     }
 
-    protected static int countViewers(Level level, WorldlyContainer container, int x, int y, int z) {
-        return level.getEntitiesOfClass(Player.class, new AABB(x - 5, y - 5, z - 5, x + 6, y + 6, z + 6)).stream()
-                    .filter(player -> player.containerMenu instanceof AbstractContainerMenu_<?>)
-                    .map(player -> ((AbstractContainerMenu_<?>) player.containerMenu).getContainer())
-                    .filter(openContainer -> openContainer == container ||
-                            openContainer instanceof CompoundWorldlyContainer compoundContainer && compoundContainer.consistsPartlyOf(container))
-                    .mapToInt(inv -> 1).sum();
+    @Override
+    public void startOpen(Player player) {
+        if (!player.isSpectator()) {
+            openersCounter.incrementOpeners(player, getLevel(), getBlockPos(), getBlockState());
+        }
+    }
+
+    @Override
+    public void stopOpen(Player player) {
+        if (!player.isSpectator()) {
+            openersCounter.decrementOpeners(player, getLevel(), getBlockPos(), getBlockState());
+        }
+    }
+
+    protected void openerCountChanged(Level level, BlockPos pos, BlockState state, int i, int j) {
+
+    }
+
+    protected boolean isOwnContainer(Container container) {
+        return container == this;
+    }
+
+    protected void onOpen(Level level, BlockPos pos, BlockState state) {
+
+    }
+
+    protected void onClose(Level level, BlockPos pos, BlockState state) {
+
+    }
+
+    public final void recheckOpen() {
+        openersCounter.recheckOpeners(getLevel(), getBlockPos(), getBlockState());
     }
 
     private void initialise(ResourceLocation blockId) {
@@ -72,9 +125,9 @@ public abstract class AbstractOpenableStorageBlockEntity extends AbstractStorage
     }
 
     @Override
-    public void load(BlockState state, CompoundTag tag) {
-        super.load(state, tag);
-        if (state.getBlock() instanceof AbstractOpenableStorageBlock block) {
+    public void load(CompoundTag tag) {
+        super.load(tag);
+        if (this.getBlockState().getBlock() instanceof AbstractOpenableStorageBlock block) {
             this.initialise(block.blockId());
             ContainerHelper.loadAllItems(tag, inventory);
         } else {

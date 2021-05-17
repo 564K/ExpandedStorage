@@ -18,6 +18,7 @@ import ninjaphenix.expandedstorage.base.internal_api.BaseApi;
 import ninjaphenix.expandedstorage.base.internal_api.ModuleInitializer;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.internal_api.tier.OpenableTier;
+import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
 import ninjaphenix.expandedstorage.old_chest.block.OldChestBlock;
 import ninjaphenix.expandedstorage.old_chest.block.misc.OldChestBlockEntity;
 
@@ -87,7 +88,7 @@ public final class Main implements ModuleInitializer {
         BlockItem netheriteChestItem = this.oldChestItem(netheriteTier, netheriteChestBlock);
         Set<BlockItem> items = ImmutableSet.copyOf(new BlockItem[]{woodChestItem, ironChestItem, goldChestItem, diamondChestItem, obsidianChestItem, netheriteChestItem});
         // Init block entity type
-        BlockEntityType<OldChestBlockEntity> blockEntityType = new BlockEntityType<>(() -> new OldChestBlockEntity(OldChestCommon.getBlockEntityType(), null), Collections.unmodifiableSet(blocks), null);
+        BlockEntityType<OldChestBlockEntity> blockEntityType = PlatformUtils.getInstance().createBlockEntityType((pos, state) -> new OldChestBlockEntity(OldChestCommon.getBlockEntityType(), pos, state), Collections.unmodifiableSet(blocks), null);
         Registry.register(Registry.BLOCK_ENTITY_TYPE, OldChestCommon.BLOCK_TYPE, blockEntityType);
         OldChestCommon.setBlockEntityType(blockEntityType);
         // Register chest module icon & upgrade behaviours

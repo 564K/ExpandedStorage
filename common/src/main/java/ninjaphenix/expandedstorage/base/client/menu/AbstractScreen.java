@@ -29,10 +29,9 @@ public abstract class AbstractScreen<T extends AbstractContainerMenu_<R>, R exte
     }
 
     @Override
-    @SuppressWarnings({"ConstantConditions", "deprecation"})
     protected void renderBg(PoseStack stack, float delta, int mouseX, int mouseY) {
-        minecraft.getTextureManager().bind(screenMeta.texture);
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, screenMeta.texture);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         GuiComponent.blit(stack, leftPos, topPos, 0, 0, imageWidth, imageHeight, screenMeta.textureWidth, screenMeta.textureHeight);
     }
 
@@ -46,7 +45,7 @@ public abstract class AbstractScreen<T extends AbstractContainerMenu_<R>, R exte
     @Override
     protected void renderLabels(PoseStack stack, int mouseX, int mouseY) {
         font.draw(stack, title, 8, 6, 4210752);
-        font.draw(stack, inventory.getDisplayName(), inventoryLabelLeft, imageHeight - 96 + 2, 4210752);
+        font.draw(stack, playerInventoryTitle, inventoryLabelLeft, imageHeight - 96 + 2, 4210752);
     }
 
     @Override

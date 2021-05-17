@@ -1,23 +1,30 @@
 package ninjaphenix.expandedstorage.base.platform.fabric;
 
+import com.mojang.datafixers.types.Type;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.BlockPos;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import ninjaphenix.expandedstorage.base.config.button.ButtonOffset;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.ClientContainerMenuFactory;
 import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
 
+import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
@@ -74,5 +81,10 @@ public final class PlatformUtilsImpl implements PlatformUtils {
             modIds.addAll(metadata.getProvides());
         }
         return modIds;
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> blockEntitySupplier, Set<Block> blocks, Type<?> type) {
+        return new BlockEntityType<>(blockEntitySupplier::apply, blocks, type);
     }
 }

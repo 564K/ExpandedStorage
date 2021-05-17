@@ -19,7 +19,6 @@ import ninjaphenix.expandedstorage.base.internal_api.tier.Tier;
 import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
-import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
@@ -56,35 +55,6 @@ public final class Utils {
     public static final int DIAMOND_STACK_COUNT = 108;
     public static final int OBSIDIAN_STACK_COUNT = 108;
     public static final int NETHERITE_STACK_COUNT = 135;
-
-    // NBT Tag Types
-    /**
-     * @deprecated Removing in 1.17, in 1.17 use {@link net.minecraft.nbt.Tag.TAG_STRING} instead.
-     */
-    @Deprecated
-    @ScheduledForRemoval(inVersion = "8 (MC=1.17)")
-    public static final int NBT_STRING_TYPE = 8;
-
-    /**
-     * @deprecated Removing in 1.17, in 1.17 use {@link net.minecraft.nbt.Tag.TAG_COMPOUND} instead.
-     */
-    @Deprecated
-    @ScheduledForRemoval(inVersion = "8 (MC=1.17)")
-    public static final int NBT_COMPOUND_TYPE = 10;
-
-    /**
-     * @deprecated Removing in 1.17, in 1.17 use {@link net.minecraft.nbt.Tag.TAG_BYTE} instead.
-     */
-    @Deprecated
-    @ScheduledForRemoval(inVersion = "8 (MC=1.17)")
-    public static final int NBT_BYTE_TYPE = 1;
-
-    /**
-     * @deprecated Removing in 1.17, in 1.17 use {@link net.minecraft.nbt.Tag.TAG_LIST} instead.
-     */
-    @Deprecated
-    @ScheduledForRemoval(inVersion = "8 (MC=1.17)")
-    public static final int NBT_LIST_TYPE = 9;
 
     // Item Cooldown
     public static final int QUARTER_SECOND = 5;

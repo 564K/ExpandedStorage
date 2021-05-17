@@ -6,7 +6,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -45,8 +44,8 @@ public final class BarrelBlock extends AbstractOpenableStorageBlock {
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockGetter blockGetter) {
-        return new BarrelBlockEntity(BarrelCommon.getBlockEntityType(), this.blockId());
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new BarrelBlockEntity(BarrelCommon.getBlockEntityType(), pos, state);
     }
 
     @Override
@@ -59,7 +58,7 @@ public final class BarrelBlock extends AbstractOpenableStorageBlock {
     @SuppressWarnings("deprecation")
     public void tick(BlockState state, ServerLevel level, BlockPos pos, Random random) {
         if (level.getBlockEntity(pos) instanceof BarrelBlockEntity entity) {
-            entity.checkViewerCount();
+            entity.recheckOpen();
         }
     }
 }

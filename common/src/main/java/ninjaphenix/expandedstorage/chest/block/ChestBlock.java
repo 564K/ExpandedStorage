@@ -3,14 +3,17 @@ package ninjaphenix.expandedstorage.chest.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -24,6 +27,9 @@ import ninjaphenix.expandedstorage.base.internal_api.block.misc.CursedChestType;
 import ninjaphenix.expandedstorage.chest.ChestCommon;
 import ninjaphenix.expandedstorage.chest.block.misc.ChestBlockEntity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Random;
 
 public final class ChestBlock extends AbstractChestBlock<ChestBlockEntity> implements SimpleWaterloggedBlock {
     public static final int SET_OPEN_COUNT_EVENT = 1;
@@ -74,6 +80,22 @@ public final class ChestBlock extends AbstractChestBlock<ChestBlockEntity> imple
         return ChestCommon.BLOCK_TYPE;
     }
 
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+        return level.isClientSide ? BaseEntityBlock.createTickerHelper(blockEntityType, ChestCommon.getBlockEntityType(), ChestBlockEntity::lidAnimateTick) : null;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, Random random) {
+        final BlockEntity temp = level.getBlockEntity(pos);
+        if (temp instanceof ChestBlockEntity) {
+            ((ChestBlockEntity) temp).recheckOpen();
+        }
+
+    }
+
     @Override
     @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
@@ -92,8 +114,8 @@ public final class ChestBlock extends AbstractChestBlock<ChestBlockEntity> imple
 
     @NotNull
     @Override
-    public BlockEntity newBlockEntity(BlockGetter getter) {
-        return new ChestBlockEntity(ChestCommon.getBlockEntityType(), blockId());
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new ChestBlockEntity(ChestCommon.getBlockEntityType(), pos, state);
     }
 
     @Override

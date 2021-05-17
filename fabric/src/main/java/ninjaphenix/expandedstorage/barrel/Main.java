@@ -84,7 +84,7 @@ public final class Main implements ModuleInitializer {
         BlockItem netheriteBarrelItem = this.barrelItem(netheriteTier, netheriteBarrelBlock);
         //Set<BlockItem> items = ImmutableSet.copyOf(new BlockItem[]{ironBarrelItem, goldBarrelItem, diamondBarrelItem, obsidianBarrelItem, netheriteBarrelItem});
         // Init block entity type
-        BlockEntityType<BarrelBlockEntity> blockEntityType = new BlockEntityType<>(() -> new BarrelBlockEntity(BarrelCommon.getBlockEntityType(), null), Collections.unmodifiableSet(blocks), null);
+        BlockEntityType<BarrelBlockEntity> blockEntityType = PlatformUtils.getInstance().createBlockEntityType((pos, state) -> new BarrelBlockEntity(BarrelCommon.getBlockEntityType(), pos, state), Collections.unmodifiableSet(blocks), null);
         Registry.register(Registry.BLOCK_ENTITY_TYPE, BarrelCommon.BLOCK_TYPE, blockEntityType);
         BarrelCommon.setBlockEntityType(blockEntityType);
         // Register chest module icon & upgrade behaviours
