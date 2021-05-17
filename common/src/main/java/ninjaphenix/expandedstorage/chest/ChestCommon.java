@@ -64,6 +64,9 @@ public final class ChestCommon {
     }
 
     private static boolean tryUpgradeBlock(UseOnContext context, ResourceLocation from, ResourceLocation to) {
+        if (true) { // Disable block upgrade for now.
+            return false;
+        }
         BlockPos pos = context.getClickedPos();
         Level level = context.getLevel();
         BlockState state = level.getBlockState(pos);
