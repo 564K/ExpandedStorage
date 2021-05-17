@@ -6,8 +6,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
-@Experimental
 @Internal
+@Experimental
 public interface ClientContainerMenuFactory<T extends AbstractContainerMenu> {
-    T create(final int WINDOW_ID, final Inventory INVENTORY, final FriendlyByteBuf BUFFER);
+    T create(int windowId, Inventory inventory, FriendlyByteBuf buffer);
 }

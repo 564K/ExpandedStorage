@@ -13,28 +13,27 @@ import ninjaphenix.expandedstorage.base.inventory.screen.ScrollableScreenMeta;
 import ninjaphenix.expandedstorage.base.platform.ConfigWrapper;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public final class ScrollableScreen extends AbstractScreen<ScrollableContainerMenu, ScrollableScreenMeta> {
-    protected final boolean HAS_SCROLLBAR;
-    private final boolean SCROLLING_UNRESTRICTED;
+    protected final boolean hasScrollbar;
+    private final boolean scrollingUnrestricted;
     private boolean isDragging;
     private int topRow;
 
     public ScrollableScreen(ScrollableContainerMenu container, Inventory playerInventory, Component title) {
-        super(container, playerInventory, title, (screenMeta) -> (screenMeta.WIDTH * 18 + 14) / 2 - 80);
-        HAS_SCROLLBAR = SCREEN_META.TOTAL_ROWS != SCREEN_META.HEIGHT;
-        imageWidth = 14 + 18 * SCREEN_META.WIDTH;
-        imageHeight = 17 + 97 + 18 * SCREEN_META.HEIGHT;
-        SCROLLING_UNRESTRICTED = ConfigWrapper.getInstance().isScrollingUnrestricted();
+        super(container, playerInventory, title, (screenMeta) -> (screenMeta.width * 18 + 14) / 2 - 80);
+        hasScrollbar = screenMeta.totalRows != screenMeta.height;
+        imageWidth = 14 + 18 * screenMeta.width;
+        imageHeight = 17 + 97 + 18 * screenMeta.height;
+        scrollingUnrestricted = ConfigWrapper.getInstance().isScrollingUnrestricted();
     }
 
     @Override
     protected void init() {
         super.init();
-        if (HAS_SCROLLBAR) {
+        if (hasScrollbar) {
             isDragging = false;
             topRow = 0;
         }
@@ -43,33 +42,33 @@ public final class ScrollableScreen extends AbstractScreen<ScrollableContainerMe
     @Override
     protected void renderBg(PoseStack stack, float delta, int mouseX, int mouseY) {
         super.renderBg(stack, delta, mouseX, mouseY);
-        if (HAS_SCROLLBAR) {
-            final int CONTAINER_SLOTS_HEIGHT = SCREEN_META.HEIGHT * 18;
-            final int SCROLLBAR_HEIGHT = CONTAINER_SLOTS_HEIGHT + (SCREEN_META.WIDTH > 9 ? 34 : 24);
-            GuiComponent.blit(stack, leftPos + imageWidth - 4, topPos, imageWidth, 0, 22, SCROLLBAR_HEIGHT, SCREEN_META.TEXTURE_WIDTH, SCREEN_META.TEXTURE_HEIGHT);
-            final int Y_OFFSET = Mth.floor((CONTAINER_SLOTS_HEIGHT - 17) * (((double) topRow) / (SCREEN_META.TOTAL_ROWS - SCREEN_META.HEIGHT)));
-            GuiComponent.blit(stack, leftPos + imageWidth - 2, topPos + Y_OFFSET + 18, imageWidth, SCROLLBAR_HEIGHT, 12, 15, SCREEN_META.TEXTURE_WIDTH, SCREEN_META.TEXTURE_HEIGHT);
+        if (hasScrollbar) {
+            int containerSlotsHeight = screenMeta.height * 18;
+            int scrollbarHeight = containerSlotsHeight + (screenMeta.width > 9 ? 34 : 24);
+            GuiComponent.blit(stack, leftPos + imageWidth - 4, topPos, imageWidth, 0, 22, scrollbarHeight, screenMeta.textureWidth, screenMeta.textureHeight);
+            int yOffset = Mth.floor((containerSlotsHeight - 17) * (((double) topRow) / (screenMeta.totalRows - screenMeta.height)));
+            GuiComponent.blit(stack, leftPos + imageWidth - 2, topPos + yOffset + 18, imageWidth, scrollbarHeight, 12, 15, screenMeta.textureWidth, screenMeta.textureHeight);
         }
     }
 
     private boolean isMouseOverScrollbar(double mouseX, double mouseY) {
-        final int SCROLLBAR_TOP_POS = topPos + 18;
-        final int SCROLLBAR_LEFT_POS = leftPos + imageWidth - 2;
-        return mouseX >= SCROLLBAR_LEFT_POS && mouseY >= SCROLLBAR_TOP_POS && mouseX < SCROLLBAR_LEFT_POS + 12 && mouseY < SCROLLBAR_TOP_POS + SCREEN_META.HEIGHT * 18;
+        int scrollbarTopPos = topPos + 18;
+        int scrollbarLeftPos = leftPos + imageWidth - 2;
+        return mouseX >= scrollbarLeftPos && mouseY >= scrollbarTopPos && mouseX < scrollbarLeftPos + 12 && mouseY < scrollbarTopPos + screenMeta.height * 18;
     }
 
     @Override
     protected boolean hasClickedOutside(double mouseX, double mouseY, int left, int top, int button) {
-        return super.hasClickedOutside(mouseX, mouseY, left, top, button) && !isMouseOverScrollbar(mouseX, mouseY);
+        return super.hasClickedOutside(mouseX, mouseY, left, top, button) && !this.isMouseOverScrollbar(mouseX, mouseY);
     }
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (HAS_SCROLLBAR) {
+        if (hasScrollbar) {
             if (keyCode == GLFW.GLFW_KEY_DOWN || keyCode == GLFW.GLFW_KEY_PAGE_DOWN) {
-                if (topRow != SCREEN_META.TOTAL_ROWS - SCREEN_META.HEIGHT) {
+                if (topRow != screenMeta.totalRows - screenMeta.height) {
                     if (Screen.hasShiftDown()) {
-                        this.setTopRow(topRow, Math.min(topRow + SCREEN_META.HEIGHT, SCREEN_META.TOTAL_ROWS - SCREEN_META.HEIGHT));
+                        this.setTopRow(topRow, Math.min(topRow + screenMeta.height, screenMeta.totalRows - screenMeta.height));
                     } else {
                         this.setTopRow(topRow, topRow + 1);
                     }
@@ -78,7 +77,7 @@ public final class ScrollableScreen extends AbstractScreen<ScrollableContainerMe
             } else if (keyCode == GLFW.GLFW_KEY_UP || keyCode == GLFW.GLFW_KEY_PAGE_UP) {
                 if (topRow != 0) {
                     if (Screen.hasShiftDown()) {
-                        this.setTopRow(topRow, Math.max(topRow - SCREEN_META.HEIGHT, 0));
+                        this.setTopRow(topRow, Math.max(topRow - screenMeta.height, 0));
                     } else {
                         this.setTopRow(topRow, topRow - 1);
                     }
@@ -91,7 +90,7 @@ public final class ScrollableScreen extends AbstractScreen<ScrollableContainerMe
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (HAS_SCROLLBAR && this.isMouseOverScrollbar(mouseX, mouseY) && button == 0) {
+        if (hasScrollbar && this.isMouseOverScrollbar(mouseX, mouseY) && button == 0) {
             isDragging = true;
             this.updateTopRow(mouseY);
         }
@@ -100,24 +99,24 @@ public final class ScrollableScreen extends AbstractScreen<ScrollableContainerMe
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        if (HAS_SCROLLBAR && isDragging) {
+        if (hasScrollbar && isDragging) {
             this.updateTopRow(mouseY);
         }
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 
     private void updateTopRow(double mouseY) {
-        this.setTopRow(topRow, Mth.floor(Mth.clampedLerp(0, SCREEN_META.TOTAL_ROWS - SCREEN_META.HEIGHT, (mouseY - (topPos + 18)) / (SCREEN_META.HEIGHT * 18))));
+        this.setTopRow(topRow, Mth.floor(Mth.clampedLerp(0, screenMeta.totalRows - screenMeta.height, (mouseY - (topPos + 18)) / (screenMeta.height * 18))));
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        if (HAS_SCROLLBAR && (SCROLLING_UNRESTRICTED || this.isMouseOverScrollbar(mouseX, mouseY))) {
-            final int newTop;
+        if (hasScrollbar && (scrollingUnrestricted || this.isMouseOverScrollbar(mouseX, mouseY))) {
+            int newTop;
             if (delta < 0) {
-                newTop = Math.min(topRow + (hasShiftDown() ? SCREEN_META.HEIGHT : 1), SCREEN_META.TOTAL_ROWS - SCREEN_META.HEIGHT);
+                newTop = Math.min(topRow + (Screen.hasShiftDown() ? screenMeta.height : 1), screenMeta.totalRows - screenMeta.height);
             } else {
-                newTop = Math.max(topRow - (hasShiftDown() ? SCREEN_META.HEIGHT : 1), 0);
+                newTop = Math.max(topRow - (Screen.hasShiftDown() ? screenMeta.height : 1), 0);
             }
             this.setTopRow(topRow, newTop);
             return true;
@@ -125,48 +124,48 @@ public final class ScrollableScreen extends AbstractScreen<ScrollableContainerMe
         return super.mouseScrolled(mouseX, mouseY, delta);
     }
 
-    private void setTopRow(final int OLD_TOP_ROW, final int NEW_TOP_ROW) {
-        if (OLD_TOP_ROW == NEW_TOP_ROW) {
+    private void setTopRow(int oldTopRow, int newTopRow) {
+        if (oldTopRow == newTopRow) {
             return;
         }
-        topRow = NEW_TOP_ROW;
-        final int DELTA = NEW_TOP_ROW - OLD_TOP_ROW;
-        final int ROWS = Math.abs(DELTA);
-        if (ROWS < SCREEN_META.HEIGHT) {
-            final int SET_AMOUNT = ROWS * SCREEN_META.WIDTH;
-            final int MOVABLE_AMOUNT = (SCREEN_META.HEIGHT - ROWS) * SCREEN_META.WIDTH;
-            if (DELTA > 0) {
-                final int setOutBegin = OLD_TOP_ROW * SCREEN_META.WIDTH;
-                final int movableBegin = NEW_TOP_ROW * SCREEN_META.WIDTH;
-                final int setInBegin = movableBegin + MOVABLE_AMOUNT;
-                menu.setSlotRange(setOutBegin, setOutBegin + SET_AMOUNT, index -> -2000);
-                menu.moveSlotRange(movableBegin, setInBegin, -18 * ROWS);
-                menu.setSlotRange(setInBegin, Math.min(setInBegin + SET_AMOUNT, SCREEN_META.TOTAL_SLOTS),
-                        index -> 18 * Mth.intFloorDiv(index - movableBegin + SCREEN_META.WIDTH, SCREEN_META.WIDTH));
+        topRow = newTopRow;
+        int delta = newTopRow - oldTopRow;
+        int rows = Math.abs(delta);
+        if (rows < screenMeta.height) {
+            int setAmount = rows * screenMeta.width;
+            int movableAmount = (screenMeta.height - rows) * screenMeta.width;
+            if (delta > 0) {
+                int setOutBegin = oldTopRow * screenMeta.width;
+                int movableBegin = newTopRow * screenMeta.width;
+                int setInBegin = movableBegin + movableAmount;
+                menu.setSlotRange(setOutBegin, setOutBegin + setAmount, index -> -2000);
+                menu.moveSlotRange(movableBegin, setInBegin, -18 * rows);
+                menu.setSlotRange(setInBegin, Math.min(setInBegin + setAmount, screenMeta.totalSlots),
+                        index -> 18 * Mth.intFloorDiv(index - movableBegin + screenMeta.width, screenMeta.width));
             } else {
-                final int setInBegin = NEW_TOP_ROW * SCREEN_META.WIDTH;
-                final int movableBegin = OLD_TOP_ROW * SCREEN_META.WIDTH;
-                final int setOutBegin = movableBegin + MOVABLE_AMOUNT;
-                menu.setSlotRange(setInBegin, setInBegin + SET_AMOUNT,
-                        index -> 18 * Mth.intFloorDiv(index - setInBegin + SCREEN_META.WIDTH, SCREEN_META.WIDTH));
-                menu.moveSlotRange(movableBegin, setOutBegin, 18 * ROWS);
-                menu.setSlotRange(setOutBegin, Math.min(setOutBegin + SET_AMOUNT, SCREEN_META.TOTAL_SLOTS), index -> -2000);
+                int setInBegin = newTopRow * screenMeta.width;
+                int movableBegin = oldTopRow * screenMeta.width;
+                int setOutBegin = movableBegin + movableAmount;
+                menu.setSlotRange(setInBegin, setInBegin + setAmount,
+                        index -> 18 * Mth.intFloorDiv(index - setInBegin + screenMeta.width, screenMeta.width));
+                menu.moveSlotRange(movableBegin, setOutBegin, 18 * rows);
+                menu.setSlotRange(setOutBegin, Math.min(setOutBegin + setAmount, screenMeta.totalSlots), index -> -2000);
             }
         } else {
-            final int oldMin = OLD_TOP_ROW * SCREEN_META.WIDTH;
-            menu.setSlotRange(oldMin, Math.min(oldMin + SCREEN_META.WIDTH * SCREEN_META.HEIGHT, SCREEN_META.TOTAL_SLOTS), index -> -2000);
-            final int newMin = NEW_TOP_ROW * SCREEN_META.WIDTH;
-            menu.setSlotRange(newMin, newMin + SCREEN_META.WIDTH * SCREEN_META.HEIGHT,
-                    index -> 18 + 18 * Mth.intFloorDiv(index - newMin, SCREEN_META.WIDTH));
+            int oldMin = oldTopRow * screenMeta.width;
+            menu.setSlotRange(oldMin, Math.min(oldMin + screenMeta.width * screenMeta.height, screenMeta.totalSlots), index -> -2000);
+            int newMin = newTopRow * screenMeta.width;
+            menu.setSlotRange(newMin, newMin + screenMeta.width * screenMeta.height,
+                    index -> 18 + 18 * Mth.intFloorDiv(index - newMin, screenMeta.width));
         }
     }
 
     @Override
     public void resize(Minecraft client, int width, int height) {
-        if (HAS_SCROLLBAR) {
-            final int row = topRow;
+        if (hasScrollbar) {
+            int row = topRow;
             super.resize(client, width, height);
-            setTopRow(topRow, row);
+            this.setTopRow(topRow, row);
         } else {
             super.resize(client, width, height);
         }
@@ -174,7 +173,7 @@ public final class ScrollableScreen extends AbstractScreen<ScrollableContainerMe
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if (HAS_SCROLLBAR && isDragging) {
+        if (hasScrollbar && isDragging) {
             isDragging = false;
             return true;
         }
@@ -182,8 +181,8 @@ public final class ScrollableScreen extends AbstractScreen<ScrollableContainerMe
     }
 
     public List<Rect2i> getExclusionZones() {
-        if (HAS_SCROLLBAR) {
-            final int height = SCREEN_META.HEIGHT * 18 + (SCREEN_META.WIDTH > 9 ? 34 : 24);
+        if (hasScrollbar) {
+            int height = screenMeta.height * 18 + (screenMeta.width > 9 ? 34 : 24);
             return Collections.singletonList(new Rect2i(leftPos + imageWidth - 4, topPos, 22, height));
         }
         return Collections.emptyList();

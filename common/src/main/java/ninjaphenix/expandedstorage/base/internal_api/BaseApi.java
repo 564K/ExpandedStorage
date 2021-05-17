@@ -19,8 +19,8 @@ import java.util.function.Predicate;
 import static org.jetbrains.annotations.ApiStatus.Experimental;
 import static org.jetbrains.annotations.ApiStatus.Internal;
 
-@Experimental
 @Internal
+@Experimental
 public interface BaseApi {
     static BaseApi getInstance() {
         return BaseImpl.getInstance();
@@ -58,9 +58,11 @@ public interface BaseApi {
     void register(ResourceLocation id, Item item);
 
     /**
-     * Temporarily internal, proper API will be introduced at a later date.
+     * @deprecated Temporarily internal, proper API will be introduced at a later date.
      */
     @Internal
+    @Deprecated
+    @ScheduledForRemoval
     void registerContainerButtonSettings(ResourceLocation containerType, ResourceLocation texture, Component text);
 
     /**

@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-@Experimental
 @Internal
+@Experimental
 public final class Utils {
     @Internal
     public static final String MOD_ID = "expandedstorage";
@@ -120,7 +120,7 @@ public final class Utils {
 
     @Internal
     public static ResourceLocation resloc(String path) {
-        return new ResourceLocation(MOD_ID, path);
+        return new ResourceLocation(Utils.MOD_ID, path);
     }
 
     @Internal
@@ -135,31 +135,31 @@ public final class Utils {
         return Collections.unmodifiableMap(map);
     }
 
-    public static <T> T getClassInstance(final Class<T> INTERFACE_CLASS, final String COMMON_PACKAGE_PATH, final String CLASS_NAME) {
-        final String CLASS_LOADER = Utils.class.getClassLoader().getClass().getName();
-        final String PLATFORM;
-        if ("net.fabricmc.loader.launch.knot.KnotClassLoader".equals(CLASS_LOADER)) {
-            PLATFORM = "fabric";
-        } else if ("cpw.mods.modlauncher.TransformingClassLoader".equals(CLASS_LOADER)) {
-            PLATFORM = "forge";
+    public static <T> T getClassInstance(Class<T> interfaceClass, String commonPackagePath, String className) {
+        String classLoader = Utils.class.getClassLoader().getClass().getName();
+        String platform;
+        if ("net.fabricmc.loader.launch.knot.KnotClassLoader".equals(classLoader)) {
+            platform = "fabric";
+        } else if ("cpw.mods.modlauncher.TransformingClassLoader".equals(classLoader)) {
+            platform = "forge";
         } else {
             throw new IllegalStateException("Unable to find mod-loader.");
         }
-        final String FULL_CLASS_PATH = COMMON_PACKAGE_PATH + "." + PLATFORM + "." + CLASS_NAME;
+        String fullClassPath = commonPackagePath + "." + platform + "." + className;
         try {
-            final Class<?> CLASS = Class.forName(FULL_CLASS_PATH, false, Utils.class.getClassLoader());
-            if (INTERFACE_CLASS.isAssignableFrom(CLASS)) {
+            Class<?> clazz = Class.forName(fullClassPath, false, Utils.class.getClassLoader());
+            if (interfaceClass.isAssignableFrom(clazz)) {
                 try {
                     //noinspection unchecked
-                    return (T) CLASS.getMethod("getInstance").invoke(null);
+                    return (T) clazz.getMethod("getInstance").invoke(null);
                 } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                    throw new IllegalStateException("Cannot find, access or call " + FULL_CLASS_PATH + "#getInstance.");
+                    throw new IllegalStateException("Cannot find, access or call " + fullClassPath + "#getInstance.");
                 }
             } else {
-                throw new IllegalStateException(FULL_CLASS_PATH + " should be an instance of " + INTERFACE_CLASS.getName());
+                throw new IllegalStateException(fullClassPath + " should be an instance of " + interfaceClass.getName());
             }
         } catch (ClassNotFoundException e) {
-            throw new IllegalStateException("No class found " + FULL_CLASS_PATH + ".");
+            throw new IllegalStateException("No class found " + fullClassPath + ".");
         }
     }
 }

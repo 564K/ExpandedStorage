@@ -19,41 +19,41 @@ import java.util.Map;
 import java.util.Set;
 
 public final class PickScreen extends Screen {
-    private static final Map<ResourceLocation, Tuple<ResourceLocation, Component>> buttonSettings = new HashMap<>();
-    private final Set<ResourceLocation> OPTIONS;
+    private static final Map<ResourceLocation, Tuple<ResourceLocation, Component>> BUTTON_SETTINGS = new HashMap<>();
+    private final Set<ResourceLocation> options;
     private final Screen parent;
-    private int TOP_PADDING;
+    private int topPadding;
 
     public PickScreen(Set<ResourceLocation> options, Screen parent) {
         super(new TranslatableComponent("screen.expandedstorage.screen_picker_title"));
-        OPTIONS = options;
+        this.options = options;
         this.parent = parent;
     }
 
     public static void declareButtonSettings(ResourceLocation containerType, ResourceLocation texture, Component text) {
-        buttonSettings.putIfAbsent(containerType, new Tuple<>(texture, text));
+        PickScreen.BUTTON_SETTINGS.putIfAbsent(containerType, new Tuple<>(texture, text));
     }
 
     @Override
     public void onClose() {
-        this.minecraft.setScreen(parent);
+        minecraft.setScreen(parent);
     }
 
     @Override
     protected void init() {
         super.init();
-        final boolean IGNORE_SINGLE = width < 370 || height < 386; // Smallest possible resolution a double netherite chest fits on.
-        final int CHOICES = OPTIONS.size() - (IGNORE_SINGLE ? 1 : 0);
-        final int COLUMNS = Math.min(Mth.intFloorDiv(width, 96), CHOICES);
-        final int INNER_PADDING = Math.min((width - COLUMNS * 96) / (COLUMNS + 1), 20); // 20 is smallest gap for any screen.
-        final int OUTER_PADDING = (width - (((COLUMNS - 1) * INNER_PADDING) + (COLUMNS * 96))) / 2;
+        boolean ignoreSingle = width < 370 || height < 386; // Smallest possible resolution a double netherite chest fits on.
+        int choices = options.size() - (ignoreSingle ? 1 : 0);
+        int columns = Math.min(Mth.intFloorDiv(width, 96), choices);
+        int innerPadding = Math.min((width - columns * 96) / (columns + 1), 20); // 20 is smallest gap for any screen.
+        int outerPadding = (width - (((columns - 1) * innerPadding) + (columns * 96))) / 2;
         int x = 0;
-        final int TOP_PADDING = (height - 96) / 2;
-        this.TOP_PADDING = TOP_PADDING;
-        for (ResourceLocation option : OPTIONS) {
-            if (!(IGNORE_SINGLE && Utils.SINGLE_CONTAINER_TYPE.equals(option))) {
-                Tuple<ResourceLocation, Component> settings = buttonSettings.get(option);
-                this.addButton(new ScreenPickButton(OUTER_PADDING + (INNER_PADDING + 96) * x, TOP_PADDING, 96, 96,
+        int topPadding = (height - 96) / 2;
+        this.topPadding = topPadding;
+        for (ResourceLocation option : options) {
+            if (!(ignoreSingle && Utils.SINGLE_CONTAINER_TYPE.equals(option))) {
+                Tuple<ResourceLocation, Component> settings = PickScreen.BUTTON_SETTINGS.get(option);
+                this.addButton(new ScreenPickButton(outerPadding + (innerPadding + 96) * x, topPadding, 96, 96,
                         settings.getA(), settings.getB(), button -> this.updatePlayerPreference(option),
                         (button, matrices, tX, tY) -> this.renderTooltip(matrices, button.getMessage(), tX, tY)));
                 x++;
@@ -83,19 +83,19 @@ public final class PickScreen extends Screen {
         } // Not sure why this can be null, but don't render in case it is.
         this.setBlitOffset(0);
         this.renderBackground(stack);
-        final int NUM_BUTTONS = buttons.size();
+        int numButtons = buttons.size();
         //noinspection ForLoopReplaceableByForEach
-        for (int i = 0; i < NUM_BUTTONS; i++) {
+        for (int i = 0; i < numButtons; i++) {
             buttons.get(i).render(stack, mouseX, mouseY, delta);
         }
         //noinspection ForLoopReplaceableByForEach
-        for (int i = 0; i < NUM_BUTTONS; i++) {
-            final AbstractWidget TEMP = buttons.get(i);
+        for (int i = 0; i < numButtons; i++) {
+            AbstractWidget temp = buttons.get(i);
             if (buttons.get(i) instanceof ScreenPickButton) {
-                ScreenPickButton button = (ScreenPickButton) TEMP;
+                ScreenPickButton button = (ScreenPickButton) temp;
                 button.renderTooltip(stack, mouseX, mouseY);
             }
         }
-        GuiComponent.drawCenteredString(stack, font, title, width / 2, Math.max(TOP_PADDING / 2, 0), 0xFFFFFFFF);
+        GuiComponent.drawCenteredString(stack, font, title, width / 2, Math.max(topPadding / 2, 0), 0xFFFFFFFF);
     }
 }

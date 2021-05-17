@@ -8,59 +8,53 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 
 import java.util.function.UnaryOperator;
 
-@Experimental
 @Internal
+@Experimental
 public class Tier {
-    private final ResourceLocation KEY;
-    private final UnaryOperator<Item.Properties> ITEM_PROPERTIES;
-    private final UnaryOperator<BlockBehaviour.Properties> BLOCK_PROPERTIES;
-    private final int MINING_LEVEL;
+    private final ResourceLocation key;
+    private final UnaryOperator<Item.Properties> itemProperties;
+    private final UnaryOperator<BlockBehaviour.Properties> blockProperties;
+    private final int miningLevel;
 
-    protected Tier(final ResourceLocation KEY,
-                   final int MINING_LEVEL,
-                   final UnaryOperator<BlockBehaviour.Properties> BLOCK_PROPERTIES,
-                   final UnaryOperator<Item.Properties> ITEM_PROPERTIES) {
-        this.KEY = KEY;
-        this.ITEM_PROPERTIES = ITEM_PROPERTIES;
-        this.BLOCK_PROPERTIES = BLOCK_PROPERTIES;
-        this.MINING_LEVEL = MINING_LEVEL;
+    protected Tier(ResourceLocation key, int miningLevel, UnaryOperator<BlockBehaviour.Properties> blockProperties,
+                   UnaryOperator<Item.Properties> itemProperties) {
+        this.key = key;
+        this.itemProperties = itemProperties;
+        this.blockProperties = blockProperties;
+        this.miningLevel = miningLevel;
     }
 
-    public static Tier of(final ResourceLocation KEY,
-                          final int MINING_LEVEL) {
-        return new Tier(KEY, MINING_LEVEL, UnaryOperator.identity(), UnaryOperator.identity());
+    public static Tier of(ResourceLocation key, int miningLevel) {
+        return new Tier(key, miningLevel, UnaryOperator.identity(), UnaryOperator.identity());
     }
 
-    public static Tier of(final ResourceLocation KEY,
-                          final int MINING_LEVEL,
-                          final UnaryOperator<BlockBehaviour.Properties> BLOCK_PROPERTIES) {
-        return new Tier(KEY, MINING_LEVEL, BLOCK_PROPERTIES, UnaryOperator.identity());
+    public static Tier of(ResourceLocation key, int miningLevel, UnaryOperator<BlockBehaviour.Properties> blockProperties) {
+        return new Tier(key, miningLevel, blockProperties, UnaryOperator.identity());
     }
 
-    public static Tier of(final ResourceLocation KEY,
-                          final int MINING_LEVEL,
-                          final UnaryOperator<BlockBehaviour.Properties> BLOCK_PROPERTIES,
-                          final UnaryOperator<Item.Properties> ITEM_PROPERTIES) {
-        return new Tier(KEY, MINING_LEVEL, BLOCK_PROPERTIES, ITEM_PROPERTIES);
+    public static Tier of(ResourceLocation key, int miningLevel, UnaryOperator<BlockBehaviour.Properties> blockProperties,
+                          UnaryOperator<Item.Properties> itemProperties) {
+        return new Tier(key, miningLevel, blockProperties, itemProperties);
     }
 
     public final ResourceLocation key() {
-        return KEY;
+        return key;
     }
 
     public final UnaryOperator<Item.Properties> itemProperties() {
-        return ITEM_PROPERTIES;
+        return itemProperties;
     }
 
     public UnaryOperator<BlockBehaviour.Properties> blockProperties() {
-        return BLOCK_PROPERTIES;
+        return blockProperties;
     }
 
     public final int miningLevel() {
-        return MINING_LEVEL;
+        return miningLevel;
     }
 
     public final boolean requiresTool() {
-        return MINING_LEVEL > 0;
+        return miningLevel > 0;
     }
 }
+

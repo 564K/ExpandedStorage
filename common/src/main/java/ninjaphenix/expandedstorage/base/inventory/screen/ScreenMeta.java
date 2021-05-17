@@ -3,15 +3,15 @@ package ninjaphenix.expandedstorage.base.inventory.screen;
 import net.minecraft.resources.ResourceLocation;
 
 public abstract class ScreenMeta {
-    public final int WIDTH, HEIGHT, TOTAL_SLOTS, TEXTURE_WIDTH, TEXTURE_HEIGHT;
-    public final ResourceLocation TEXTURE;
+    public final int width, height, totalSlots, textureWidth, textureHeight;
+    public final ResourceLocation texture;
 
     protected ScreenMeta(int width, int height, int totalSlots, ResourceLocation texture, int textureWidth, int textureHeight) {
-        WIDTH = width;
-        HEIGHT = height;
-        TOTAL_SLOTS = totalSlots;
-        TEXTURE = texture;
-        TEXTURE_WIDTH = textureWidth;
-        TEXTURE_HEIGHT = textureHeight;
+        this.width = width;
+        this.height = height;
+        this.totalSlots = totalSlots;
+        this.texture = texture;
+        this.textureWidth = textureWidth;
+        this.textureHeight = textureHeight;
     }
 }

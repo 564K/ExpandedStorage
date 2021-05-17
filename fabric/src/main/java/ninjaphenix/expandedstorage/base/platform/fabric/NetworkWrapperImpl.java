@@ -172,7 +172,7 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
                 @Nullable
                 @Override
                 public AbstractContainerMenu createMenu(int windowId, Inventory inventory, Player player) {
-                    return NetworkWrapperImpl.this.createMenu(windowId, MENU.POS, MENU.getContainer(), inventory, MENU.getDisplayName());
+                    return NetworkWrapperImpl.this.createMenu(windowId, MENU.pos, MENU.getContainer(), inventory, MENU.getDisplayName());
                 }
 
                 @Override
@@ -182,7 +182,7 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
 
                 @Override
                 public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buffer) {
-                    buffer.writeBlockPos(MENU.POS).writeInt(MENU.getContainer().getContainerSize());
+                    buffer.writeBlockPos(MENU.pos).writeInt(MENU.getContainer().getContainerSize());
                 }
             })));
         } else {

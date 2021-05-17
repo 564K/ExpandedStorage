@@ -10,25 +10,23 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 
 import java.util.function.UnaryOperator;
 
-@Experimental
 @Internal
+@Experimental
 public class TargetedTier extends Tier {
-    private final ResourceLocation BLOCK_TYPE;
+    private final ResourceLocation blockType;
 
-    protected TargetedTier(final ResourceLocation KEY,
-                           final UnaryOperator<BlockBehaviour.Properties> BLOCK_PROPERTIES,
-                           final UnaryOperator<Item.Properties> ITEM_PROPERTIES,
-                           final ResourceLocation BLOCK_TYPE,
-                           final int MINING_LEVEL) {
-        super(KEY, MINING_LEVEL, BLOCK_PROPERTIES, ITEM_PROPERTIES);
-        this.BLOCK_TYPE = BLOCK_TYPE;
+    protected TargetedTier(ResourceLocation key, UnaryOperator<BlockBehaviour.Properties> blockProperties,
+                           UnaryOperator<Item.Properties> itemProperties, ResourceLocation blockType, int miningLevel) {
+        super(key, miningLevel, blockProperties, itemProperties);
+        this.blockType = blockType;
     }
 
-    public final boolean appliesTo(final Block BLOCK) {
-        return BLOCK instanceof AbstractStorageBlock && ((AbstractStorageBlock) BLOCK).blockType() == BLOCK_TYPE;
+    public final boolean appliesTo(Block block) {
+        return block instanceof AbstractStorageBlock && ((AbstractStorageBlock) block).blockType() == blockType;
     }
 
     public final ResourceLocation blockType() {
-        return BLOCK_TYPE;
+        return blockType;
     }
 }
+

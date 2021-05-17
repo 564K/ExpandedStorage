@@ -15,8 +15,8 @@ import ninjaphenix.expandedstorage.base.internal_api.block.misc.AbstractOpenable
 public class BarrelBlockEntity extends AbstractOpenableStorageBlockEntity {
     private int viewerCount;
 
-    public BarrelBlockEntity(final BlockEntityType<BarrelBlockEntity> BLOCK_ENTITY_TYPE, final ResourceLocation BLOCK_ID) {
-        super(BLOCK_ENTITY_TYPE, BLOCK_ID);
+    public BarrelBlockEntity(BlockEntityType<BarrelBlockEntity> blockEntityType, ResourceLocation blockId) {
+        super(blockEntityType, blockId);
     }
 
     public void checkViewerCount() {
@@ -25,57 +25,57 @@ public class BarrelBlockEntity extends AbstractOpenableStorageBlockEntity {
         if (viewerCount > 0) {
             this.scheduleViewCountCheck();
         } else {
-            final BlockState STATE = getBlockState();
-            if (!(STATE.getBlock() instanceof BarrelBlock)) {
+            BlockState state = this.getBlockState();
+            if (!(state.getBlock() instanceof BarrelBlock)) {
                 this.setRemoved();
                 return;
             }
-            if (STATE.getValue(BlockStateProperties.OPEN)) {
-                this.playSound(STATE, SoundEvents.BARREL_CLOSE);
-                this.setOpen(STATE, false);
+            if (state.getValue(BlockStateProperties.OPEN)) {
+                this.playSound(state, SoundEvents.BARREL_CLOSE);
+                this.setOpen(state, false);
             }
         }
     }
 
     @Override
-    public void startOpen(final Player PLAYER) {
-        if (!PLAYER.isSpectator()) {
+    public void startOpen(Player player) {
+        if (!player.isSpectator()) {
             if (viewerCount < 0) {
                 viewerCount = 0;
             }
             ++viewerCount;
-            final BlockState STATE = getBlockState();
-            if (!STATE.getValue(BlockStateProperties.OPEN)) {
-                this.playSound(STATE, SoundEvents.BARREL_OPEN);
-                this.setOpen(STATE, true);
+            BlockState state = this.getBlockState();
+            if (!state.getValue(BlockStateProperties.OPEN)) {
+                this.playSound(state, SoundEvents.BARREL_OPEN);
+                this.setOpen(state, true);
             }
             this.scheduleViewCountCheck();
         }
     }
 
     @Override
-    public void stopOpen(final Player PLAYER) {
-        if (!PLAYER.isSpectator()) {
+    public void stopOpen(Player player) {
+        if (!player.isSpectator()) {
             --viewerCount;
         }
     }
 
-    private void setOpen(final BlockState STATE, final boolean OPEN) {
+    private void setOpen(BlockState state, boolean open) {
         //noinspection ConstantConditions
-        level.setBlock(getBlockPos(), STATE.setValue(BlockStateProperties.OPEN, OPEN), 3);
+        level.setBlock(this.getBlockPos(), state.setValue(BlockStateProperties.OPEN, open), 3);
     }
 
-    private void playSound(final BlockState STATE, final SoundEvent SOUND) {
-        final Vec3i FACING_VECTOR = STATE.getValue(BlockStateProperties.FACING).getNormal();
-        final double X = worldPosition.getX() + 0.5D + FACING_VECTOR.getX() / 2.0D;
-        final double Y = worldPosition.getY() + 0.5D + FACING_VECTOR.getY() / 2.0D;
-        final double Z = worldPosition.getZ() + 0.5D + FACING_VECTOR.getZ() / 2.0D;
+    private void playSound(BlockState state, SoundEvent sound) {
+        Vec3i facingVector = state.getValue(BlockStateProperties.FACING).getNormal();
+        double X = worldPosition.getX() + 0.5D + facingVector.getX() / 2.0D;
+        double Y = worldPosition.getY() + 0.5D + facingVector.getY() / 2.0D;
+        double Z = worldPosition.getZ() + 0.5D + facingVector.getZ() / 2.0D;
         //noinspection ConstantConditions
-        level.playSound(null, X, Y, Z, SOUND, SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
+        level.playSound(null, X, Y, Z, sound, SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
     }
 
     private void scheduleViewCountCheck() {
         //noinspection ConstantConditions
-        level.getBlockTicks().scheduleTick(getBlockPos(), getBlockState().getBlock(), 5);
+        level.getBlockTicks().scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), 5);
     }
 }

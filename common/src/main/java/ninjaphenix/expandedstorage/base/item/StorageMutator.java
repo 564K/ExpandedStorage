@@ -35,37 +35,37 @@ public final class StorageMutator extends Item {
         super(properties);
     }
 
-    private static void setMode(final CompoundTag TAG, @Nullable MutationMode MODE) {
-        if (MODE == null) {
-            MODE = StorageMutator.DEFAULT_MODE;
+    private static void setMode(CompoundTag tag, @Nullable MutationMode mode) {
+        if (mode == null) {
+            mode = StorageMutator.DEFAULT_MODE;
         }
-        TAG.putString(StorageMutator.MODE_KEY, MODE.toString());
-        TAG.remove(BEHAVIOUR_DATA_KEY);
+        tag.putString(StorageMutator.MODE_KEY, mode.toString());
+        tag.remove(BEHAVIOUR_DATA_KEY);
     }
 
-    private static MutationMode getMode(final CompoundTag TAG) {
-        if (TAG.contains(StorageMutator.MODE_KEY, Utils.NBT_BYTE_TYPE)) {
-            StorageMutator.setMode(TAG, MutationMode.from(TAG.getByte(StorageMutator.MODE_KEY)));
+    private static MutationMode getMode(CompoundTag tag) {
+        if (tag.contains(StorageMutator.MODE_KEY, Utils.NBT_BYTE_TYPE)) {
+            StorageMutator.setMode(tag, MutationMode.from(tag.getByte(StorageMutator.MODE_KEY)));
         }
-        if (TAG.contains(StorageMutator.MODE_KEY, Utils.NBT_STRING_TYPE)) {
-            return MutationMode.from(TAG.getString(StorageMutator.MODE_KEY));
+        if (tag.contains(StorageMutator.MODE_KEY, Utils.NBT_STRING_TYPE)) {
+            return MutationMode.from(tag.getString(StorageMutator.MODE_KEY));
         }
         return StorageMutator.DEFAULT_MODE;
     }
 
     @Override
-    public InteractionResult useOn(final UseOnContext CONTEXT) {
-        CompoundTag tag = CONTEXT.getItemInHand().getOrCreateTag();
-        Level level = CONTEXT.getLevel();
-        Player player = CONTEXT.getPlayer();
+    public InteractionResult useOn(UseOnContext context) {
+        CompoundTag tag = context.getItemInHand().getOrCreateTag();
+        Level level = context.getLevel();
+        Player player = context.getPlayer();
         if (true) {
             player.displayClientMessage(new TextComponent("Storage Mutator is not yet implemented"), true);
             return InteractionResult.FAIL;
         }
         if (player != null) {
-            player.getCooldowns().addCooldown(CONTEXT.getItemInHand().getItem(), Utils.QUARTER_SECOND);
+            player.getCooldowns().addCooldown(context.getItemInHand().getItem(), Utils.QUARTER_SECOND);
         }
-        Block block = level.getBlockState(CONTEXT.getClickedPos()).getBlock();
+        Block block = level.getBlockState(context.getClickedPos()).getBlock();
         if (block instanceof AbstractStorageBlock) {
             String behaviourKey = ((AbstractStorageBlock) block).blockType().toString();
             if (tag.contains(StorageMutator.BEHAVIOUR_KEY, Utils.NBT_STRING_TYPE)) { // Try continue behaviour usage
@@ -73,36 +73,36 @@ public final class StorageMutator extends Item {
                 if (readBehaviour.equals(behaviourKey)) { // Continue behaviour usage
                     MutationBehaviour behaviour = BaseApi.getInstance().getMutationBehaviour(readBehaviour);
                     if (behaviour == null) { // Cannot find behaviour, module un-installed
-                        clearBehaviour(tag);
+                        this.clearBehaviour(tag);
                         return InteractionResult.FAIL;
                     } else { // Continue using behaviour
-                        InteractionResult result = behaviour.continueUseOn(CONTEXT, StorageMutator.getMode(tag));
+                        InteractionResult result = behaviour.continueUseOn(context, StorageMutator.getMode(tag));
                         if (result == InteractionResult.PASS) {
                             return InteractionResult.sidedSuccess(level.isClientSide());
                         }
-                        clearBehaviour(tag);
+                        this.clearBehaviour(tag);
                         return result;
                     }
                 } else { // User clicked on different block than current behaviour
-                    clearBehaviour(tag);
-                    return startNewMutation(CONTEXT, tag, level.isClientSide(), behaviourKey);
+                    this.clearBehaviour(tag);
+                    return this.startNewMutation(context, tag, level.isClientSide(), behaviourKey);
                 }
             } else { // Start behaviour
-                return startNewMutation(CONTEXT, tag, level.isClientSide(), behaviourKey);
+                return this.startNewMutation(context, tag, level.isClientSide(), behaviourKey);
             }
         } else { // Storage mutator clicked on non-compatible block
             return InteractionResult.FAIL;
         }
     }
 
-    private InteractionResult startNewMutation(final UseOnContext CONTEXT, final CompoundTag TAG, final boolean IS_CLIENT, final String BEHAVIOUR_NAME) {
-        MutationBehaviour behaviour = BaseApi.getInstance().getMutationBehaviour(BEHAVIOUR_NAME);
+    private InteractionResult startNewMutation(UseOnContext context, CompoundTag tag, boolean isClientSide, String behaviourName) {
+        MutationBehaviour behaviour = BaseApi.getInstance().getMutationBehaviour(behaviourName);
         if (behaviour != null) {
-            InteractionResult result = behaviour.startUseOn(CONTEXT, StorageMutator.getMode(TAG));
-            if (!IS_CLIENT && result == InteractionResult.SUCCESS) {
-                TAG.putString(StorageMutator.BEHAVIOUR_KEY, BEHAVIOUR_NAME);
+            InteractionResult result = behaviour.startUseOn(context, StorageMutator.getMode(tag));
+            if (!isClientSide && result == InteractionResult.SUCCESS) {
+                tag.putString(StorageMutator.BEHAVIOUR_KEY, behaviourName);
             }
-            return InteractionResult.sidedSuccess(IS_CLIENT);
+            return InteractionResult.sidedSuccess(isClientSide);
         } else {
             // no swing, cannot use on block
             return InteractionResult.FAIL;
@@ -125,7 +125,7 @@ public final class StorageMutator extends Item {
         if (player.isShiftKeyDown()) {
             CompoundTag tag = stack.getOrCreateTag();
             MutationMode mode = StorageMutator.getMode(tag).next();
-            setMode(tag, mode);
+            StorageMutator.setMode(tag, mode);
             player.displayClientMessage(getToolModeComponent(mode), true);
             return InteractionResultHolder.success(stack);
         }

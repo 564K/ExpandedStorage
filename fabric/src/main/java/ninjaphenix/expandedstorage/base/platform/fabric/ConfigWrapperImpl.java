@@ -27,9 +27,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public final class ConfigWrapperImpl implements ConfigWrapper {
-    private Type MAP_TYPE;
-    private Gson GSON;
-    private Path CONFIG_PATH;
+    private Type mapType;
+    private Gson gson;
+    private Path configPath;
     private ConfigV0 config;
 
     private ConfigWrapperImpl() {
@@ -41,10 +41,10 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
     }
 
     public void initialise() {
-        MAP_TYPE = new TypeToken<Map<String, Object>>() {
+        mapType = new TypeToken<Map<String, Object>>() {
         }.getType();
-        CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve(Utils.CONFIG_PATH);
-        GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocationTypeAdapter())
+        configPath = FabricLoader.getInstance().getConfigDir().resolve(Utils.CONFIG_PATH);
+        gson = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocationTypeAdapter())
                                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                                 .setPrettyPrinting()
                                 .setLenient()
@@ -79,10 +79,10 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
     }
 
     private <T extends Config> void saveConfig(T config) {
-        try (BufferedWriter writer = Files.newBufferedWriter(CONFIG_PATH)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(configPath)) {
             Map<String, Object> configValues = config.getConverter().toSource(config);
             configValues.put("config_version", config.getVersion());
-            GSON.toJson(configValues, MAP_TYPE, GSON.newJsonWriter(writer));
+            gson.toJson(configValues, mapType, gson.newJsonWriter(writer));
         } catch (IOException e) {
             BaseCommon.LOGGER.warn("Failed to save Expanded Storage's config.", e);
         }
@@ -91,7 +91,7 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
     private ConfigV0 getConfig() {
         Path oldPath = FabricLoader.getInstance().getConfigDir().resolve(Utils.FABRIC_LEGACY_CONFIG_PATH);
         boolean triedLoadingOldConfig = false;
-        Path newPath = CONFIG_PATH;
+        Path newPath = configPath;
         boolean triedLoadingNewConfig = false;
         ConfigV0 config = null;
         if (Files.exists(newPath)) {
@@ -131,7 +131,7 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
     // essentially converter will need to be decided in this method based on the value of "config_version"
     private <T extends Config> T convertToConfig(String lines, Converter<Map<String, Object>, T> converter, Path configPath) {
         try {
-            Map<String, Object> configMap = GSON.fromJson(lines, MAP_TYPE);
+            Map<String, Object> configMap = gson.fromJson(lines, mapType);
             // Do not edit, gson returns a double, we want an int.
             // This is so fucking cursed.
             int configVersion = Mth.floor((Double) configMap.getOrDefault("config_version", (double) -1));

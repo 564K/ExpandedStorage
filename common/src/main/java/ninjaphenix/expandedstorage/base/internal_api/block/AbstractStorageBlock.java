@@ -14,33 +14,33 @@ import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.Nullable;
 
-@Experimental
 @Internal
+@Experimental
 public abstract class AbstractStorageBlock extends Block {
-    private final ResourceLocation BLOCK_ID;
-    private final ResourceLocation BLOCK_TIER;
+    private final ResourceLocation blockId;
+    private final ResourceLocation blockTier;
 
-    public AbstractStorageBlock(final Properties properties, final ResourceLocation BLOCK_ID, final ResourceLocation BLOCK_TIER) {
+    public AbstractStorageBlock(Properties properties, ResourceLocation blockId, ResourceLocation blockTier) {
         super(properties);
-        this.BLOCK_ID = BLOCK_ID;
-        this.BLOCK_TIER = BLOCK_TIER;
+        this.blockId = blockId;
+        this.blockTier = blockTier;
     }
 
     public abstract ResourceLocation blockType();
 
     public final ResourceLocation blockId() {
-        return BLOCK_ID;
+        return blockId;
     }
 
     public final ResourceLocation blockTier() {
-        return BLOCK_TIER;
+        return blockTier;
     }
 
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        final BlockEntity TEMP = level.getBlockEntity(pos);
-        if (TEMP instanceof AbstractStorageBlockEntity && stack.hasCustomHoverName()) {
-            ((AbstractOpenableStorageBlockEntity) TEMP).setCustomName(stack.getHoverName());
+        BlockEntity temp = level.getBlockEntity(pos);
+        if (temp instanceof AbstractStorageBlockEntity && stack.hasCustomHoverName()) {
+            ((AbstractOpenableStorageBlockEntity) temp).setCustomName(stack.getHoverName());
         }
     }
 }

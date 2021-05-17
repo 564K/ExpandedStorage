@@ -9,14 +9,14 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
-@Experimental
 @Internal
+@Experimental
 public interface ContainerMenuFactory {
-    void writeClientData(final ServerPlayer PLAYER, final FriendlyByteBuf BUFFER);
+    void writeClientData(ServerPlayer player, FriendlyByteBuf buffer);
 
     Component displayName();
 
-    boolean canPlayerOpen(final ServerPlayer PLAYER);
+    boolean canPlayerOpen(ServerPlayer player);
 
-    AbstractContainerMenu createMenu(final int WINDOW_ID, final Inventory PLAYER_INVENTORY, final Player PLAYER);
+    AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player);
 }

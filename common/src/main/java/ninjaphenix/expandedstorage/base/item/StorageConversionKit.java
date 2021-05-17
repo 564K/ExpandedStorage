@@ -49,7 +49,6 @@ public final class StorageConversionKit extends Item {
                 } else if (maybeBehaviour.get().tryUpgradeBlock(context, from, to)) {
                     return InteractionResult.SUCCESS;
                 }
-
             }
         }
         return InteractionResult.FAIL;

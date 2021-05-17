@@ -30,46 +30,46 @@ public final class ScrollableContainerMenu extends AbstractContainerMenu_<Scroll
             .build();
     // @formatter:on
 
-    public ScrollableContainerMenu(final int WINDOW_ID, final BlockPos POS, final Container CONTAINER, final Inventory INVENTORY, final Component DISPLAY_NAME) {
-        super(BaseCommon.SCROLL_MENU_TYPE, WINDOW_ID, POS, CONTAINER, INVENTORY, DISPLAY_NAME,
-                AbstractContainerMenu_.getNearestScreenMeta(CONTAINER.getContainerSize(), SIZES));
-        for (int i = 0; i < CONTAINER.getContainerSize(); i++) {
-            final int SLOT_X_POS = i % SCREEN_META.WIDTH;
-            final int SLOT_Y_POS = Mth.ceil((((double) (i - SLOT_X_POS)) / SCREEN_META.WIDTH));
-            final int REAL_Y_POS = SLOT_Y_POS >= SCREEN_META.HEIGHT ? -2000 : SLOT_Y_POS * 18 + 18;
-            this.addSlot(new Slot(CONTAINER, i, SLOT_X_POS * 18 + 8, REAL_Y_POS));
+    public ScrollableContainerMenu(int windowId, BlockPos pos, Container container, Inventory inventory, Component displayName) {
+        super(BaseCommon.SCROLL_MENU_TYPE, windowId, pos, container, inventory, displayName,
+                AbstractContainerMenu_.getNearestScreenMeta(container.getContainerSize(), ScrollableContainerMenu.SIZES));
+        for (int i = 0; i < container.getContainerSize(); i++) {
+            int slotXPos = i % screenMeta.width;
+            int slotYPos = Mth.ceil((((double) (i - slotXPos)) / screenMeta.width));
+            int realYPos = slotYPos >= screenMeta.height ? -2000 : slotYPos * 18 + 18;
+            this.addSlot(new Slot(container, i, slotXPos * 18 + 8, realYPos));
         }
-        final int left = (SCREEN_META.WIDTH * 18 + 14) / 2 - 80;
-        final int top = 18 + 14 + (SCREEN_META.HEIGHT * 18);
+        int left = (screenMeta.width * 18 + 14) / 2 - 80;
+        int top = 18 + 14 + (screenMeta.height * 18);
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 3; y++) {
-                this.addSlot(new Slot(INVENTORY, y * 9 + x + 9, left + 18 * x, top + y * 18));
+                this.addSlot(new Slot(inventory, y * 9 + x + 9, left + 18 * x, top + y * 18));
             }
         }
         for (int x = 0; x < 9; x++) {
-            this.addSlot(new Slot(INVENTORY, x, left + 18 * x, top + 58));
+            this.addSlot(new Slot(inventory, x, left + 18 * x, top + 58));
         }
     }
 
-    public void moveSlotRange(final int MIN_SLOT_INDEX, final int MAX_SLOT_INDEX, final int Y_DIFFERENCE) {
-        for (int i = MIN_SLOT_INDEX; i < MAX_SLOT_INDEX; i++) {
-            slots.get(i).y += Y_DIFFERENCE;
+    public void moveSlotRange(int minSlotIndex, int maxSlotIndex, int yDifference) {
+        for (int i = minSlotIndex; i < maxSlotIndex; i++) {
+            slots.get(i).y += yDifference;
         }
     }
 
-    public void setSlotRange(final int MIN_SLOT_INDEX, final int MAX_SLOT_INDEX, final IntUnaryOperator Y_MUTATOR) {
-        for (int i = MIN_SLOT_INDEX; i < MAX_SLOT_INDEX; i++) {
-            slots.get(i).y = Y_MUTATOR.applyAsInt(i);
+    public void setSlotRange(int minSlotIndex, int maxSlotIndex, IntUnaryOperator yMutator) {
+        for (int i = minSlotIndex; i < maxSlotIndex; i++) {
+            slots.get(i).y = yMutator.applyAsInt(i);
         }
     }
 
     public static final class Factory implements ClientContainerMenuFactory<ScrollableContainerMenu> {
         @Override
-        public ScrollableContainerMenu create(final int WINDOW_ID, final Inventory INVENTORY, final FriendlyByteBuf BUFFER) {
-            if (BUFFER == null) {
+        public ScrollableContainerMenu create(int windowId, Inventory inventory, FriendlyByteBuf buffer) {
+            if (buffer == null) {
                 return null;
             }
-            return new ScrollableContainerMenu(WINDOW_ID, BUFFER.readBlockPos(), new SimpleContainer(BUFFER.readInt()), INVENTORY, null);
+            return new ScrollableContainerMenu(windowId, buffer.readBlockPos(), new SimpleContainer(buffer.readInt()), inventory, null);
         }
     }
 }

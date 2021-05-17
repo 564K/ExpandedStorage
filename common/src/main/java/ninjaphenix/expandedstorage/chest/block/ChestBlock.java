@@ -76,7 +76,7 @@ public final class ChestBlock extends AbstractChestBlock<ChestBlockEntity> imple
     @Override
     @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
-        final CursedChestType type = state.getValue(AbstractChestBlock.CURSED_CHEST_TYPE);
+        CursedChestType type = state.getValue(AbstractChestBlock.CURSED_CHEST_TYPE);
         if (type == CursedChestType.TOP) {
             return ChestBlock.SHAPES[4];
         } else if (type == CursedChestType.BOTTOM) {
@@ -84,7 +84,7 @@ public final class ChestBlock extends AbstractChestBlock<ChestBlockEntity> imple
         } else if (type == CursedChestType.SINGLE) {
             return ChestBlock.SHAPES[6];
         } else {
-            final int index = (state.getValue(BlockStateProperties.HORIZONTAL_FACING).get2DDataValue() + type.offset()) % 4;
+            int index = (state.getValue(BlockStateProperties.HORIZONTAL_FACING).get2DDataValue() + type.offset()) % 4;
             return ChestBlock.SHAPES[index];
         }
     }

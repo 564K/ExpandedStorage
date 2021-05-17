@@ -53,10 +53,10 @@ public final class BaseImpl implements BaseApi {
     }
 
     @Override
-    public Optional<BlockUpgradeBehaviour> getBlockUpgradeBehaviour(final Block BLOCK) {
-        for (final Map.Entry<Predicate<Block>, BlockUpgradeBehaviour> ENTRY : BLOCK_UPGRADE_BEHAVIOURS.entrySet()) {
-            if (ENTRY.getKey().test(BLOCK)) {
-                return Optional.of(ENTRY.getValue());
+    public Optional<BlockUpgradeBehaviour> getBlockUpgradeBehaviour(Block block) {
+        for (Map.Entry<Predicate<Block>, BlockUpgradeBehaviour> entry : BLOCK_UPGRADE_BEHAVIOURS.entrySet()) {
+            if (entry.getKey().test(block)) {
+                return Optional.of(entry.getValue());
             }
         }
         return Optional.empty();
@@ -75,17 +75,17 @@ public final class BaseImpl implements BaseApi {
 
     @Override
     public void defineTierUpgradePath(Component addingMod, Tier... tiers) {
-        int NUM_TIERS = tiers.length;
-        for (int fromIndex = 0; fromIndex < NUM_TIERS - 1; fromIndex++) {
-            final Tier FROM_TIER = tiers[fromIndex];
-            for (int toIndex = fromIndex + 1; toIndex < NUM_TIERS; toIndex++) {
-                final Tier TO_TIER = tiers[toIndex];
-                ResourceLocation itemId = Utils.resloc(FROM_TIER.key().getPath() + "_to_" + TO_TIER.key().getPath() + "_conversion_kit");
+        int numTiers = tiers.length;
+        for (int fromIndex = 0; fromIndex < numTiers - 1; fromIndex++) {
+            Tier fromTier = tiers[fromIndex];
+            for (int toIndex = fromIndex + 1; toIndex < numTiers; toIndex++) {
+                Tier toTier = tiers[toIndex];
+                ResourceLocation itemId = Utils.resloc(fromTier.key().getPath() + "_to_" + toTier.key().getPath() + "_conversion_kit");
                 if (!items.containsKey(itemId)) {
-                    Item.Properties properties = FROM_TIER.itemProperties()
-                            .andThen(TO_TIER.itemProperties())
+                    Item.Properties properties = fromTier.itemProperties()
+                            .andThen(toTier.itemProperties())
                             .apply(new Item.Properties().tab(Utils.TAB).stacksTo(16));
-                    Item kit = new StorageConversionKit(properties, FROM_TIER.key(), TO_TIER.key(), addingMod);
+                    Item kit = new StorageConversionKit(properties, fromTier.key(), toTier.key(), addingMod);
                     this.register(itemId, kit);
                 }
             }
@@ -120,9 +120,9 @@ public final class BaseImpl implements BaseApi {
     @Override
     @ApiStatus.Internal
     public Map<ResourceLocation, Item> getAndClearItems() {
-        final Map<ResourceLocation, Item> ITEMS = items;
-        items = null;
-        return ITEMS;
+        Map<ResourceLocation, Item> items = this.items;
+        this.items = null;
+        return items;
     }
 
     @Override

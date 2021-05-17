@@ -8,8 +8,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
-@Experimental
 @Internal
+@Experimental
 public interface ServerContainerMenuFactory {
-    AbstractContainerMenu create(final int WINDOW_ID, final BlockPos POS, final Container CONTAINER, final Inventory PLAYER_INVENTORY, final Component DISPLAY_NAME);
+    AbstractContainerMenu create(int windowId, BlockPos pos, Container container, Inventory playerInventory, Component displayName);
 }

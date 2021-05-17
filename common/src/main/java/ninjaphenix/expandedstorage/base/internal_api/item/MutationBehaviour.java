@@ -8,8 +8,8 @@ import ninjaphenix.expandedstorage.base.item.StorageMutator;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
-@Experimental
 @Internal
+@Experimental
 public interface MutationBehaviour {
     InteractionResult startUseOn(UseOnContext context, MutationMode mode);
 

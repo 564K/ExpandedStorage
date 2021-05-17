@@ -7,9 +7,8 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
-@Experimental
 @Internal
+@Experimental
 public interface ItemUpgradeBehaviour {
-    // todo: remove level param?
     boolean tryUpgradeItem(Level level, Player player, ItemStack upgrade, ItemStack target, ResourceLocation from, ResourceLocation to);
 }

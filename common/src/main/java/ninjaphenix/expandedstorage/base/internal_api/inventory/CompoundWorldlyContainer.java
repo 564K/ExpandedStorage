@@ -7,134 +7,134 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
-@Experimental
 @Internal
+@Experimental
 public final class CompoundWorldlyContainer implements WorldlyContainer {
-    private final WorldlyContainer FIRST;
-    private final WorldlyContainer SECOND;
+    private final WorldlyContainer first;
+    private final WorldlyContainer second;
 
-    public CompoundWorldlyContainer(final WorldlyContainer FIRST, final WorldlyContainer SECOND) {
-        this.FIRST = FIRST;
-        this.SECOND = SECOND;
+    public CompoundWorldlyContainer(WorldlyContainer first, WorldlyContainer second) {
+        this.first = first;
+        this.second = second;
     }
 
     @Override
-    public int[] getSlotsForFace(final Direction DIRECTION) {
-        final int NUM_FIRST_SLOTS = FIRST.getContainerSize();
-        final int[] FIRST_SLOTS = FIRST.getSlotsForFace(DIRECTION);
-        final int[] SECOND_SLOTS = SECOND.getSlotsForFace(DIRECTION);
-        final int[] COMBINED = new int[FIRST_SLOTS.length + SECOND_SLOTS.length];
+    public int[] getSlotsForFace(Direction direction) {
+        int firstContainerSize = first.getContainerSize();
+        int[] firstSlots = first.getSlotsForFace(direction);
+        int[] secondSlots = second.getSlotsForFace(direction);
+        int[] combinedSlots = new int[firstSlots.length + secondSlots.length];
         int index = 0;
-        for (final int slot : FIRST_SLOTS) {
-            COMBINED[index++] = slot;
+        for (int slot : firstSlots) {
+            combinedSlots[index++] = slot;
         }
-        for (final int slot : SECOND_SLOTS) {
-            COMBINED[index++] = slot + NUM_FIRST_SLOTS;
+        for (int slot : secondSlots) {
+            combinedSlots[index++] = slot + firstContainerSize;
         }
-        return COMBINED;
+        return combinedSlots;
     }
 
     @Override
-    public boolean canPlaceItemThroughFace(final int SLOT, final ItemStack STACK, final Direction DIRECTION) {
-        if (SLOT >= FIRST.getContainerSize()) {
-            return SECOND.canPlaceItemThroughFace(SLOT - FIRST.getContainerSize(), STACK, DIRECTION);
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, Direction face) {
+        if (slot >= first.getContainerSize()) {
+            return second.canPlaceItemThroughFace(slot - first.getContainerSize(), stack, face);
         }
-        return FIRST.canPlaceItemThroughFace(SLOT, STACK, DIRECTION);
+        return first.canPlaceItemThroughFace(slot, stack, face);
     }
 
     @Override
-    public boolean canTakeItemThroughFace(final int SLOT, final ItemStack STACK, final Direction DIRECTION) {
-        if (SLOT >= FIRST.getContainerSize()) {
-            return SECOND.canTakeItemThroughFace(SLOT - FIRST.getContainerSize(), STACK, DIRECTION);
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction face) {
+        if (slot >= first.getContainerSize()) {
+            return second.canTakeItemThroughFace(slot - first.getContainerSize(), stack, face);
         }
-        return FIRST.canTakeItemThroughFace(SLOT, STACK, DIRECTION);
+        return first.canTakeItemThroughFace(slot, stack, face);
     }
 
     @Override
     public int getContainerSize() {
-        return FIRST.getContainerSize() + SECOND.getContainerSize();
+        return first.getContainerSize() + second.getContainerSize();
     }
 
     @Override
     public boolean isEmpty() {
-        return FIRST.isEmpty() && SECOND.isEmpty();
+        return first.isEmpty() && second.isEmpty();
     }
 
     @Override
-    public boolean stillValid(final Player PLAYER) {
-        return FIRST.stillValid(PLAYER) && SECOND.stillValid(PLAYER);
+    public boolean stillValid(Player player) {
+        return first.stillValid(player) && second.stillValid(player);
     }
 
     @Override
     public void clearContent() {
-        FIRST.clearContent();
-        SECOND.clearContent();
+        first.clearContent();
+        second.clearContent();
     }
 
     @Override
     public void setChanged() {
-        FIRST.setChanged();
-        SECOND.setChanged();
+        first.setChanged();
+        second.setChanged();
     }
 
     @Override
-    public void startOpen(final Player PLAYER) {
-        FIRST.startOpen(PLAYER);
-        SECOND.startOpen(PLAYER);
+    public void startOpen(Player player) {
+        first.startOpen(player);
+        second.startOpen(player);
     }
 
     @Override
-    public void stopOpen(final Player PLAYER) {
-        FIRST.stopOpen(PLAYER);
-        SECOND.stopOpen(PLAYER);
+    public void stopOpen(Player player) {
+        first.stopOpen(player);
+        second.stopOpen(player);
     }
 
-    public boolean consistsPartlyOf(final WorldlyContainer CONTAINER) {
-        return FIRST == CONTAINER || SECOND == CONTAINER;
+    public boolean consistsPartlyOf(WorldlyContainer container) {
+        return first == container || second == container;
     }
 
     public int getMaxStackSize() {
-        return FIRST.getMaxStackSize();
+        return first.getMaxStackSize();
     }
 
     @Override
-    public ItemStack getItem(final int SLOT) {
-        if (SLOT >= FIRST.getContainerSize()) {
-            return SECOND.getItem(SLOT - FIRST.getContainerSize());
+    public ItemStack getItem(int slot) {
+        if (slot >= first.getContainerSize()) {
+            return second.getItem(slot - first.getContainerSize());
         }
-        return FIRST.getItem(SLOT);
+        return first.getItem(slot);
     }
 
     @Override
-    public ItemStack removeItem(final int SLOT, final int AMOUNT) {
-        if (SLOT >= FIRST.getContainerSize()) {
-            return SECOND.removeItem(SLOT - FIRST.getContainerSize(), AMOUNT);
+    public ItemStack removeItem(int slot, int count) {
+        if (slot >= first.getContainerSize()) {
+            return second.removeItem(slot - first.getContainerSize(), count);
         }
-        return FIRST.removeItem(SLOT, AMOUNT);
+        return first.removeItem(slot, count);
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(final int SLOT) {
-        if (SLOT >= FIRST.getContainerSize()) {
-            return SECOND.removeItemNoUpdate(SLOT - FIRST.getContainerSize());
+    public ItemStack removeItemNoUpdate(int slot) {
+        if (slot >= first.getContainerSize()) {
+            return second.removeItemNoUpdate(slot - first.getContainerSize());
         }
-        return FIRST.removeItemNoUpdate(SLOT);
+        return first.removeItemNoUpdate(slot);
     }
 
     @Override
-    public void setItem(final int SLOT, final ItemStack STACK) {
-        if (SLOT >= FIRST.getContainerSize()) {
-            SECOND.setItem(SLOT - FIRST.getContainerSize(), STACK);
+    public void setItem(int slot, ItemStack stack) {
+        if (slot >= first.getContainerSize()) {
+            second.setItem(slot - first.getContainerSize(), stack);
         } else {
-            FIRST.setItem(SLOT, STACK);
+            first.setItem(slot, stack);
         }
     }
 
     @Override
-    public boolean canPlaceItem(final int SLOT, final ItemStack STACK) {
-        if (SLOT >= FIRST.getContainerSize()) {
-            return SECOND.canPlaceItem(SLOT - FIRST.getContainerSize(), STACK);
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        if (slot >= first.getContainerSize()) {
+            return second.canPlaceItem(slot - first.getContainerSize(), stack);
         }
-        return FIRST.canPlaceItem(SLOT, STACK);
+        return first.canPlaceItem(slot, stack);
     }
 }

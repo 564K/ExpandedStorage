@@ -8,16 +8,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 public class ScreenPickButton extends Button {
-    private final ResourceLocation TEXTURE;
+    private final ResourceLocation texture;
 
     public ScreenPickButton(int x, int y, int width, int height, ResourceLocation texture, Component message, OnPress pressAction, OnTooltip tooltipRenderer) {
         super(x, y, width, height, message, pressAction, tooltipRenderer);
-        TEXTURE = texture;
+        this.texture = texture;
     }
 
     @Override
     public void renderButton(PoseStack stack, int mouseX, int mouseY, float delta) {
-        Minecraft.getInstance().getTextureManager().bind(TEXTURE);
+        Minecraft.getInstance().getTextureManager().bind(texture);
         GuiComponent.blit(stack, x, y, 0, this.isHovered() ? height : 0, width, height, width, height * 2);
     }
 

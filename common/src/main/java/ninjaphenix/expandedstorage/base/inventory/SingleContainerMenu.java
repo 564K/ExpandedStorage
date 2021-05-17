@@ -27,33 +27,33 @@ public final class SingleContainerMenu extends AbstractContainerMenu_<SingleScre
             .build();
     // @formatter:on
 
-    public SingleContainerMenu(final int WINDOW_ID, final BlockPos POS, final Container CONTAINER, final Inventory PLAYER_INVENTORY, final Component DISPLAY_NAME) {
-        super(BaseCommon.SINGLE_MENU_TYPE, WINDOW_ID, POS, CONTAINER, PLAYER_INVENTORY, DISPLAY_NAME,
-                AbstractContainerMenu_.getNearestScreenMeta(CONTAINER.getContainerSize(), SIZES));
-        for (int i = 0; i < CONTAINER.getContainerSize(); i++) {
-            final int x = i % SCREEN_META.WIDTH;
-            final int y = (i - x) / SCREEN_META.WIDTH;
-            this.addSlot(new Slot(CONTAINER, i, x * 18 + 8, y * 18 + 18));
+    public SingleContainerMenu(int windowId, BlockPos pos, Container container, Inventory playerInventory, Component displayName) {
+        super(BaseCommon.SINGLE_MENU_TYPE, windowId, pos, container, playerInventory, displayName,
+                AbstractContainerMenu_.getNearestScreenMeta(container.getContainerSize(), SingleContainerMenu.SIZES));
+        for (int i = 0; i < container.getContainerSize(); i++) {
+            int x = i % screenMeta.width;
+            int y = (i - x) / screenMeta.width;
+            this.addSlot(new Slot(container, i, x * 18 + 8, y * 18 + 18));
         }
-        final int left = (SCREEN_META.WIDTH * 18 + 14) / 2 - 80;
-        final int top = 18 + 14 + (SCREEN_META.HEIGHT * 18);
+        int left = (screenMeta.width * 18 + 14) / 2 - 80;
+        int top = 18 + 14 + (screenMeta.height * 18);
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 3; y++) {
-                this.addSlot(new Slot(PLAYER_INVENTORY, y * 9 + x + 9, left + 18 * x, top + y * 18));
+                this.addSlot(new Slot(playerInventory, y * 9 + x + 9, left + 18 * x, top + y * 18));
             }
         }
         for (int x = 0; x < 9; x++) {
-            this.addSlot(new Slot(PLAYER_INVENTORY, x, left + 18 * x, top + 58));
+            this.addSlot(new Slot(playerInventory, x, left + 18 * x, top + 58));
         }
     }
 
     public static final class Factory implements ClientContainerMenuFactory<SingleContainerMenu> {
         @Override
-        public SingleContainerMenu create(final int WINDOW_ID, final Inventory INVENTORY, final FriendlyByteBuf BUFFER) {
-            if (BUFFER == null) {
+        public SingleContainerMenu create(int windowId, Inventory inventory, FriendlyByteBuf buffer) {
+            if (buffer == null) {
                 return null;
             }
-            return new SingleContainerMenu(WINDOW_ID, BUFFER.readBlockPos(), new SimpleContainer(BUFFER.readInt()), INVENTORY, null);
+            return new SingleContainerMenu(windowId, buffer.readBlockPos(), new SimpleContainer(buffer.readInt()), inventory, null);
         }
     }
 }

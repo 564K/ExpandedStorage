@@ -4,17 +4,17 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
-@Experimental
 @Internal
+@Experimental
 public class OpenableTier extends TargetedTier {
-    private final int SLOTS;
+    private final int slots;
 
-    public OpenableTier(final Tier PARENT, final ResourceLocation BLOCK_TYPE, final int SLOTS) {
-        super(PARENT.key(), PARENT.blockProperties(), PARENT.itemProperties(), BLOCK_TYPE, PARENT.miningLevel());
-        this.SLOTS = SLOTS;
+    public OpenableTier(Tier parent, ResourceLocation blockType, int slots) {
+        super(parent.key(), parent.blockProperties(), parent.itemProperties(), blockType, parent.miningLevel());
+        this.slots = slots;
     }
 
     public final int slots() {
-        return SLOTS;
+        return slots;
     }
 }

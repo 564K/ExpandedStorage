@@ -26,6 +26,6 @@ public final class OldChestBlock extends AbstractChestBlock<OldChestBlockEntity>
 
     @Override
     public BlockEntity newBlockEntity(BlockGetter getter) {
-        return new OldChestBlockEntity(OldChestCommon.getBlockEntityType(), blockId());
+        return new OldChestBlockEntity(OldChestCommon.getBlockEntityType(), this.blockId());
     }
 }

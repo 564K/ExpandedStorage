@@ -26,40 +26,41 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.function.IntUnaryOperator;
 
-@Experimental
 @Internal
+@Experimental
 public abstract class AbstractOpenableStorageBlockEntity extends AbstractStorageBlockEntity implements WorldlyContainer {
-    private final ResourceLocation BLOCK_ID;
+    private final ResourceLocation blockId;
     protected Component containerName;
     private int slots;
     private NonNullList<ItemStack> inventory;
     private int[] slotsForFace;
 
-    public AbstractOpenableStorageBlockEntity(final BlockEntityType<?> BLOCK_ENTITY_TYPE, final ResourceLocation BLOCK_ID) {
-        super(BLOCK_ENTITY_TYPE);
-        this.BLOCK_ID = BLOCK_ID;
-        if (BLOCK_ID != null) {
-            this.initialise(BLOCK_ID);
+    public AbstractOpenableStorageBlockEntity(BlockEntityType<?> blockEntityType, ResourceLocation blockId) {
+        super(blockEntityType);
+        this.blockId = blockId;
+        if (blockId != null) {
+            this.initialise(blockId);
         }
     }
 
-    protected static int countViewers(final Level LEVEL, final WorldlyContainer CONTAINER, final int X, final int Y, final int Z) {
-        return LEVEL.getEntitiesOfClass(Player.class, new AABB(X - 5, Y - 5, Z - 5, X + 6, Y + 6, Z + 6)).stream()
-                .filter(PLAYER -> PLAYER.containerMenu instanceof AbstractContainerMenu_<?>)
-                .map(PLAYER -> ((AbstractContainerMenu_<?>) PLAYER.containerMenu).getContainer())
-                .filter(OPEN_CONTAINER -> OPEN_CONTAINER == CONTAINER || OPEN_CONTAINER instanceof CompoundWorldlyContainer && ((CompoundWorldlyContainer) OPEN_CONTAINER).consistsPartlyOf(CONTAINER))
+    protected static int countViewers(Level level, WorldlyContainer container, int x, int y, int z) {
+        return level.getEntitiesOfClass(Player.class, new AABB(x - 5, y - 5, z - 5, x + 6, y + 6, z + 6)).stream()
+                .filter(player -> player.containerMenu instanceof AbstractContainerMenu_<?>)
+                .map(player -> ((AbstractContainerMenu_<?>) player.containerMenu).getContainer())
+                .filter(openContainer -> openContainer == container ||
+                        openContainer instanceof CompoundWorldlyContainer && ((CompoundWorldlyContainer) openContainer).consistsPartlyOf(container))
                 .mapToInt(inv -> 1).sum();
     }
 
-    private void initialise(final ResourceLocation BLOCK_ID) {
-        Block BLOCK = Registry.BLOCK.get(BLOCK_ID);
-        if (BLOCK instanceof AbstractOpenableStorageBlock) {
-            AbstractOpenableStorageBlock STORAGE_BLOCK = (AbstractOpenableStorageBlock) BLOCK;
-            slots = STORAGE_BLOCK.getSlotCount();
+    private void initialise(ResourceLocation blockId) {
+        Block temp = Registry.BLOCK.get(blockId);
+        if (temp instanceof AbstractOpenableStorageBlock) {
+            AbstractOpenableStorageBlock block = (AbstractOpenableStorageBlock) temp;
+            slots = block.getSlotCount();
             slotsForFace = new int[slots];
             Arrays.setAll(slotsForFace, IntUnaryOperator.identity());
             inventory = NonNullList.withSize(slots, ItemStack.EMPTY);
-            containerName = STORAGE_BLOCK.getContainerName();
+            containerName = block.getContainerName();
         }
     }
 
@@ -69,44 +70,42 @@ public abstract class AbstractOpenableStorageBlockEntity extends AbstractStorage
     }
 
     public final ResourceLocation getBlockId() {
-        return BLOCK_ID;
+        return blockId;
     }
 
     @Override
-    public void load(final BlockState STATE, final CompoundTag TAG) {
-        super.load(STATE, TAG);
-        final Block TEMP = STATE.getBlock();
-        if (TEMP instanceof AbstractOpenableStorageBlock) {
-            AbstractOpenableStorageBlock BLOCK = (AbstractOpenableStorageBlock) TEMP;
-            this.initialise(BLOCK.blockId());
-            ContainerHelper.loadAllItems(TAG, inventory);
+    public void load(BlockState state, CompoundTag tag) {
+        super.load(state, tag);
+        Block temp = state.getBlock();
+        if (temp instanceof AbstractOpenableStorageBlock) {
+            AbstractOpenableStorageBlock block = (AbstractOpenableStorageBlock) temp;
+            this.initialise(block.blockId());
+            ContainerHelper.loadAllItems(tag, inventory);
         } else {
             throw new IllegalStateException("Block Entity attached to wrong block.");
         }
     }
 
     @Override
-    public CompoundTag save(final CompoundTag TAG) {
-        super.save(TAG);
-        ContainerHelper.saveAllItems(TAG, inventory);
-        return TAG;
+    public CompoundTag save(CompoundTag tag) {
+        super.save(tag);
+        ContainerHelper.saveAllItems(tag, inventory);
+        return tag;
     }
 
-    // <editor-fold desc="// Wordly Container Impl">
     @Override
-    public int[] getSlotsForFace(final Direction DIRECTION) {
+    public int[] getSlotsForFace(Direction direction) {
         return slotsForFace;
     }
 
-    public boolean canPlaceItemThroughFace(final int SLOT, final ItemStack STACK, @Nullable final Direction FACE) {
-        return this.canPlaceItem(SLOT, STACK);
+    public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction face) {
+        return this.canPlaceItem(slot, stack);
     }
 
-    public boolean canTakeItemThroughFace(final int SLOT, final ItemStack STACK, final Direction FACE) {
+    public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction face) {
         return true;
     }
 
-    // <editor-fold desc="// Container Impl">
     @Override
     public int getContainerSize() {
         return slots;
@@ -118,49 +117,40 @@ public abstract class AbstractOpenableStorageBlockEntity extends AbstractStorage
     }
 
     @Override
-    public ItemStack getItem(final int SLOT) {
-        return inventory.get(SLOT);
+    public ItemStack getItem(int slot) {
+        return inventory.get(slot);
     }
 
     @Override
-    public ItemStack removeItem(final int SLOT, final int AMOUNT) {
-        final ItemStack STACK = ContainerHelper.removeItem(inventory, SLOT, AMOUNT);
-        if (!STACK.isEmpty()) {
+    public ItemStack removeItem(int slot, int count) {
+        ItemStack stack = ContainerHelper.removeItem(inventory, slot, count);
+        if (!stack.isEmpty()) {
             this.setChanged();
         }
-        return STACK;
+        return stack;
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(final int SLOT) {
-        return ContainerHelper.takeItem(inventory, SLOT);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ContainerHelper.takeItem(inventory, slot);
     }
 
     @Override
-    public void setItem(final int SLOT, final ItemStack STACK) {
-        inventory.set(SLOT, STACK);
-        if (STACK.getCount() > this.getMaxStackSize()) {
-            STACK.setCount(this.getMaxStackSize());
+    public void setItem(int slot, ItemStack stack) {
+        inventory.set(slot, stack);
+        if (stack.getCount() > this.getMaxStackSize()) {
+            stack.setCount(this.getMaxStackSize());
         }
-
         this.setChanged();
     }
 
     @Override
-    public boolean stillValid(final Player PLAYER) {
-        if (level.getBlockEntity(worldPosition) != this) {
-            return false;
-        } else {
-            return PLAYER.distanceToSqr(Vec3.atCenterOf(worldPosition)) <= 64;
-        }
+    public boolean stillValid(Player player) {
+        return level.getBlockEntity(worldPosition) == this && player.distanceToSqr(Vec3.atCenterOf(worldPosition)) <= 64;
     }
 
-    // <editor-fold desc="// Clearable Impl">
     @Override
     public void clearContent() {
         inventory.clear();
     }
-    // </editor-fold>
-    // </editor-fold>
-    // </editor-fold>
 }

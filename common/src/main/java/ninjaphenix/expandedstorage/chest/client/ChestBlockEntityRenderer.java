@@ -41,49 +41,49 @@ public final class ChestBlockEntityRenderer extends BlockEntityRenderer<ChestBlo
     });
     private static final DoubleBlockCombiner.Combiner<ChestBlockEntity, Float2FloatFunction> LID_OPENNESS_FUNCTION_GETTER = new DoubleBlockCombiner.Combiner<ChestBlockEntity, Float2FloatFunction>() {
         @Override
-        public Float2FloatFunction acceptDouble(final ChestBlockEntity FIRST, final ChestBlockEntity SECOND) {
-            return (DELTA) -> Math.max(FIRST.getLidOpenness(DELTA), SECOND.getLidOpenness(DELTA));
+        public Float2FloatFunction acceptDouble(ChestBlockEntity first, ChestBlockEntity second) {
+            return (delta) -> Math.max(first.getLidOpenness(delta), second.getLidOpenness(delta));
         }
 
         @Override
-        public Float2FloatFunction acceptSingle(final ChestBlockEntity SINGLE) {
-            return SINGLE::getLidOpenness;
+        public Float2FloatFunction acceptSingle(ChestBlockEntity single) {
+            return single::getLidOpenness;
         }
 
         @Override
         public Float2FloatFunction acceptNone() { // Should be an illegal case, but we'll provide a fallback just in case.
-            return (DELTA) -> DELTA;
+            return (delta) -> delta;
         }
     };
 
-    public ChestBlockEntityRenderer(final BlockEntityRenderDispatcher DISPATCHER) {
-        super(DISPATCHER);
+    public ChestBlockEntityRenderer(BlockEntityRenderDispatcher dispatcher) {
+        super(dispatcher);
     }
 
     @Override
-    public void render(final ChestBlockEntity ENTITY, final float DELTA, final PoseStack STACK, final MultiBufferSource SOURCE, final int LIGHT, final int OVERLAY) {
-        final ResourceLocation BLOCK_ID = ENTITY.getBlockId();
-        final BlockState STATE = ENTITY.hasLevel() ? ENTITY.getBlockState() :
+    public void render(ChestBlockEntity entity, float delta, PoseStack stack, MultiBufferSource source, int light, int overlay) {
+        ResourceLocation blockId = entity.getBlockId();
+        BlockState state = entity.hasLevel() ? entity.getBlockState() :
                 ChestBlockEntityRenderer.DEFAULT_STATE.setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH);
-        final Block TEMP = STATE.getBlock();
-        if (BLOCK_ID == null || !(TEMP instanceof ChestBlock)) {
+        Block temp = state.getBlock();
+        if (blockId == null || !(temp instanceof ChestBlock)) {
             return;
         }
-        final ChestBlock BLOCK = (ChestBlock) TEMP;
-        final CursedChestType CHEST_TYPE = STATE.getValue(AbstractChestBlock.CURSED_CHEST_TYPE);
-        final SingleChestModel MODEL = ChestBlockEntityRenderer.MODELS.get(CHEST_TYPE);
-        STACK.pushPose();
-        STACK.translate(0.5D, 0.5D, 0.5D);
-        STACK.mulPose(Vector3f.YP.rotationDegrees(-STATE.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot()));
-        STACK.translate(-0.5D, -0.5D, -0.5D);
-        final DoubleBlockCombiner.NeighborCombineResult<? extends ChestBlockEntity> COMPOUND_PROPERTY_ACCESSOR = ENTITY.hasLevel() ?
-                BLOCK.combine(STATE, ENTITY.getLevel(), ENTITY.getBlockPos(), true) :
+        ChestBlock block = (ChestBlock) temp;
+        CursedChestType chestType = state.getValue(AbstractChestBlock.CURSED_CHEST_TYPE);
+        SingleChestModel model = ChestBlockEntityRenderer.MODELS.get(chestType);
+        stack.pushPose();
+        stack.translate(0.5D, 0.5D, 0.5D);
+        stack.mulPose(Vector3f.YP.rotationDegrees(-state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot()));
+        stack.translate(-0.5D, -0.5D, -0.5D);
+        DoubleBlockCombiner.NeighborCombineResult<? extends ChestBlockEntity> compoundPropertyAccessor = entity.hasLevel() ?
+                block.combine(state, entity.getLevel(), entity.getBlockPos(), true) :
                 DoubleBlockCombiner.Combiner::acceptNone;
-        final VertexConsumer CONSUMER = new Material(Sheets.CHEST_SHEET, ChestApi.INSTANCE.getChestTexture(BLOCK_ID, CHEST_TYPE)).buffer(SOURCE, RenderType::entityCutout);
-        final float LID_OPENNESS = COMPOUND_PROPERTY_ACCESSOR.apply(ChestBlockEntityRenderer.LID_OPENNESS_FUNCTION_GETTER).get(DELTA);
-        final int BRIGHTNESS = COMPOUND_PROPERTY_ACCESSOR.apply(new BrightnessCombiner<>()).applyAsInt(LIGHT);
-        MODEL.setLidPitch(LID_OPENNESS);
-        MODEL.render(STACK, CONSUMER, BRIGHTNESS, OVERLAY);
-        STACK.popPose();
+        VertexConsumer consumer = new Material(Sheets.CHEST_SHEET, ChestApi.INSTANCE.getChestTexture(blockId, chestType)).buffer(source, RenderType::entityCutout);
+        float lidOpenness = compoundPropertyAccessor.apply(ChestBlockEntityRenderer.LID_OPENNESS_FUNCTION_GETTER).get(delta);
+        int brightness = compoundPropertyAccessor.apply(new BrightnessCombiner<>()).applyAsInt(light);
+        model.setLidPitch(lidOpenness);
+        model.render(stack, consumer, brightness, overlay);
+        stack.popPose();
     }
 }

@@ -16,46 +16,45 @@ import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.Nullable;
 
-@Experimental
 @Internal
+@Experimental
 public abstract class AbstractStorageBlockEntity extends BlockEntity implements Nameable {
     private LockCode lockKey;
     private Component customName;
 
-    public AbstractStorageBlockEntity(final BlockEntityType<?> BLOCK_ENTITY_TYPE) {
-        super(BLOCK_ENTITY_TYPE);
+    public AbstractStorageBlockEntity(BlockEntityType<?> blockEntityType) {
+        super(blockEntityType);
         lockKey = LockCode.NO_LOCK;
     }
 
-    public static void alertBlockLocked(final Player PLAYER, final Component DISPLAY_NAME) {
-        PLAYER.displayClientMessage(new TranslatableComponent("container.isLocked", DISPLAY_NAME), true);
-        PLAYER.playNotifySound(SoundEvents.CHEST_LOCKED, SoundSource.BLOCKS, 1.0F, 1.0F);
+    public static void alertBlockLocked(Player player, Component displayName) {
+        player.displayClientMessage(new TranslatableComponent("container.isLocked", displayName), true);
+        player.playNotifySound(SoundEvents.CHEST_LOCKED, SoundSource.BLOCKS, 1.0F, 1.0F);
     }
 
     @Override
-    public void load(final BlockState STATE, final CompoundTag TAG) {
-        super.load(STATE, TAG);
-        lockKey = LockCode.fromTag(TAG);
-        if (TAG.contains("CustomName", Utils.NBT_STRING_TYPE)) {
-            customName = Component.Serializer.fromJson(TAG.getString("CustomName"));
+    public void load(BlockState state, CompoundTag tag) {
+        super.load(state, tag);
+        lockKey = LockCode.fromTag(tag);
+        if (tag.contains("CustomName", Utils.NBT_STRING_TYPE)) {
+            customName = Component.Serializer.fromJson(tag.getString("CustomName"));
         }
     }
 
     @Override
-    public CompoundTag save(final CompoundTag TAG) {
-        super.save(TAG);
-        this.lockKey.addToTag(TAG);
+    public CompoundTag save(CompoundTag tag) {
+        super.save(tag);
+        lockKey.addToTag(tag);
         if (customName != null) {
-            TAG.putString("CustomName", Component.Serializer.toJson(customName));
+            tag.putString("CustomName", Component.Serializer.toJson(customName));
         }
-        return TAG;
+        return tag;
     }
 
-    public boolean canPlayerInteractWith(final Player PLAYER) {
-        return !PLAYER.isSpectator() && lockKey.unlocksWith(PLAYER.getMainHandItem());
+    public boolean canPlayerInteractWith(Player player) {
+        return !player.isSpectator() && lockKey.unlocksWith(player.getMainHandItem());
     }
 
-    // <editor-fold desc="// Display names">
     @Override
     public final Component getName() {
         return this.hasCustomName() ? customName : this.getDefaultName();
@@ -74,8 +73,7 @@ public abstract class AbstractStorageBlockEntity extends BlockEntity implements 
         return customName;
     }
 
-    public final void setCustomName(final Component NAME) {
-        customName = NAME;
+    public final void setCustomName(Component name) {
+        customName = name;
     }
-    // </editor-fold>
 }

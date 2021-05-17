@@ -19,60 +19,60 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import java.util.Collections;
 import java.util.List;
 
-@Experimental
 @Internal
+@Experimental
 public abstract class AbstractContainerMenu_<T extends ScreenMeta> extends AbstractContainerMenu {
-    public final BlockPos POS;
-    public final T SCREEN_META;
-    protected final Container CONTAINER;
-    private final Component DISPLAY_NAME;
+    public final BlockPos pos;
+    public final T screenMeta;
+    protected final Container container;
+    private final Component displayName;
 
-    public AbstractContainerMenu_(final MenuType<?> MENU_TYPE, final int WINDOW_ID, final BlockPos POS, final Container CONTAINER,
-                                  final Inventory PLAYER_INVENTORY, final Component DISPLAY_NAME, final T SCREEN_META) {
-        super(MENU_TYPE, WINDOW_ID);
-        this.POS = POS;
-        this.CONTAINER = CONTAINER;
-        this.DISPLAY_NAME = DISPLAY_NAME;
-        this.SCREEN_META = SCREEN_META;
-        CONTAINER.startOpen(PLAYER_INVENTORY.player);
+    public AbstractContainerMenu_(MenuType<?> menuType, int windowId, BlockPos pos, Container container,
+                                  Inventory playerInventory, Component displayName, T screenMeta) {
+        super(menuType, windowId);
+        this.pos = pos;
+        this.container = container;
+        this.displayName = displayName;
+        this.screenMeta = screenMeta;
+        container.startOpen(playerInventory.player);
     }
 
-    public static ResourceLocation getTexture(final String TYPE, final int SLOT_X_COUNT, final int SLOT_Y_COUNT) {
-        return Utils.resloc(String.format("textures/gui/container/%s_%d_%d.png", TYPE, SLOT_X_COUNT, SLOT_Y_COUNT));
+    public static ResourceLocation getTexture(String type, int slotXCount, int slotYCount) {
+        return Utils.resloc(String.format("textures/gui/container/%s_%d_%d.png", type, slotXCount, slotYCount));
     }
 
-    protected static <T extends ScreenMeta> T getNearestScreenMeta(final int INVENTORY_SIZE, final ImmutableMap<Integer, T> KNOWN_SIZES) {
-        final T EXACT_SCREEN_META = KNOWN_SIZES.get(INVENTORY_SIZE);
-        if (EXACT_SCREEN_META != null) {
-            return EXACT_SCREEN_META;
+    protected static <T extends ScreenMeta> T getNearestScreenMeta(int inventorySize, ImmutableMap<Integer, T> knownSizes) {
+        T exactScreenMeta = knownSizes.get(inventorySize);
+        if (exactScreenMeta != null) {
+            return exactScreenMeta;
         }
-        final List<Integer> KEYS = KNOWN_SIZES.keySet().asList();
-        final int index = Collections.binarySearch(KEYS, INVENTORY_SIZE);
-        final int largestKey = KEYS.get(Math.abs(index) - 1);
-        final T nearestMeta = KNOWN_SIZES.get(largestKey);
-        if (nearestMeta != null && largestKey > INVENTORY_SIZE && largestKey - INVENTORY_SIZE <= nearestMeta.WIDTH) {
+        List<Integer> keys = knownSizes.keySet().asList();
+        int index = Collections.binarySearch(keys, inventorySize);
+        int largestKey = keys.get(Math.abs(index) - 1);
+        T nearestMeta = knownSizes.get(largestKey);
+        if (nearestMeta != null && largestKey > inventorySize && largestKey - inventorySize <= nearestMeta.width) {
             return nearestMeta;
         }
-        throw new RuntimeException("No screen can show an inventory of size " + INVENTORY_SIZE + ".");
+        throw new RuntimeException("No screen can show an inventory of size " + inventorySize + ".");
     }
 
     @Override
-    public boolean stillValid(final Player PLAYER) {
-        return CONTAINER.stillValid(PLAYER);
+    public boolean stillValid(Player player) {
+        return container.stillValid(player);
     }
 
     public Component getDisplayName() {
-        return DISPLAY_NAME.plainCopy();
+        return displayName.plainCopy();
     }
 
     @Override
     public void removed(Player player) {
         super.removed(player);
-        CONTAINER.stopOpen(player);
+        container.stopOpen(player);
     }
 
     public final Container getContainer() {
-        return CONTAINER;
+        return container;
     }
 
     @Override
@@ -82,11 +82,11 @@ public abstract class AbstractContainerMenu_<T extends ScreenMeta> extends Abstr
         if (slot != null && slot.hasItem()) {
             ItemStack newStack = slot.getItem();
             originalStack = newStack.copy();
-            if (index < SCREEN_META.TOTAL_SLOTS) {
-                if (!this.moveItemStackTo(newStack, SCREEN_META.TOTAL_SLOTS, SCREEN_META.TOTAL_SLOTS + 36, true)) {
+            if (index < screenMeta.totalSlots) {
+                if (!this.moveItemStackTo(newStack, screenMeta.totalSlots, screenMeta.totalSlots + 36, true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(newStack, 0, SCREEN_META.TOTAL_SLOTS, false)) {
+            } else if (!this.moveItemStackTo(newStack, 0, screenMeta.totalSlots, false)) {
                 return ItemStack.EMPTY;
             }
             if (newStack.isEmpty()) {

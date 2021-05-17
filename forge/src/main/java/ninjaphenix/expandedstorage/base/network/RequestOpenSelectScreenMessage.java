@@ -39,9 +39,9 @@ public final class RequestOpenSelectScreenMessage {
 
                     @Override
                     public AbstractContainerMenu createMenu(int windowId, Inventory inventory, Player player1) {
-                        return NetworkWrapper.getInstance().createMenu(windowId, MENU.POS, MENU.getContainer(), inventory, MENU.getDisplayName());
+                        return NetworkWrapper.getInstance().createMenu(windowId, MENU.pos, MENU.getContainer(), inventory, MENU.getDisplayName());
                     }
-                }, buffer -> buffer.writeBlockPos(MENU.POS).writeInt(MENU.getContainer().getContainerSize()))));
+                }, buffer -> buffer.writeBlockPos(MENU.pos).writeInt(MENU.getContainer().getContainerSize()))));
             } else {
                 context.enqueueWork(() -> NetworkWrapper.getInstance().s2c_openSelectScreen(player, null));
             }

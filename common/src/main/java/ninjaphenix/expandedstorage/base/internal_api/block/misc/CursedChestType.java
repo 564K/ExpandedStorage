@@ -4,8 +4,8 @@ import net.minecraft.util.StringRepresentable;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
-@Experimental
 @Internal
+@Experimental
 public enum CursedChestType implements StringRepresentable {
     TOP("top", -1),
     BOTTOM("bottom", -1),
@@ -25,27 +25,27 @@ public enum CursedChestType implements StringRepresentable {
 
     @Override
     public String getSerializedName() {
-        return this.name;
+        return name;
     }
 
     public int offset() {
-        return this.offset;
+        return offset;
     }
 
     public CursedChestType getOpposite() {
         if (this == CursedChestType.TOP) {
-            return BOTTOM;
+            return CursedChestType.BOTTOM;
         } else if (this == CursedChestType.BOTTOM) {
-            return TOP;
+            return CursedChestType.TOP;
         } else if (this == CursedChestType.FRONT) {
-            return BACK;
+            return CursedChestType.BACK;
         } else if (this == CursedChestType.BACK) {
-            return FRONT;
+            return CursedChestType.FRONT;
         } else if (this == CursedChestType.LEFT) {
-            return RIGHT;
+            return CursedChestType.RIGHT;
         } else if (this == CursedChestType.RIGHT) {
-            return LEFT;
+            return CursedChestType.LEFT;
         }
-        throw new IllegalStateException("SINGLE CursedChestType has no opposite");
+        throw new IllegalStateException("CursedChestType.SINGLE CursedChestType has no opposite");
     }
 }

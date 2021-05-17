@@ -7,14 +7,14 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.io.IOException;
 
-public class ResourceLocationTypeAdapter extends TypeAdapter<ResourceLocation> {
+public final class ResourceLocationTypeAdapter extends TypeAdapter<ResourceLocation> {
     @Override
-    public void write(JsonWriter out, ResourceLocation value) throws IOException {
-        out.value(value.toString());
+    public void write(JsonWriter writer, ResourceLocation value) throws IOException {
+        writer.value(value.toString());
     }
 
     @Override // never used.
-    public ResourceLocation read(JsonReader in) {
+    public ResourceLocation read(JsonReader reader) {
         return null;
     }
 }

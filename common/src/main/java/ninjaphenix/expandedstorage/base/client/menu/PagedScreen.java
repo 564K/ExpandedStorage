@@ -28,35 +28,35 @@ public final class PagedScreen extends AbstractScreen<PagedContainerMenu, PagedS
     private float pageTextX;
 
     public PagedScreen(PagedContainerMenu screenHandler, Inventory playerInventory, Component title) {
-        super(screenHandler, playerInventory, title, (screenMeta) -> (screenMeta.WIDTH * 18 + 14) / 2 - 80);
-        imageWidth = 14 + 18 * SCREEN_META.WIDTH;
-        imageHeight = 17 + 97 + 18 * SCREEN_META.HEIGHT;
+        super(screenHandler, playerInventory, title, (screenMeta) -> (screenMeta.width * 18 + 14) / 2 - 80);
+        imageWidth = 14 + 18 * screenMeta.width;
+        imageHeight = 17 + 97 + 18 * screenMeta.height;
     }
 
     private void setPage(int oldPage, int newPage) {
-        if (newPage == 0 || newPage > SCREEN_META.PAGES) {
+        if (newPage == 0 || newPage > screenMeta.pages) {
             return;
         }
         page = newPage;
         if (newPage > oldPage) {
-            if (page == SCREEN_META.PAGES) {
+            if (page == screenMeta.pages) {
                 rightPageButton.setActive(false);
-                final int blanked = SCREEN_META.BLANK_SLOTS;
+                int blanked = screenMeta.blankSlots;
                 if (blanked > 0) {
-                    final int rows = Mth.intFloorDiv(blanked, SCREEN_META.WIDTH);
-                    final int remainder = (blanked - SCREEN_META.WIDTH * rows);
-                    int yTop = topPos + Utils.CONTAINER_HEADER_HEIGHT + (SCREEN_META.HEIGHT - 1) * Utils.SLOT_SIZE;
-                    final int xLeft = leftPos + Utils.CONTAINER_PADDING_WIDTH;
+                    int rows = Mth.intFloorDiv(blanked, screenMeta.width);
+                    int remainder = (blanked - screenMeta.width * rows);
+                    int yTop = topPos + Utils.CONTAINER_HEADER_HEIGHT + (screenMeta.height - 1) * Utils.SLOT_SIZE;
+                    int xLeft = leftPos + Utils.CONTAINER_PADDING_WIDTH;
                     for (int i = 0; i < rows; i++) {
-                        blankArea.add(new Image(xLeft, yTop, SCREEN_META.WIDTH * Utils.SLOT_SIZE, Utils.SLOT_SIZE,
-                                Utils.CONTAINER_PADDING_WIDTH, imageHeight, SCREEN_META.TEXTURE_WIDTH, SCREEN_META.TEXTURE_HEIGHT));
+                        blankArea.add(new Image(xLeft, yTop, screenMeta.width * Utils.SLOT_SIZE, Utils.SLOT_SIZE,
+                                Utils.CONTAINER_PADDING_WIDTH, imageHeight, screenMeta.textureWidth, screenMeta.textureHeight));
                         yTop -= Utils.SLOT_SIZE;
                     }
                     if (remainder > 0) {
-                        final int xRight = leftPos + Utils.CONTAINER_PADDING_WIDTH + SCREEN_META.WIDTH * Utils.SLOT_SIZE;
-                        final int width = remainder * Utils.SLOT_SIZE;
+                        int xRight = leftPos + Utils.CONTAINER_PADDING_WIDTH + screenMeta.width * Utils.SLOT_SIZE;
+                        int width = remainder * Utils.SLOT_SIZE;
                         blankArea.add(new Image(xRight - width, yTop, width, Utils.SLOT_SIZE,
-                                Utils.CONTAINER_PADDING_WIDTH, imageHeight, SCREEN_META.TEXTURE_WIDTH, SCREEN_META.TEXTURE_HEIGHT));
+                                Utils.CONTAINER_PADDING_WIDTH, imageHeight, screenMeta.textureWidth, screenMeta.textureHeight));
                     }
                 }
             }
@@ -72,18 +72,18 @@ public final class PagedScreen extends AbstractScreen<PagedContainerMenu, PagedS
                 rightPageButton.setActive(true);
             }
         }
-        final int slotsPerPage = SCREEN_META.WIDTH * SCREEN_META.HEIGHT;
-        final int oldMin = slotsPerPage * (oldPage - 1);
-        final int oldMax = Math.min(oldMin + slotsPerPage, SCREEN_META.TOTAL_SLOTS);
+        int slotsPerPage = screenMeta.width * screenMeta.height;
+        int oldMin = slotsPerPage * (oldPage - 1);
+        int oldMax = Math.min(oldMin + slotsPerPage, screenMeta.totalSlots);
         menu.moveSlotRange(oldMin, oldMax, -2000);
-        final int newMin = slotsPerPage * (newPage - 1);
-        final int newMax = Math.min(newMin + slotsPerPage, SCREEN_META.TOTAL_SLOTS);
+        int newMin = slotsPerPage * (newPage - 1);
+        int newMax = Math.min(newMin + slotsPerPage, screenMeta.totalSlots);
         menu.moveSlotRange(newMin, newMax, 2000);
-        setPageText();
+        this.setPageText();
     }
 
     private void setPageText() {
-        currentPageText = new TranslatableComponent("screen.expandedstorage.page_x_y", page, SCREEN_META.PAGES);
+        currentPageText = new TranslatableComponent("screen.expandedstorage.page_x_y", page, screenMeta.pages);
     }
 
     @Override
@@ -92,7 +92,7 @@ public final class PagedScreen extends AbstractScreen<PagedContainerMenu, PagedS
             return;
         } // Not sure why this can be null, but don't render in case it is.
         super.render(stack, mouseX, mouseY, delta);
-        if (SCREEN_META.PAGES != 1) {
+        if (screenMeta.pages != 1) {
             leftPageButton.renderTooltip(stack, mouseX, mouseY);
             rightPageButton.renderTooltip(stack, mouseX, mouseY);
         }
@@ -104,22 +104,22 @@ public final class PagedScreen extends AbstractScreen<PagedContainerMenu, PagedS
         //final boolean inventoryProfilesLoaded = instance.isModLoaded("inventoryprofiles");
         //final boolean inventorySorterLoaded = instance.isModLoaded("inventorysorter");
         super.init();
-        if (SCREEN_META.PAGES != 1) {
-            final int pageButtonsXOffset = 0;
+        if (screenMeta.pages != 1) {
+            int pageButtonsXOffset = 0;
             //if (inventoryProfilesLoaded) { pageButtonsXOffset = -12; }
             //else if (inventorySorterLoaded) { pageButtonsXOffset = -18; }
             //else { pageButtonsXOffset = 0; }
             page = 1;
-            setPageText();
+            this.setPageText();
             leftPageButton = new PageButton(leftPos + imageWidth - 61 + pageButtonsXOffset, topPos + imageHeight - 96, 0,
-                    new TranslatableComponent("screen.expandedstorage.prev_page"), button -> setPage(page, page - 1),
+                    new TranslatableComponent("screen.expandedstorage.prev_page"), button -> this.setPage(page, page - 1),
                     this::renderButtonTooltip);
             leftPageButton.active = false;
-            addButton(leftPageButton);
+            this.addButton(leftPageButton);
             rightPageButton = new PageButton(leftPos + imageWidth - 19 + pageButtonsXOffset, topPos + imageHeight - 96, 1,
-                    new TranslatableComponent("screen.expandedstorage.next_page"), button -> setPage(page, page + 1),
+                    new TranslatableComponent("screen.expandedstorage.next_page"), button -> this.setPage(page, page + 1),
                     this::renderButtonTooltip);
-            addButton(rightPageButton);
+            this.addButton(rightPageButton);
             pageTextX = (1 + leftPageButton.x + rightPageButton.x - rightPageButton.getWidth() / 2F) / 2F;
         }
     }
@@ -132,13 +132,13 @@ public final class PagedScreen extends AbstractScreen<PagedContainerMenu, PagedS
 
     @Override
     public void resize(Minecraft client, int width, int height) {
-        if (SCREEN_META.PAGES != 1) {
-            final int currentPage = page;
+        if (screenMeta.pages != 1) {
+            int currentPage = page;
             if (currentPage != 1) {
                 menu.resetSlotPositions(false);
                 super.resize(client, width, height);
                 blankArea.clear();
-                setPage(1, currentPage);
+                this.setPage(1, currentPage);
                 return;
             }
         }
@@ -155,9 +155,9 @@ public final class PagedScreen extends AbstractScreen<PagedContainerMenu, PagedS
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (SCREEN_META.PAGES != 1) {
+        if (screenMeta.pages != 1) {
             if (keyCode == GLFW.GLFW_KEY_RIGHT || keyCode == GLFW.GLFW_KEY_PAGE_DOWN) {
-                this.setPage(page, Screen.hasShiftDown() ? SCREEN_META.PAGES : page + 1);
+                this.setPage(page, Screen.hasShiftDown() ? screenMeta.pages : page + 1);
                 return true;
             } else if (keyCode == GLFW.GLFW_KEY_LEFT || keyCode == GLFW.GLFW_KEY_PAGE_UP) {
                 this.setPage(page, Screen.hasShiftDown() ? 1 : page - 1);
