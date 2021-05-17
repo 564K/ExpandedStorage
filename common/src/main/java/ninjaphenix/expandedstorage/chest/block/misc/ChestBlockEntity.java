@@ -34,12 +34,12 @@ public final class ChestBlockEntity extends AbstractOpenableStorageBlockEntity i
     }
 
     @Override
-    public boolean triggerEvent(int actionId, int value) {
-        if (actionId == 1) {
+    public boolean triggerEvent(int event, int value) {
+        if (event == ChestBlock.SET_OPEN_COUNT_EVENT) {
             viewerCount = value;
             return true;
         }
-        return super.triggerEvent(actionId, value);
+        return super.triggerEvent(event, value);
     }
 
     // Client only
@@ -104,7 +104,7 @@ public final class ChestBlockEntity extends AbstractOpenableStorageBlockEntity i
         Block temp = this.getBlockState().getBlock();
         if (temp instanceof ChestBlock) {
             ChestBlock block = (ChestBlock) temp;
-            level.blockEvent(worldPosition, block, 1, viewerCount);
+            level.blockEvent(worldPosition, block, ChestBlock.SET_OPEN_COUNT_EVENT, viewerCount);
             level.updateNeighborsAt(worldPosition, block);
         }
     }

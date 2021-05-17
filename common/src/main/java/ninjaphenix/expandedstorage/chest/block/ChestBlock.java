@@ -26,6 +26,7 @@ import ninjaphenix.expandedstorage.chest.block.misc.ChestBlockEntity;
 import org.jetbrains.annotations.NotNull;
 
 public final class ChestBlock extends AbstractChestBlock<ChestBlockEntity> implements SimpleWaterloggedBlock {
+    public static final int SET_OPEN_COUNT_EVENT = 1;
     private static final VoxelShape[] SHAPES = {
             Block.box(1, 0, 0, 15, 14, 15), // Horizontal shapes, depends on orientation and chest type.
             Block.box(1, 0, 1, 16, 14, 15),

@@ -10,6 +10,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import ninjaphenix.expandedstorage.base.BaseCommon;
+import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.AbstractContainerMenu_;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.ClientContainerMenuFactory;
 import ninjaphenix.expandedstorage.base.inventory.screen.ScrollableScreenMeta;
@@ -36,18 +37,18 @@ public final class ScrollableContainerMenu extends AbstractContainerMenu_<Scroll
         for (int i = 0; i < container.getContainerSize(); i++) {
             int slotXPos = i % screenMeta.width;
             int slotYPos = Mth.ceil((((double) (i - slotXPos)) / screenMeta.width));
-            int realYPos = slotYPos >= screenMeta.height ? -2000 : slotYPos * 18 + 18;
-            this.addSlot(new Slot(container, i, slotXPos * 18 + 8, realYPos));
+            int realYPos = slotYPos >= screenMeta.height ? -2000 : slotYPos * Utils.SLOT_SIZE + Utils.SLOT_SIZE;
+            this.addSlot(new Slot(container, i, slotXPos * Utils.SLOT_SIZE + 8, realYPos));
         }
-        int left = (screenMeta.width * 18 + 14) / 2 - 80;
-        int top = 18 + 14 + (screenMeta.height * 18);
+        int left = (screenMeta.width * Utils.SLOT_SIZE + 14) / 2 - 80;
+        int top = Utils.SLOT_SIZE + 14 + (screenMeta.height * Utils.SLOT_SIZE);
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 3; y++) {
-                this.addSlot(new Slot(inventory, y * 9 + x + 9, left + 18 * x, top + y * 18));
+                this.addSlot(new Slot(inventory, y * 9 + x + 9, left + Utils.SLOT_SIZE * x, top + y * Utils.SLOT_SIZE));
             }
         }
         for (int x = 0; x < 9; x++) {
-            this.addSlot(new Slot(inventory, x, left + 18 * x, top + 58));
+            this.addSlot(new Slot(inventory, x, left + Utils.SLOT_SIZE * x, top + 58));
         }
     }
 

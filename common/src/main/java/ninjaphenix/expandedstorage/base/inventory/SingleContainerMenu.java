@@ -9,6 +9,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import ninjaphenix.expandedstorage.base.BaseCommon;
+import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.AbstractContainerMenu_;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.ClientContainerMenuFactory;
 import ninjaphenix.expandedstorage.base.inventory.screen.SingleScreenMeta;
@@ -33,17 +34,17 @@ public final class SingleContainerMenu extends AbstractContainerMenu_<SingleScre
         for (int i = 0; i < container.getContainerSize(); i++) {
             int x = i % screenMeta.width;
             int y = (i - x) / screenMeta.width;
-            this.addSlot(new Slot(container, i, x * 18 + 8, y * 18 + 18));
+            this.addSlot(new Slot(container, i, x * Utils.SLOT_SIZE + 8, y * Utils.SLOT_SIZE + Utils.SLOT_SIZE));
         }
-        int left = (screenMeta.width * 18 + 14) / 2 - 80;
-        int top = 18 + 14 + (screenMeta.height * 18);
+        int left = (screenMeta.width * Utils.SLOT_SIZE + 14) / 2 - 80;
+        int top = Utils.SLOT_SIZE + 14 + (screenMeta.height * Utils.SLOT_SIZE);
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 3; y++) {
-                this.addSlot(new Slot(playerInventory, y * 9 + x + 9, left + 18 * x, top + y * 18));
+                this.addSlot(new Slot(playerInventory, y * 9 + x + 9, left + Utils.SLOT_SIZE * x, top + y * Utils.SLOT_SIZE));
             }
         }
         for (int x = 0; x < 9; x++) {
-            this.addSlot(new Slot(playerInventory, x, left + 18 * x, top + 58));
+            this.addSlot(new Slot(playerInventory, x, left + Utils.SLOT_SIZE * x, top + 58));
         }
     }
 

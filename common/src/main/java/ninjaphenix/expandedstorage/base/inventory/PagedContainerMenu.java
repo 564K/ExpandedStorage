@@ -10,6 +10,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import ninjaphenix.expandedstorage.base.BaseCommon;
+import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.AbstractContainerMenu_;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.ClientContainerMenuFactory;
 import ninjaphenix.expandedstorage.base.inventory.screen.PagedScreenMeta;
@@ -32,15 +33,15 @@ public final class PagedContainerMenu extends AbstractContainerMenu_<PagedScreen
         super(BaseCommon.PAGE_MENU_TYPE, windowId, pos, container, playerInventory, displayName,
                 AbstractContainerMenu_.getNearestScreenMeta(container.getContainerSize(), PagedContainerMenu.SIZES));
         this.resetSlotPositions(true);
-        int left = (screenMeta.width * 18 + 14) / 2 - 80;
-        int top = 18 + 14 + (screenMeta.height * 18);
+        int left = (screenMeta.width * Utils.SLOT_SIZE + 14) / 2 - 80;
+        int top = Utils.SLOT_SIZE + 14 + (screenMeta.height * Utils.SLOT_SIZE);
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 3; y++) {
-                this.addSlot(new Slot(playerInventory, y * 9 + x + 9, left + 18 * x, top + y * 18));
+                this.addSlot(new Slot(playerInventory, y * 9 + x + 9, left + Utils.SLOT_SIZE * x, top + y * Utils.SLOT_SIZE));
             }
         }
         for (int x = 0; x < 9; x++) {
-            this.addSlot(new Slot(playerInventory, x, left + 18 * x, top + 58));
+            this.addSlot(new Slot(playerInventory, x, left + Utils.SLOT_SIZE * x, top + 58));
         }
     }
 
@@ -48,11 +49,11 @@ public final class PagedContainerMenu extends AbstractContainerMenu_<PagedScreen
         for (int i = 0; i < container.getContainerSize(); i++) {
             int slotXPos = i % screenMeta.width;
             int slotYPos = Mth.ceil((((double) (i - slotXPos)) / screenMeta.width));
-            int realYPos = slotYPos >= screenMeta.height ? (18 * (slotYPos % screenMeta.height)) - 2000 : slotYPos * 18;
+            int realYPos = slotYPos >= screenMeta.height ? (Utils.SLOT_SIZE * (slotYPos % screenMeta.height)) - 2000 : slotYPos * Utils.SLOT_SIZE;
             if (createSlots) {
-                this.addSlot(new Slot(container, i, slotXPos * 18 + 8, realYPos + 18));
+                this.addSlot(new Slot(container, i, slotXPos * Utils.SLOT_SIZE + 8, realYPos + Utils.SLOT_SIZE));
             } else {
-                slots.get(i).y = realYPos + 18;
+                slots.get(i).y = realYPos + Utils.SLOT_SIZE;
             }
         }
     }
