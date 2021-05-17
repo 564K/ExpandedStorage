@@ -53,7 +53,7 @@ subprojects {
             languageVersion = MINECRAFT_JAVA_VERSION
         })
         if (JavaVersion.toVersion(MOD_JAVA_VERSION.asInt()).isJava9Compatible()) {
-            it.options.release.set(rootProject.properties.source_java_version as int)
+            it.options.release.set(rootProject.properties.mod_java_version as int)
         }
     }
 
