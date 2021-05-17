@@ -47,35 +47,20 @@ public final class Main {
         ResourceLocation netheriteOpenStat = BaseCommon.registerStat(Utils.resloc("open_netherite_barrel"));
         // Init block properties
         BlockBehaviour.Properties ironProperties = BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.WOOD)
-                                                                            .harvestTool(ToolType.AXE)
-                                                                            .harvestLevel(Tiers.STONE.getLevel())
-                                                                            .requiresCorrectToolForDrops()
-                                                                            .strength(5.0F, 6.0F)
-                                                                            .sound(SoundType.WOOD);
+                .strength(5.0F, 6.0F)
+                .sound(SoundType.WOOD);
         BlockBehaviour.Properties goldProperties = BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.WOOD)
-                                                                            .harvestTool(ToolType.AXE)
-                                                                            .harvestLevel(Tiers.STONE.getLevel())
-                                                                            .requiresCorrectToolForDrops()
-                                                                            .strength(3.0F, 6.0F)
-                                                                            .sound(SoundType.WOOD);
+                .strength(3.0F, 6.0F)
+                .sound(SoundType.WOOD);
         BlockBehaviour.Properties diamondProperties = BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.WOOD)
-                                                                               .harvestTool(ToolType.AXE)
-                                                                               .harvestLevel(Tiers.IRON.getLevel())
-                                                                               .requiresCorrectToolForDrops()
-                                                                               .strength(5.0F, 6.0F)
-                                                                               .sound(SoundType.WOOD);
+                .strength(5.0F, 6.0F)
+                .sound(SoundType.WOOD);
         BlockBehaviour.Properties obsidianProperties = BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.WOOD)
-                                                                                .harvestTool(ToolType.AXE)
-                                                                                .harvestLevel(Tiers.DIAMOND.getLevel())
-                                                                                .requiresCorrectToolForDrops()
-                                                                                .strength(50.0F, 1200.0F)
-                                                                                .sound(SoundType.WOOD);
+                .strength(50.0F, 1200.0F)
+                .sound(SoundType.WOOD);
         BlockBehaviour.Properties netheriteProperties = BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.WOOD)
-                                                                                 .harvestTool(ToolType.AXE)
-                                                                                 .harvestLevel(Tiers.DIAMOND.getLevel())
-                                                                                 .requiresCorrectToolForDrops()
-                                                                                 .strength(50.0F, 1200.0F)
-                                                                                 .sound(SoundType.WOOD);
+                .strength(50.0F, 1200.0F)
+                .sound(SoundType.WOOD);
         // Init blocks
         BarrelBlock ironBarrelBlock = this.barrelBlock(Utils.resloc("iron_barrel"), ironOpenStat, ironTier, ironProperties);
         BarrelBlock goldBarrelBlock = this.barrelBlock(Utils.resloc("gold_barrel"), goldOpenStat, goldTier, goldProperties);

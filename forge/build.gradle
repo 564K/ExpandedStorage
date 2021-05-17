@@ -36,19 +36,19 @@ processResources {
 }
 
 repositories {
-    mavenLocal()
+    //mavenLocal()
 }
 
 dependencies {
-    annotationProcessor('com.github.bsideup.jabel:jabel-javac-plugin:0.4.0')
-    compileOnly('com.github.bsideup.jabel:jabel-javac-plugin:0.4.0')
+    //annotationProcessor('com.github.bsideup.jabel:jabel-javac-plugin:0.4.0')
+    //compileOnly('com.github.bsideup.jabel:jabel-javac-plugin:0.4.0')
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-    if (System.getenv("I_HATE_INTELLIJ_AND_GRADLE")) {
-        options.release.set(MINECRAFT_JAVA_VERSION.asInt())
-    }
+    //if (System.getenv("I_HATE_INTELLIJ_AND_GRADLE")) {
+    //    options.release.set(MINECRAFT_JAVA_VERSION.asInt())
+    //}
 }
 
 tasks.withType(JavaExec).configureEach {

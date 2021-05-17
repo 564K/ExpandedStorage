@@ -6,6 +6,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -40,6 +41,6 @@ public class BarrelBlockEntity extends AbstractOpenableStorageBlockEntity {
     }
 
     private void updateBlockState(BlockState state, boolean open) {
-        level.setBlock(this.getBlockPos(), state.setValue(BlockStateProperties.OPEN, open), 3);
+        level.setBlock(this.getBlockPos(), state.setValue(BlockStateProperties.OPEN, open), Block.UPDATE_ALL);
     }
 }

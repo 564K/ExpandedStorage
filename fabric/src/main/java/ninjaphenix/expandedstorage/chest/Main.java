@@ -4,9 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.tag.TagRegistry;
-import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.core.BlockPos;
@@ -14,7 +12,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -55,42 +52,29 @@ public final class Main implements ModuleInitializer {
         ResourceLocation obsidianOpenStat = BaseCommon.registerStat(Utils.resloc("open_obsidian_chest"));
         ResourceLocation netheriteOpenStat = BaseCommon.registerStat(Utils.resloc("open_netherite_chest"));
         // Init block properties
-        BlockBehaviour.Properties woodProperties = FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD)
-                                                                      .breakByTool(FabricToolTags.AXES, Tiers.WOOD.getLevel())
-                                                                      .strength(2.5F) // End of FBS
-                                                                      .sound(SoundType.WOOD);
-        BlockBehaviour.Properties pumpkinProperties = FabricBlockSettings.of(Material.VEGETABLE, MaterialColor.COLOR_ORANGE)
-                                                                         .breakByTool(FabricToolTags.AXES, Tiers.WOOD.getLevel())
-                                                                         .strength(1.0F) // End of FBS
-                                                                         .sound(SoundType.WOOD);
-        BlockBehaviour.Properties christmasProperties = FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD)
-                                                                           .breakByTool(FabricToolTags.AXES, Tiers.WOOD.getLevel())
-                                                                           .strength(2.5F) // End of FBS
-                                                                           .sound(SoundType.WOOD);
-        BlockBehaviour.Properties ironProperties = FabricBlockSettings.of(Material.METAL, MaterialColor.METAL)
-                                                                      .breakByTool(FabricToolTags.PICKAXES, Tiers.STONE.getLevel())
-                                                                      .requiresCorrectToolForDrops() // End of FBS
-                                                                      .strength(5.0F, 6.0F)
-                                                                      .sound(SoundType.METAL);
-        BlockBehaviour.Properties goldProperties = FabricBlockSettings.of(Material.METAL, MaterialColor.GOLD)
-                                                                      .breakByTool(FabricToolTags.PICKAXES, Tiers.STONE.getLevel())
-                                                                      .requiresCorrectToolForDrops() // End of FBS
-                                                                      .strength(3.0F, 6.0F)
-                                                                      .sound(SoundType.METAL);
-        BlockBehaviour.Properties diamondProperties = FabricBlockSettings.of(Material.METAL, MaterialColor.DIAMOND)
-                                                                         .breakByTool(FabricToolTags.PICKAXES, Tiers.IRON.getLevel())
-                                                                         .requiresCorrectToolForDrops() // End of FBS
-                                                                         .strength(5.0F, 6.0F)
-                                                                         .sound(SoundType.METAL);
-        BlockBehaviour.Properties obsidianProperties = FabricBlockSettings.of(Material.STONE, MaterialColor.COLOR_BLACK)
-                                                                          .breakByTool(FabricToolTags.PICKAXES, Tiers.DIAMOND.getLevel())
-                                                                          .requiresCorrectToolForDrops() // End of FBS
-                                                                          .strength(50.0F, 1200.0F);
-        BlockBehaviour.Properties netheriteProperties = FabricBlockSettings.of(Material.METAL, MaterialColor.COLOR_BLACK)
-                                                                           .breakByTool(FabricToolTags.PICKAXES, Tiers.DIAMOND.getLevel())
-                                                                           .requiresCorrectToolForDrops() // End of FBS
-                                                                           .strength(50.0F, 1200.0F)
-                                                                           .sound(SoundType.NETHERITE_BLOCK);
+        BlockBehaviour.Properties woodProperties = BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.WOOD)
+                .strength(2.5F)
+                .sound(SoundType.WOOD);
+        BlockBehaviour.Properties pumpkinProperties = BlockBehaviour.Properties.of(Material.VEGETABLE, MaterialColor.COLOR_ORANGE)
+                .strength(1.0F)
+                .sound(SoundType.WOOD);
+        BlockBehaviour.Properties christmasProperties = BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.WOOD)
+                .strength(2.5F)
+                .sound(SoundType.WOOD);
+        BlockBehaviour.Properties ironProperties = BlockBehaviour.Properties.of(Material.METAL, MaterialColor.METAL)
+                .strength(5.0F, 6.0F)
+                .sound(SoundType.METAL);
+        BlockBehaviour.Properties goldProperties = BlockBehaviour.Properties.of(Material.METAL, MaterialColor.GOLD)
+                .strength(3.0F, 6.0F)
+                .sound(SoundType.METAL);
+        BlockBehaviour.Properties diamondProperties = BlockBehaviour.Properties.of(Material.METAL, MaterialColor.DIAMOND)
+                .strength(5.0F, 6.0F)
+                .sound(SoundType.METAL);
+        BlockBehaviour.Properties obsidianProperties = BlockBehaviour.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK)
+                .strength(50.0F, 1200.0F);
+        BlockBehaviour.Properties netheriteProperties = BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_BLACK)
+                .strength(50.0F, 1200.0F)
+                .sound(SoundType.NETHERITE_BLOCK);
         // Init and register blocks
         ChestBlock woodChestBlock = this.chestBlock(Utils.resloc("wood_chest"), woodOpenStat, woodTier, woodProperties);
         ChestBlock pumpkinChestBlock = this.chestBlock(Utils.resloc("pumpkin_chest"), pumpkinOpenStat, pumpkinTier, pumpkinProperties);

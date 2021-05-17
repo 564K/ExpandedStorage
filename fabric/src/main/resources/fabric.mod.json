@@ -5,9 +5,9 @@
     "quilt_loader": "*"
   },
   "depends": {
-    "fabric": "*",
+    "fabric": ">=0.34.4",
     "fabricloader": ">=0.7.4",
-    "minecraft": "~1.17-alpha.21.18.a"
+    "minecraft": "~1.17-alpha.21.19.a"
   },
   "entrypoints": {
     "main": [
