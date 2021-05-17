@@ -26,7 +26,7 @@ public class OpenSelectScreenMessage {
 
     public static OpenSelectScreenMessage decode(FriendlyByteBuf buffer) {
         Set<ResourceLocation> containerTypeOptions = new HashSet<>();
-        final int options = buffer.readInt();
+        int options = buffer.readInt();
         for (int i = 0; i < options; i++) {
             containerTypeOptions.add(buffer.readResourceLocation());
         }
@@ -34,7 +34,7 @@ public class OpenSelectScreenMessage {
     }
 
     public static void handle(OpenSelectScreenMessage message, Supplier<NetworkEvent.Context> wrappedContext) {
-        final NetworkEvent.Context context = wrappedContext.get();
+        NetworkEvent.Context context = wrappedContext.get();
         message.openScreen(context);
         context.setPacketHandled(true);
     }

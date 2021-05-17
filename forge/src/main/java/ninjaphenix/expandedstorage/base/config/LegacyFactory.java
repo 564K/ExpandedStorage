@@ -12,25 +12,25 @@ public final class LegacyFactory implements Converter<Config, ConfigV0> {
     }
 
     @Override
-    public ConfigV0 fromSource(final Config SOURCE) {
-        if (SOURCE != null) {
-            final Object CONTAINER_TYPE = SOURCE.get("client.preferred_container_type");
-            final Object RESTRICTIVE_SCROLLING = SOURCE.get("client.restrictive_scrolling");
-            if (CONTAINER_TYPE instanceof String && RESTRICTIVE_SCROLLING instanceof Boolean) {
-                String temp = (String) CONTAINER_TYPE;
+    public ConfigV0 fromSource(Config source) {
+        if (source != null) {
+            Object containerType = source.get("client.preferred_container_type");
+            Object restrictiveScrolling = source.get("client.restrictive_scrolling");
+            if (containerType instanceof String && restrictiveScrolling instanceof Boolean) {
+                String temp = (String) containerType;
                 if ("expandedstorage:paged".equals(temp)) {
                     temp = Utils.PAGE_CONTAINER_TYPE.toString();
                 } else if ("expandedstorage:scrollable".equals(temp)) {
                     temp = Utils.SCROLL_CONTAINER_TYPE.toString();
                 }
-                return new ConfigV0(ResourceLocation.tryParse(temp), (Boolean) RESTRICTIVE_SCROLLING);
+                return new ConfigV0(ResourceLocation.tryParse(temp), (Boolean) restrictiveScrolling);
             }
         }
         return null;
     }
 
     @Override
-    public Config toSource(final ConfigV0 TARGET) {
+    public Config toSource(ConfigV0 target) {
         throw new UnsupportedOperationException("Legacy configs cannot be saved.");
     }
 

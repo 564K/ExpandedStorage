@@ -11,11 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.fml.loading.FMLPaths;
 import ninjaphenix.expandedstorage.base.BaseCommon;
-import ninjaphenix.expandedstorage.base.config.Config;
-import ninjaphenix.expandedstorage.base.config.ConfigV0;
-import ninjaphenix.expandedstorage.base.config.Converter;
-import ninjaphenix.expandedstorage.base.config.LegacyFactory;
-import ninjaphenix.expandedstorage.base.config.ResourceLocationTypeAdapter;
+import ninjaphenix.expandedstorage.base.config.*;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.platform.ConfigWrapper;
 
@@ -29,9 +25,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public final class ConfigWrapperImpl implements ConfigWrapper {
-    private Type MAP_TYPE;
-    private Gson GSON;
-    private Path CONFIG_PATH;
+    private Type mapType;
+    private Gson gson;
+    private Path configPath;
     private ConfigV0 config;
 
     private ConfigWrapperImpl() {
@@ -43,15 +39,15 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
     }
 
     public void initialise() {
-        MAP_TYPE = new TypeToken<Map<String, Object>>() {
+        mapType = new TypeToken<Map<String, Object>>() {
         }.getType();
-        CONFIG_PATH = FMLPaths.CONFIGDIR.get().resolve("expandedstorage.json");
-        GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocationTypeAdapter())
-                                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                                .setPrettyPrinting()
-                                .setLenient()
-                                .create();
-        config = getConfig();
+        configPath = FMLPaths.CONFIGDIR.get().resolve("expandedstorage.json");
+        gson = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocationTypeAdapter())
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .setPrettyPrinting()
+                .setLenient()
+                .create();
+        config = this.getConfig();
     }
 
     public boolean isScrollingUnrestricted() {
@@ -61,7 +57,7 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
     public void setScrollingRestricted(boolean value) {
         if (config.isScrollingRestricted() == value) {
             config.setScrollingRestricted(!value);
-            saveConfig(config);
+            this.saveConfig(config);
         }
     }
 
@@ -74,17 +70,17 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
                 || Utils.SCROLL_CONTAINER_TYPE.equals(containerType) || Utils.SINGLE_CONTAINER_TYPE.equals(containerType))
                 && containerType != config.getContainerType()) {
             config.setContainerType(containerType);
-            saveConfig(config);
+            this.saveConfig(config);
             return true;
         }
         return false;
     }
 
     private <T extends Config> void saveConfig(T config) {
-        try (BufferedWriter writer = Files.newBufferedWriter(CONFIG_PATH)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(configPath)) {
             Map<String, Object> configValues = config.getConverter().toSource(config);
             configValues.put("config_version", config.getVersion());
-            GSON.toJson(configValues, MAP_TYPE, GSON.newJsonWriter(writer));
+            gson.toJson(configValues, mapType, gson.newJsonWriter(writer));
         } catch (IOException e) {
             BaseCommon.LOGGER.warn("Failed to save Expanded Storage's config.", e);
         }
@@ -94,12 +90,12 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
         Path configDirectory = FMLPaths.CONFIGDIR.get();
         Path oldPath = configDirectory.resolve("expandedstorage-client.toml");
         boolean triedLoadingOldConfig = false;
-        Path newPath = configDirectory.resolve(CONFIG_PATH);
+        Path newPath = configDirectory.resolve(configPath);
         boolean triedLoadingNewConfig = false;
         ConfigV0 config = null;
         if (Files.exists(newPath)) {
             triedLoadingNewConfig = true;
-            config = loadConfig(newPath, ConfigV0.Factory.INSTANCE, false);
+            config = this.loadConfig(newPath, ConfigV0.Factory.INSTANCE, false);
         }
         if (Files.exists(oldPath)) {
             triedLoadingOldConfig = true;
@@ -108,12 +104,12 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
                 String lines = reader.lines().collect(Collectors.joining());
                 reader.reset();
                 CommentedConfig tomlConfig = TomlFormat.instance().createParser().parse(reader);
-                ConfigV0 oldConfig = convert(tomlConfig, -1, LegacyFactory.INSTANCE);
+                ConfigV0 oldConfig = this.convert(tomlConfig, -1, LegacyFactory.INSTANCE);
                 if (config == null && oldConfig != null) {
                     config = oldConfig;
-                    saveConfig(config);
+                    this.saveConfig(config);
                 }
-                backupFile(oldPath, String.format("Failed to backup legacy Expanded Storage config, '%s'.", oldPath.getFileName().toString()), lines);
+                this.backupFile(oldPath, String.format("Failed to backup legacy Expanded Storage config, '%s'.", oldPath.getFileName().toString()), lines);
             } catch (IOException e) {
                 if (config == null) {
                     BaseCommon.LOGGER.warn("Failed to load legacy Expanded Storage Config, new default config will be used.", e);
@@ -125,7 +121,7 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
                 BaseCommon.LOGGER.warn("Could not load an existing config, Expanded Storage is using it's default config.");
             }
             config = new ConfigV0();
-            saveConfig(config);
+            this.saveConfig(config);
         }
         return config;
     }
@@ -135,14 +131,14 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
     // essentially converter will need to be decided in this method based on the value of "config_version"
     private <T extends Config> T convertToConfig(String lines, Converter<Map<String, Object>, T> converter, Path configPath) {
         try {
-            Map<String, Object> configMap = GSON.fromJson(lines, MAP_TYPE);
+            Map<String, Object> configMap = gson.fromJson(lines, mapType);
             // Do not edit, method returns a Double, we need an integer
             int configVersion = Mth.floor((Double) configMap.getOrDefault("config_version", -1.0D));
-            return convert(configMap, configVersion, converter);
+            return this.convert(configMap, configVersion, converter);
         } catch (JsonParseException e) {
             String configFileName = configPath.getFileName().toString();
             BaseCommon.warnThrowableMessage("Failed to convert config, backing config '{}'.", e, configFileName);
-            backupFile(configPath, String.format("Failed to backup expanded storage config which failed to read, '%s'.%n", configFileName), lines);
+            this.backupFile(configPath, String.format("Failed to backup expanded storage config which failed to read, '%s'.%n", configFileName), lines);
             return null;
         }
     }
@@ -178,12 +174,12 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
     private <T extends Config> T loadConfig(Path configPath, Converter<Map<String, Object>, T> converter, boolean isLegacy) {
         try (BufferedReader reader = Files.newBufferedReader(configPath)) {
             String configLines = reader.lines().collect(Collectors.joining());
-            return convertToConfig(configLines, converter, configPath);
+            return this.convertToConfig(configLines, converter, configPath);
         } catch (IOException e) {
             String configFileName = configPath.getFileName().toString();
             BaseCommon.warnThrowableMessage("Failed to read {}Expanded Storage config, '{}'.", e, isLegacy ? "legacy " : "", configFileName);
             e.printStackTrace();
-            backupFile(configPath, String.format("Failed to backup %sExpanded Storage config, '%s'.%n", isLegacy ? "legacy " : "", configFileName), null);
+            this.backupFile(configPath, String.format("Failed to backup %sExpanded Storage config, '%s'.%n", isLegacy ? "legacy " : "", configFileName), null);
         }
         return null;
     }

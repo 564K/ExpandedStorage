@@ -61,68 +61,68 @@ public class Main {
         ResourceLocation netheriteOpenStat = BaseCommon.registerStat(Utils.resloc("open_netherite_chest"));
         // Init block properties
         BlockBehaviour.Properties woodProperties = BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.WOOD)
-                                                                            .harvestTool(ToolType.AXE)
-                                                                            .harvestLevel(Tiers.WOOD.getLevel())
-                                                                            .strength(2.5F)
-                                                                            .sound(SoundType.WOOD);
+                .harvestTool(ToolType.AXE)
+                .harvestLevel(Tiers.WOOD.getLevel())
+                .strength(2.5F)
+                .sound(SoundType.WOOD);
         BlockBehaviour.Properties pumpkinProperties = BlockBehaviour.Properties.of(Material.VEGETABLE, MaterialColor.COLOR_ORANGE)
-                                                                               .harvestTool(ToolType.AXE)
-                                                                               .harvestLevel(Tiers.WOOD.getLevel())
-                                                                               .strength(1.0F)
-                                                                               .sound(SoundType.WOOD);
+                .harvestTool(ToolType.AXE)
+                .harvestLevel(Tiers.WOOD.getLevel())
+                .strength(1.0F)
+                .sound(SoundType.WOOD);
         BlockBehaviour.Properties christmasProperties = BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.WOOD)
-                                                                                 .harvestTool(ToolType.AXE)
-                                                                                 .harvestLevel(Tiers.WOOD.getLevel())
-                                                                                 .strength(2.5F)
-                                                                                 .sound(SoundType.WOOD);
+                .harvestTool(ToolType.AXE)
+                .harvestLevel(Tiers.WOOD.getLevel())
+                .strength(2.5F)
+                .sound(SoundType.WOOD);
         BlockBehaviour.Properties ironProperties = BlockBehaviour.Properties.of(Material.METAL, MaterialColor.METAL)
-                                                                            .harvestTool(ToolType.PICKAXE)
-                                                                            .harvestLevel(Tiers.STONE.getLevel())
-                                                                            .requiresCorrectToolForDrops()
-                                                                            .strength(5.0F, 6.0F)
-                                                                            .sound(SoundType.METAL);
+                .harvestTool(ToolType.PICKAXE)
+                .harvestLevel(Tiers.STONE.getLevel())
+                .requiresCorrectToolForDrops()
+                .strength(5.0F, 6.0F)
+                .sound(SoundType.METAL);
         BlockBehaviour.Properties goldProperties = BlockBehaviour.Properties.of(Material.METAL, MaterialColor.GOLD)
-                                                                            .harvestTool(ToolType.PICKAXE)
-                                                                            .harvestLevel(Tiers.STONE.getLevel())
-                                                                            .requiresCorrectToolForDrops()
-                                                                            .strength(3.0F, 6.0F)
-                                                                            .sound(SoundType.METAL);
+                .harvestTool(ToolType.PICKAXE)
+                .harvestLevel(Tiers.STONE.getLevel())
+                .requiresCorrectToolForDrops()
+                .strength(3.0F, 6.0F)
+                .sound(SoundType.METAL);
         BlockBehaviour.Properties diamondProperties = BlockBehaviour.Properties.of(Material.METAL, MaterialColor.DIAMOND)
-                                                                               .harvestTool(ToolType.PICKAXE)
-                                                                               .harvestLevel(Tiers.IRON.getLevel())
-                                                                               .requiresCorrectToolForDrops()
-                                                                               .strength(5.0F, 6.0F)
-                                                                               .sound(SoundType.METAL);
+                .harvestTool(ToolType.PICKAXE)
+                .harvestLevel(Tiers.IRON.getLevel())
+                .requiresCorrectToolForDrops()
+                .strength(5.0F, 6.0F)
+                .sound(SoundType.METAL);
         BlockBehaviour.Properties obsidianProperties = BlockBehaviour.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK)
-                                                                                .harvestTool(ToolType.PICKAXE)
-                                                                                .harvestLevel(Tiers.DIAMOND.getLevel())
-                                                                                .requiresCorrectToolForDrops()
-                                                                                .strength(50.0F, 1200.0F);
+                .harvestTool(ToolType.PICKAXE)
+                .harvestLevel(Tiers.DIAMOND.getLevel())
+                .requiresCorrectToolForDrops()
+                .strength(50.0F, 1200.0F);
         BlockBehaviour.Properties netheriteProperties = BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_BLACK)
-                                                                                 .harvestTool(ToolType.PICKAXE)
-                                                                                 .harvestLevel(Tiers.DIAMOND.getLevel())
-                                                                                 .requiresCorrectToolForDrops()
-                                                                                 .strength(50.0F, 1200.0F)
-                                                                                 .sound(SoundType.NETHERITE_BLOCK);
+                .harvestTool(ToolType.PICKAXE)
+                .harvestLevel(Tiers.DIAMOND.getLevel())
+                .requiresCorrectToolForDrops()
+                .strength(50.0F, 1200.0F)
+                .sound(SoundType.NETHERITE_BLOCK);
         // Init blocks
-        ChestBlock woodChestBlock = chestBlock(Utils.resloc("wood_chest"), woodOpenStat, woodTier, woodProperties);
-        ChestBlock pumpkinChestBlock = chestBlock(Utils.resloc("pumpkin_chest"), pumpkinOpenStat, pumpkinTier, pumpkinProperties);
-        ChestBlock christmasChestBlock = chestBlock(Utils.resloc("christmas_chest"), christmasOpenStat, christmasTier, christmasProperties);
-        ChestBlock ironChestBlock = chestBlock(Utils.resloc("iron_chest"), ironOpenStat, ironTier, ironProperties);
-        ChestBlock goldChestBlock = chestBlock(Utils.resloc("gold_chest"), goldOpenStat, goldTier, goldProperties);
-        ChestBlock diamondChestBlock = chestBlock(Utils.resloc("diamond_chest"), diamondOpenStat, diamondTier, diamondProperties);
-        ChestBlock obsidianChestBlock = chestBlock(Utils.resloc("obsidian_chest"), obsidianOpenStat, obsidianTier, obsidianProperties);
-        ChestBlock netheriteChestBlock = chestBlock(Utils.resloc("netherite_chest"), netheriteOpenStat, netheriteTier, netheriteProperties);
+        ChestBlock woodChestBlock = this.chestBlock(Utils.resloc("wood_chest"), woodOpenStat, woodTier, woodProperties);
+        ChestBlock pumpkinChestBlock = this.chestBlock(Utils.resloc("pumpkin_chest"), pumpkinOpenStat, pumpkinTier, pumpkinProperties);
+        ChestBlock christmasChestBlock = this.chestBlock(Utils.resloc("christmas_chest"), christmasOpenStat, christmasTier, christmasProperties);
+        ChestBlock ironChestBlock = this.chestBlock(Utils.resloc("iron_chest"), ironOpenStat, ironTier, ironProperties);
+        ChestBlock goldChestBlock = this.chestBlock(Utils.resloc("gold_chest"), goldOpenStat, goldTier, goldProperties);
+        ChestBlock diamondChestBlock = this.chestBlock(Utils.resloc("diamond_chest"), diamondOpenStat, diamondTier, diamondProperties);
+        ChestBlock obsidianChestBlock = this.chestBlock(Utils.resloc("obsidian_chest"), obsidianOpenStat, obsidianTier, obsidianProperties);
+        ChestBlock netheriteChestBlock = this.chestBlock(Utils.resloc("netherite_chest"), netheriteOpenStat, netheriteTier, netheriteProperties);
         Set<ChestBlock> blocks = ImmutableSet.copyOf(new ChestBlock[]{woodChestBlock, pumpkinChestBlock, christmasChestBlock, ironChestBlock, goldChestBlock, diamondChestBlock, obsidianChestBlock, netheriteChestBlock});
         // Init items
-        BlockItem woodChestItem = chestItem(woodTier, woodChestBlock);
-        BlockItem pumpkinChestItem = chestItem(pumpkinTier, pumpkinChestBlock);
-        BlockItem christmasChestItem = chestItem(christmasTier, christmasChestBlock);
-        BlockItem ironChestItem = chestItem(ironTier, ironChestBlock);
-        BlockItem goldChestItem = chestItem(goldTier, goldChestBlock);
-        BlockItem diamondChestItem = chestItem(diamondTier, diamondChestBlock);
-        BlockItem obsidianChestItem = chestItem(obsidianTier, obsidianChestBlock);
-        BlockItem netheriteChestItem = chestItem(netheriteTier, netheriteChestBlock);
+        BlockItem woodChestItem = this.chestItem(woodTier, woodChestBlock);
+        BlockItem pumpkinChestItem = this.chestItem(pumpkinTier, pumpkinChestBlock);
+        BlockItem christmasChestItem = this.chestItem(christmasTier, christmasChestBlock);
+        BlockItem ironChestItem = this.chestItem(ironTier, ironChestBlock);
+        BlockItem goldChestItem = this.chestItem(goldTier, goldChestBlock);
+        BlockItem diamondChestItem = this.chestItem(diamondTier, diamondChestBlock);
+        BlockItem obsidianChestItem = this.chestItem(obsidianTier, obsidianChestBlock);
+        BlockItem netheriteChestItem = this.chestItem(netheriteTier, netheriteChestBlock);
         Set<BlockItem> items = ImmutableSet.copyOf(new BlockItem[]{woodChestItem, pumpkinChestItem, christmasChestItem, ironChestItem, goldChestItem, diamondChestItem, obsidianChestItem, netheriteChestItem});
         // Init block entity type
         BlockEntityType<ChestBlockEntity> blockEntityType = new BlockEntityType<>(() -> new ChestBlockEntity(ChestCommon.getBlockEntityType(), null), Collections.unmodifiableSet(blocks), null);
@@ -161,14 +161,14 @@ public class Main {
     private ChestBlock chestBlock(ResourceLocation blockId, ResourceLocation stat, OpenableTier tier, BlockBehaviour.Properties properties) {
         tier.blockProperties().apply(properties.dynamicShape());
         // Forge makes it so correct tool harvest tier and requires tool are copied.
-        ChestBlock rv = new ChestBlock(properties, blockId, tier.key(), stat, tier.slots());
-        rv.setRegistryName(blockId);
-        BaseApi.getInstance().registerTieredBlock(rv);
-        return rv;
+        ChestBlock block = new ChestBlock(properties, blockId, tier.key(), stat, tier.slots());
+        block.setRegistryName(blockId);
+        BaseApi.getInstance().registerTieredBlock(block);
+        return block;
     }
 
     private BlockItem chestItem(OpenableTier tier, ChestBlock block) {
-        final Item.Properties itemProperties = tier.itemProperties().apply(new Item.Properties().tab(Utils.TAB));
+        Item.Properties itemProperties = tier.itemProperties().apply(new Item.Properties().tab(Utils.TAB));
         itemProperties.setISTER(() -> () -> new BlockEntityWithoutLevelRenderer() {
             ChestBlockEntity renderEntity = null;
 
@@ -184,8 +184,8 @@ public class Main {
                 return renderEntity;
             }
         });
-        BlockItem rv = new BlockItem(block, itemProperties);
-        rv.setRegistryName(block.blockId());
-        return rv;
+        BlockItem item = new BlockItem(block, itemProperties);
+        item.setRegistryName(block.blockId());
+        return item;
     }
 }

@@ -8,12 +8,13 @@ import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.resources.ResourceLocation;
 import ninjaphenix.expandedstorage.base.client.menu.AbstractScreen;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @JeiPlugin
 public class ExpandedStorageReiPlugin implements IModPlugin {
+    @NotNull
     @Override
     public ResourceLocation getPluginUid() {
         return Utils.resloc("jei_plugin");
@@ -22,9 +23,10 @@ public class ExpandedStorageReiPlugin implements IModPlugin {
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addGenericGuiContainerHandler(AbstractScreen.class, new IGuiContainerHandler<AbstractScreen<?, ?>>() {
+            @NotNull
             @Override
             public List<Rect2i> getGuiExtraAreas(AbstractScreen<?, ?> screen) {
-                return screen.getExclusionZones().stream().map(rect -> new Rect2i(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight())).collect(Collectors.toList());
+                return screen.getExclusionZones();
             }
         });
     }

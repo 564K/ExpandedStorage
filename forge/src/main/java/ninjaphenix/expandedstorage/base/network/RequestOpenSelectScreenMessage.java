@@ -25,23 +25,23 @@ public final class RequestOpenSelectScreenMessage {
     }
 
     public static void handle(RequestOpenSelectScreenMessage message, Supplier<NetworkEvent.Context> wrappedContext) {
-        final NetworkEvent.Context context = wrappedContext.get();
-        final ServerPlayer player = context.getSender();
+        NetworkEvent.Context context = wrappedContext.get();
+        ServerPlayer player = context.getSender();
         if (player != null) {
-            final AbstractContainerMenu CONTAINER_MENU = player.containerMenu;
-            if (CONTAINER_MENU instanceof AbstractContainerMenu_<?>) {
-                final AbstractContainerMenu_<?> MENU = (AbstractContainerMenu_<?>) CONTAINER_MENU;
+            AbstractContainerMenu temp = player.containerMenu;
+            if (temp instanceof AbstractContainerMenu_<?>) {
+                AbstractContainerMenu_<?> menu = (AbstractContainerMenu_<?>) temp;
                 context.enqueueWork(() -> NetworkWrapper.getInstance().s2c_openSelectScreen(player, (type) -> NetworkHooks.openGui(player, new MenuProvider() {
                     @Override
                     public Component getDisplayName() {
-                        return MENU.getDisplayName();
+                        return menu.getDisplayName();
                     }
 
                     @Override
                     public AbstractContainerMenu createMenu(int windowId, Inventory inventory, Player player1) {
-                        return NetworkWrapper.getInstance().createMenu(windowId, MENU.pos, MENU.getContainer(), inventory, MENU.getDisplayName());
+                        return NetworkWrapper.getInstance().createMenu(windowId, menu.pos, menu.getContainer(), inventory, menu.getDisplayName());
                     }
-                }, buffer -> buffer.writeBlockPos(MENU.pos).writeInt(MENU.getContainer().getContainerSize()))));
+                }, buffer -> buffer.writeBlockPos(menu.pos).writeInt(menu.getContainer().getContainerSize()))));
             } else {
                 context.enqueueWork(() -> NetworkWrapper.getInstance().s2c_openSelectScreen(player, null));
             }

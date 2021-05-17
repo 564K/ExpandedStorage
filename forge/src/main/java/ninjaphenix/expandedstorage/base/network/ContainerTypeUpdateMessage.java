@@ -25,10 +25,10 @@ public class ContainerTypeUpdateMessage {
     }
 
     public static void handle(ContainerTypeUpdateMessage message, Supplier<NetworkEvent.Context> wrappedContext) {
-        final NetworkEvent.Context context = wrappedContext.get();
-        final ServerPlayer player = context.getSender();
+        NetworkEvent.Context context = wrappedContext.get();
+        ServerPlayer player = context.getSender();
         if (player != null) {
-            final ResourceLocation containerType = message.containerType;
+            ResourceLocation containerType = message.containerType;
             context.enqueueWork(() -> NetworkWrapper.getInstance().s_setPlayerContainerType(player, containerType));
             context.setPacketHandled(true);
         }

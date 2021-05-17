@@ -17,11 +17,10 @@ public class RemovePlayerPreferenceCallbackMessage {
     }
 
     public static void handle(RemovePlayerPreferenceCallbackMessage message, Supplier<NetworkEvent.Context> wrappedContext) {
-        final NetworkEvent.Context context = wrappedContext.get();
-        final ServerPlayer player = context.getSender();
+        NetworkEvent.Context context = wrappedContext.get();
+        ServerPlayer player = context.getSender();
         if (player != null) {
             context.enqueueWork(() -> NetworkWrapper.getInstance().removeTypeSelectCallback(player));
-
             context.setPacketHandled(true);
         }
     }
