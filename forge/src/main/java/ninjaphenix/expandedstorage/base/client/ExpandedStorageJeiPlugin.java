@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 @JeiPlugin
-public class ExpandedStorageReiPlugin implements IModPlugin {
+public class ExpandedStorageJeiPlugin implements IModPlugin {
     @NotNull
     @Override
     public ResourceLocation getPluginUid() {
