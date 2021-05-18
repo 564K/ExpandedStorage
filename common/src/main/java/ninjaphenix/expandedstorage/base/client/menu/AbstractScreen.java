@@ -28,16 +28,13 @@ public abstract class AbstractScreen<T extends AbstractContainerMenu_<R>, R exte
     @Override
     @SuppressWarnings({"ConstantConditions", "deprecation"})
     protected void renderBg(PoseStack stack, float delta, int mouseX, int mouseY) {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         minecraft.getTextureManager().bind(screenMeta.texture);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         GuiComponent.blit(stack, leftPos, topPos, 0, 0, imageWidth, imageHeight, screenMeta.textureWidth, screenMeta.textureHeight);
     }
 
     @Override
     public void render(PoseStack stack, int mouseX, int mouseY, float delta) {
-        if (stack == null) { // Not sure why this can be null, but don't render in case it is.
-            return;
-        }
         this.renderBackground(stack);
         super.render(stack, mouseX, mouseY, delta);
         this.renderTooltip(stack, mouseX, mouseY);

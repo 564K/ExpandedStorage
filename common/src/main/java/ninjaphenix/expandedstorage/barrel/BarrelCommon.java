@@ -1,7 +1,8 @@
 package ninjaphenix.expandedstorage.barrel;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
@@ -41,7 +42,7 @@ public final class BarrelCommon {
         BaseApi.getInstance().offerTabIcon(item, BarrelCommon.ICON_SUITABILITY);
     }
 
-    public static void registerUpgradeBehaviours(Tag<Block> tag) {
+    public static void registerUpgradeBehaviours(net.minecraft.tags.Tag<Block> tag) {
         Predicate<Block> isUpgradableChestBlock = (block) -> block instanceof BarrelBlock || tag.contains(block);
         BaseApi.getInstance().defineBlockUpgradeBehaviour(isUpgradableChestBlock, BarrelCommon::tryUpgradeBlock);
     }

@@ -78,9 +78,6 @@ public final class PickScreen extends Screen {
 
     @Override
     public void render(PoseStack stack, int mouseX, int mouseY, float delta) {
-        if (stack == null) {
-            return;
-        } // Not sure why this can be null, but don't render in case it is.
         this.setBlitOffset(0);
         this.renderBackground(stack);
         int numButtons = buttons.size();

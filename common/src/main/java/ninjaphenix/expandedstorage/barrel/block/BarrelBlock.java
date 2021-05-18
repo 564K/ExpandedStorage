@@ -57,8 +57,8 @@ public final class BarrelBlock extends AbstractOpenableStorageBlock {
 
     @Override
     @SuppressWarnings("deprecation")
-    public void tick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Random random) {
-        BlockEntity temp = serverLevel.getBlockEntity(blockPos);
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, Random random) {
+        BlockEntity temp = level.getBlockEntity(pos);
         if (temp instanceof BarrelBlockEntity) {
             ((BarrelBlockEntity) temp).checkViewerCount();
         }
