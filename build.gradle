@@ -39,6 +39,14 @@ subprojects {
     version = rootProject.mod_version
     group = rootProject.maven_group
 
+    dependencies {
+        annotationProcessor('com.github.bsideup.jabel:jabel-javac-plugin:0.3.0') {
+            exclude group: 'net.bytebuddy'
+        }
+        annotationProcessor('net.bytebuddy:byte-buddy:1.10.22')
+        annotationProcessor('net.bytebuddy:byte-buddy-agent:1.10.22')
+    }
+
     java {
         withSourcesJar()
         toolchain {
@@ -49,11 +57,13 @@ subprojects {
     // We specified a java version, use it when compiling our mod
     tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8'
+        options.setFork(true)
+        options.forkOptions.jvmArgs += List.of('--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED', '--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED')
         javaCompiler.set(javaToolchains.compilerFor {
-            languageVersion = MINECRAFT_JAVA_VERSION
+            languageVersion = MOD_JAVA_VERSION
         })
         if (JavaVersion.toVersion(MOD_JAVA_VERSION.asInt()).isJava9Compatible()) {
-            it.options.release.set(rootProject.properties.mod_java_version as int)
+            it.options.release.set(rootProject.properties.minecraft_java_version as int)
         }
     }
 
