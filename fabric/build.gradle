@@ -44,14 +44,22 @@ dependencies {
     modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
 
     // For chest module
-    modCompileOnly('com.github.Virtuoel:Statement:31a2c3f')
-    modCompileOnly('com.github.Virtuoel:Towelette:e5e39eb')
+    modCompileOnly('com.github.Virtuoel:Statement:31a2c3f') {
+        exclude group: 'net.fabricmc'
+    }
+    modCompileOnly('com.github.Virtuoel:Towelette:e5e39eb') {
+        exclude group: 'net.fabricmc'
+    }
 
     // For all modules
-    modCompileOnly('me.shedaniel:RoughlyEnoughItems:5.10.181')
+    modCompileOnly('me.shedaniel:RoughlyEnoughItems:5.10.181') {
+        exclude group: 'net.fabricmc'
+    }
     modRuntime('me.shedaniel:RoughlyEnoughItems:5.10.181')
 
-    modCompileOnly('com.terraformersmc:modmenu:1.16.9')
+    modCompileOnly('com.terraformersmc:modmenu:1.16.9') {
+        exclude group: 'net.fabricmc'
+    }
     modRuntime('com.terraformersmc:modmenu:1.16.9')
 
     implementation(project(path: ':common')) {
