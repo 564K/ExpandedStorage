@@ -9,7 +9,11 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import ninjaphenix.expandedstorage.base.BaseCommon;
-import ninjaphenix.expandedstorage.base.config.*;
+import ninjaphenix.expandedstorage.base.config.Config;
+import ninjaphenix.expandedstorage.base.config.ConfigV0;
+import ninjaphenix.expandedstorage.base.config.Converter;
+import ninjaphenix.expandedstorage.base.config.LegacyFactory;
+import ninjaphenix.expandedstorage.base.config.ResourceLocationTypeAdapter;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.platform.ConfigWrapper;
 
