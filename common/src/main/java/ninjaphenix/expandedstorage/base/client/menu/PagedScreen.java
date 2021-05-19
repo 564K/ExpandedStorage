@@ -122,11 +122,11 @@ public final class PagedScreen extends AbstractScreen<PagedContainerMenu, PagedS
                     new TranslatableComponent("screen.expandedstorage.prev_page"), button -> this.setPage(page, page - 1),
                     this::renderButtonTooltip);
             leftPageButton.active = false;
-            this.addButton(leftPageButton);
+            this.addRenderableWidget(leftPageButton);
             rightPageButton = new PageButton(leftPos + imageWidth - 19 + pageButtonsXOffset, topPos + imageHeight - 96, 1,
                     new TranslatableComponent("screen.expandedstorage.next_page"), button -> this.setPage(page, page + 1),
                     this::renderButtonTooltip);
-            this.addButton(rightPageButton);
+            this.addRenderableWidget(rightPageButton);
             pageTextX = (1 + leftPageButton.x + rightPageButton.x - rightPageButton.getWidth() / 2F) / 2F;
         }
     }

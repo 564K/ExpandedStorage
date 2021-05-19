@@ -2,7 +2,6 @@ package ninjaphenix.expandedstorage.base.client.menu;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -14,7 +13,9 @@ import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.platform.NetworkWrapper;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,11 +23,13 @@ public final class PickScreen extends Screen {
     private static final Map<ResourceLocation, Tuple<ResourceLocation, Component>> BUTTON_SETTINGS = new HashMap<>();
     private final Set<ResourceLocation> options;
     private final Screen parent;
+    private List<ScreenPickButton> optionWidgets;
     private int topPadding;
 
     public PickScreen(Set<ResourceLocation> options, Screen parent) {
         super(new TranslatableComponent("screen.expandedstorage.screen_picker_title"));
         this.options = options;
+        this.optionWidgets = new ArrayList<>(options.size());
         this.parent = parent;
     }
 
@@ -55,12 +58,13 @@ public final class PickScreen extends Screen {
         int x = 0;
         int topPadding = (height - 96) / 2;
         this.topPadding = topPadding;
+        optionWidgets.clear();
         for (ResourceLocation option : options) {
             if (!(ignoreSingle && Utils.SINGLE_CONTAINER_TYPE.equals(option))) {
                 Tuple<ResourceLocation, Component> settings = PickScreen.BUTTON_SETTINGS.get(option);
-                this.addButton(new ScreenPickButton(outerPadding + (innerPadding + 96) * x, topPadding, 96, 96,
+                optionWidgets.add(this.addRenderableWidget(new ScreenPickButton(outerPadding + (innerPadding + 96) * x, topPadding, 96, 96,
                         settings.getA(), settings.getB(), button -> this.updatePlayerPreference(option),
-                        (button, matrices, tX, tY) -> this.renderTooltip(matrices, button.getMessage(), tX, tY)));
+                        (button, matrices, tX, tY) -> this.renderTooltip(matrices, button.getMessage(), tX, tY))));
                 x++;
             }
         }
@@ -83,19 +87,9 @@ public final class PickScreen extends Screen {
 
     @Override
     public void render(PoseStack stack, int mouseX, int mouseY, float delta) {
-        this.setBlitOffset(0);
         this.renderBackground(stack);
-        int numButtons = buttons.size();
-        //noinspection ForLoopReplaceableByForEach
-        for (int i = 0; i < numButtons; i++) {
-            buttons.get(i).render(stack, mouseX, mouseY, delta);
-        }
-        //noinspection ForLoopReplaceableByForEach
-        for (int i = 0; i < numButtons; i++) {
-            if (buttons.get(i) instanceof ScreenPickButton button) {
-                button.renderTooltip(stack, mouseX, mouseY);
-            }
-        }
+        super.render(stack, mouseX, mouseY, delta);
+        optionWidgets.forEach(button -> button.renderTooltip(stack, mouseX, mouseY));
         GuiComponent.drawCenteredString(stack, font, title, width / 2, Math.max(topPadding / 2, 0), 0xFFFFFFFF);
     }
 }
