@@ -4,12 +4,14 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.AbstractContainerMenu_;
 import ninjaphenix.expandedstorage.base.inventory.screen.ScreenMeta;
+import ninjaphenix.expandedstorage.base.platform.NetworkWrapper;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
@@ -50,7 +52,11 @@ public abstract class AbstractScreen<T extends AbstractContainerMenu_<R>, R exte
     @SuppressWarnings("ConstantConditions")
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (keyCode == GLFW.GLFW_KEY_ESCAPE || minecraft.options.keyInventory.matches(keyCode, scanCode)) {
-            minecraft.player.closeContainer();
+            if (Screen.hasShiftDown()) {
+                NetworkWrapper.getInstance().c2s_openTypeSelectScreen();
+            } else {
+                minecraft.player.closeContainer();
+            }
             return true;
         }
         return super.keyPressed(keyCode, scanCode, modifiers);

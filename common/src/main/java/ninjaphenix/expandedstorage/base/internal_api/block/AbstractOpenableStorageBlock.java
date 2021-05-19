@@ -1,8 +1,10 @@
 package ninjaphenix.expandedstorage.base.internal_api.block;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -15,6 +17,9 @@ import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.EntityBlock;
@@ -27,6 +32,9 @@ import ninjaphenix.expandedstorage.base.internal_api.inventory.ContainerMenuFact
 import ninjaphenix.expandedstorage.base.platform.NetworkWrapper;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 @Internal
 @Experimental
@@ -65,6 +73,12 @@ public abstract class AbstractOpenableStorageBlock extends AbstractStorageBlock 
             return InteractionResult.CONSUME;
         }
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter getter, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, getter, tooltip, flag);
+        tooltip.add(new TranslatableComponent("tooltip.expandedstorage.stores_x_stacks", slots).withStyle(ChatFormatting.GRAY));
     }
 
     @Override

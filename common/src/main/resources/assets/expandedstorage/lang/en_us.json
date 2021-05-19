@@ -52,6 +52,7 @@
   "tooltip.expandedstorage.conversion_kit_wood_obsidian": "%1$s on a Wooden Storage Block to convert it to an Obsidian Storage Block.",
   "tooltip.expandedstorage.conversion_kit.need_x_upgrades": "Cannot upgrade %ss, you need %s more upgrade(s).",
   "tooltip.expandedstorage.added_by": "Added by: %s",
+  "tooltip.expandedstorage.stores_x_stacks": "Stores %s stacks",
 
   "block.expandedstorage.iron_barrel": "Iron Barrel",
   "block.expandedstorage.gold_barrel": "Gold Barrel",
