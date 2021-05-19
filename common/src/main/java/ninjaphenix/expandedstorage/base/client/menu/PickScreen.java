@@ -40,6 +40,11 @@ public final class PickScreen extends Screen {
     }
 
     @Override
+    public boolean isPauseScreen() {
+        return minecraft.level == null;
+    }
+
+    @Override
     protected void init() {
         super.init();
         boolean ignoreSingle = width < 370 || height < 386; // Smallest possible resolution a double netherite chest fits on.
