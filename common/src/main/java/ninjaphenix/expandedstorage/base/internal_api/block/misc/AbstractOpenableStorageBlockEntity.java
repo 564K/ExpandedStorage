@@ -45,11 +45,11 @@ public abstract class AbstractOpenableStorageBlockEntity extends AbstractStorage
 
     protected static int countViewers(Level level, WorldlyContainer container, int x, int y, int z) {
         return level.getEntitiesOfClass(Player.class, new AABB(x - 5, y - 5, z - 5, x + 6, y + 6, z + 6)).stream()
-                .filter(player -> player.containerMenu instanceof AbstractContainerMenu_<?>)
-                .map(player -> ((AbstractContainerMenu_<?>) player.containerMenu).getContainer())
-                .filter(openContainer -> openContainer == container ||
-                        openContainer instanceof CompoundWorldlyContainer && ((CompoundWorldlyContainer) openContainer).consistsPartlyOf(container))
-                .mapToInt(inv -> 1).sum();
+                    .filter(player -> player.containerMenu instanceof AbstractContainerMenu_<?>)
+                    .map(player -> ((AbstractContainerMenu_<?>) player.containerMenu).getContainer())
+                    .filter(openContainer -> openContainer == container ||
+                            openContainer instanceof CompoundWorldlyContainer && ((CompoundWorldlyContainer) openContainer).consistsPartlyOf(container))
+                    .mapToInt(inv -> 1).sum();
     }
 
     private void initialise(ResourceLocation blockId) {

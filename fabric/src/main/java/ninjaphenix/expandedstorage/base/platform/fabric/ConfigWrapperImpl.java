@@ -41,10 +41,10 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
         }.getType();
         configPath = FabricLoader.getInstance().getConfigDir().resolve(Utils.CONFIG_PATH);
         gson = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocationTypeAdapter())
-                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                .setPrettyPrinting()
-                .setLenient()
-                .create();
+                                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                                .setPrettyPrinting()
+                                .setLenient()
+                                .create();
         config = this.getConfig();
     }
 

@@ -135,7 +135,7 @@ public abstract class AbstractChestBlock<T extends AbstractOpenableStorageBlockE
                               ResourceLocation openStat, int slots) {
         super(properties, blockId, blockTier, openStat, slots);
         this.registerDefaultState(this.getStateDefinition().any().setValue(AbstractChestBlock.CURSED_CHEST_TYPE, CursedChestType.SINGLE)
-                .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
+                                      .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
     }
 
     public static Direction getDirectionToAttached(BlockState state) {

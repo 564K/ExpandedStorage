@@ -57,8 +57,8 @@ public final class ChestCommon {
                     Utils.resloc("entity/" + id.getPath() + "/front"),
                     Utils.resloc("entity/" + id.getPath() + "/back"));
             Arrays.stream(CursedChestType.values())
-                    .map(type -> ChestApi.INSTANCE.getChestTexture(id, type))
-                    .forEach(textures::add);
+                  .map(type -> ChestApi.INSTANCE.getChestTexture(id, type))
+                  .forEach(textures::add);
         });
         return textures;
     }

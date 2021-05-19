@@ -83,8 +83,8 @@ public final class BaseImpl implements BaseApi {
                 ResourceLocation itemId = Utils.resloc(fromTier.key().getPath() + "_to_" + toTier.key().getPath() + "_conversion_kit");
                 if (!items.containsKey(itemId)) {
                     Item.Properties properties = fromTier.itemProperties()
-                            .andThen(toTier.itemProperties())
-                            .apply(new Item.Properties().tab(Utils.TAB).stacksTo(16));
+                                                         .andThen(toTier.itemProperties())
+                                                         .apply(new Item.Properties().tab(Utils.TAB).stacksTo(16));
                     Item kit = new StorageConversionKit(properties, fromTier.key(), toTier.key(), addingMod);
                     this.register(itemId, kit);
                 }

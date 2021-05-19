@@ -43,33 +43,33 @@ public final class Main implements ModuleInitializer {
         ResourceLocation netheriteOpenStat = BaseCommon.registerStat(Utils.resloc("open_old_netherite_chest"));
         // Init block properties
         BlockBehaviour.Properties woodProperties = FabricBlockSettings.of(Material.WOOD, MaterialColor.WOOD)
-                .breakByTool(FabricToolTags.AXES, Tiers.WOOD.getLevel())
-                .strength(2.5F) // End of FBS
-                .sound(SoundType.WOOD);
+                                                                      .breakByTool(FabricToolTags.AXES, Tiers.WOOD.getLevel())
+                                                                      .strength(2.5F) // End of FBS
+                                                                      .sound(SoundType.WOOD);
         BlockBehaviour.Properties ironProperties = FabricBlockSettings.of(Material.METAL, MaterialColor.METAL)
-                .breakByTool(FabricToolTags.PICKAXES, Tiers.STONE.getLevel())
-                .requiresCorrectToolForDrops() // End of FBS
-                .strength(5.0F, 6.0F)
-                .sound(SoundType.METAL);
+                                                                      .breakByTool(FabricToolTags.PICKAXES, Tiers.STONE.getLevel())
+                                                                      .requiresCorrectToolForDrops() // End of FBS
+                                                                      .strength(5.0F, 6.0F)
+                                                                      .sound(SoundType.METAL);
         BlockBehaviour.Properties goldProperties = FabricBlockSettings.of(Material.METAL, MaterialColor.GOLD)
-                .breakByTool(FabricToolTags.PICKAXES, Tiers.STONE.getLevel())
-                .requiresCorrectToolForDrops() // End of FBS
-                .strength(3.0F, 6.0F)
-                .sound(SoundType.METAL);
+                                                                      .breakByTool(FabricToolTags.PICKAXES, Tiers.STONE.getLevel())
+                                                                      .requiresCorrectToolForDrops() // End of FBS
+                                                                      .strength(3.0F, 6.0F)
+                                                                      .sound(SoundType.METAL);
         BlockBehaviour.Properties diamondProperties = FabricBlockSettings.of(Material.METAL, MaterialColor.DIAMOND)
-                .breakByTool(FabricToolTags.PICKAXES, Tiers.IRON.getLevel())
-                .requiresCorrectToolForDrops() // End of FBS
-                .strength(5.0F, 6.0F)
-                .sound(SoundType.METAL);
+                                                                         .breakByTool(FabricToolTags.PICKAXES, Tiers.IRON.getLevel())
+                                                                         .requiresCorrectToolForDrops() // End of FBS
+                                                                         .strength(5.0F, 6.0F)
+                                                                         .sound(SoundType.METAL);
         BlockBehaviour.Properties obsidianProperties = FabricBlockSettings.of(Material.STONE, MaterialColor.COLOR_BLACK)
-                .breakByTool(FabricToolTags.PICKAXES, Tiers.DIAMOND.getLevel())
-                .requiresCorrectToolForDrops() // End of FBS
-                .strength(50.0F, 1200.0F);
+                                                                          .breakByTool(FabricToolTags.PICKAXES, Tiers.DIAMOND.getLevel())
+                                                                          .requiresCorrectToolForDrops() // End of FBS
+                                                                          .strength(50.0F, 1200.0F);
         BlockBehaviour.Properties netheriteProperties = FabricBlockSettings.of(Material.METAL, MaterialColor.COLOR_BLACK)
-                .breakByTool(FabricToolTags.PICKAXES, Tiers.DIAMOND.getLevel())
-                .requiresCorrectToolForDrops() // End of FBS
-                .strength(50.0F, 1200.0F)
-                .sound(SoundType.NETHERITE_BLOCK);
+                                                                           .breakByTool(FabricToolTags.PICKAXES, Tiers.DIAMOND.getLevel())
+                                                                           .requiresCorrectToolForDrops() // End of FBS
+                                                                           .strength(50.0F, 1200.0F)
+                                                                           .sound(SoundType.NETHERITE_BLOCK);
         // Init blocks
         OldChestBlock woodChestBlock = this.oldChestBlock(Utils.resloc("old_wood_chest"), woodOpenStat, woodTier, woodProperties);
         OldChestBlock ironChestBlock = this.oldChestBlock(Utils.resloc("old_iron_chest"), ironOpenStat, ironTier, ironProperties);
