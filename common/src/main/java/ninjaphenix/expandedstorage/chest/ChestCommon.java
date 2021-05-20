@@ -71,8 +71,7 @@ public final class ChestCommon {
         Level level = context.getLevel();
         BlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
-        if (block instanceof ChestBlock) { // Expanded Storage chest block.
-            ChestBlock chestBlock = (ChestBlock) block;
+        if (block instanceof ChestBlock chestBlock) { // Expanded Storage chest block.
             if (from == chestBlock.blockTier()) {
                 System.out.println("Trying to upgrade ES Chest.");
                 // calculate one or 2 chests

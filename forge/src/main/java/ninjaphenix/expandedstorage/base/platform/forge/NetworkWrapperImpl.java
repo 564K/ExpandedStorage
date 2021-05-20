@@ -67,9 +67,8 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
 
     @SubscribeEvent
     public static void onPlayerDisconnected(PlayerEvent.PlayerLoggedOutEvent event) {
-        Player player = event.getPlayer();
-        if (player instanceof ServerPlayer) { // Probably called on both sides.
-            NetworkWrapper.getInstance().s_setPlayerContainerType((ServerPlayer) player, Utils.UNSET_CONTAINER_TYPE);
+        if (event.getPlayer() instanceof ServerPlayer player) { // Probably called on both sides.
+            NetworkWrapper.getInstance().s_setPlayerContainerType(player, Utils.UNSET_CONTAINER_TYPE);
         }
     }
 

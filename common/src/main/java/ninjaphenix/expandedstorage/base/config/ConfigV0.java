@@ -55,10 +55,8 @@ public class ConfigV0 implements Config {
 
         @Override
         public ConfigV0 fromSource(Map<String, Object> source) {
-            Object containerType = source.get("container_type");
-            Object restrictiveScrolling = source.get("restrictive_scrolling");
-            if (containerType instanceof String && restrictiveScrolling instanceof Boolean) {
-                return new ConfigV0(ResourceLocation.tryParse((String) containerType), (Boolean) restrictiveScrolling);
+            if (source.get("container_type") instanceof String containerType && source.get("restrictive_scrolling") instanceof Boolean restrictiveScrolling) {
+                return new ConfigV0(ResourceLocation.tryParse(containerType), restrictiveScrolling);
             }
             return null;
         }

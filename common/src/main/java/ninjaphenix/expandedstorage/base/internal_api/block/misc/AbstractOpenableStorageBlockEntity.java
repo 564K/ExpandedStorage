@@ -48,14 +48,12 @@ public abstract class AbstractOpenableStorageBlockEntity extends AbstractStorage
                     .filter(player -> player.containerMenu instanceof AbstractContainerMenu_<?>)
                     .map(player -> ((AbstractContainerMenu_<?>) player.containerMenu).getContainer())
                     .filter(openContainer -> openContainer == container ||
-                            openContainer instanceof CompoundWorldlyContainer && ((CompoundWorldlyContainer) openContainer).consistsPartlyOf(container))
+                            openContainer instanceof CompoundWorldlyContainer compoundContainer && compoundContainer.consistsPartlyOf(container))
                     .mapToInt(inv -> 1).sum();
     }
 
     private void initialise(ResourceLocation blockId) {
-        Block temp = Registry.BLOCK.get(blockId);
-        if (temp instanceof AbstractOpenableStorageBlock) {
-            AbstractOpenableStorageBlock block = (AbstractOpenableStorageBlock) temp;
+        if (Registry.BLOCK.get(blockId) instanceof AbstractOpenableStorageBlock block) {
             slots = block.getSlotCount();
             slotsForFace = new int[slots];
             Arrays.setAll(slotsForFace, IntUnaryOperator.identity());
@@ -76,9 +74,7 @@ public abstract class AbstractOpenableStorageBlockEntity extends AbstractStorage
     @Override
     public void load(BlockState state, CompoundTag tag) {
         super.load(state, tag);
-        Block temp = state.getBlock();
-        if (temp instanceof AbstractOpenableStorageBlock) {
-            AbstractOpenableStorageBlock block = (AbstractOpenableStorageBlock) temp;
+        if (state.getBlock() instanceof AbstractOpenableStorageBlock block) {
             this.initialise(block.blockId());
             ContainerHelper.loadAllItems(tag, inventory);
         } else {

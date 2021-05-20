@@ -101,9 +101,7 @@ public final class ChestBlockEntity extends AbstractOpenableStorageBlockEntity i
 
     @SuppressWarnings("ConstantConditions")
     private void onInvOpenOrClose() {
-        Block temp = this.getBlockState().getBlock();
-        if (temp instanceof ChestBlock) {
-            ChestBlock block = (ChestBlock) temp;
+        if (this.getBlockState().getBlock() instanceof ChestBlock block) {
             level.blockEvent(worldPosition, block, ChestBlock.SET_OPEN_COUNT_EVENT, viewerCount);
             level.updateNeighborsAt(worldPosition, block);
         }

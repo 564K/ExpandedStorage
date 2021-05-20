@@ -92,9 +92,7 @@ public final class PickScreen extends Screen {
         }
         //noinspection ForLoopReplaceableByForEach
         for (int i = 0; i < numButtons; i++) {
-            AbstractWidget temp = buttons.get(i);
-            if (buttons.get(i) instanceof ScreenPickButton) {
-                ScreenPickButton button = (ScreenPickButton) temp;
+            if (buttons.get(i) instanceof ScreenPickButton button) {
                 button.renderTooltip(stack, mouseX, mouseY);
             }
         }

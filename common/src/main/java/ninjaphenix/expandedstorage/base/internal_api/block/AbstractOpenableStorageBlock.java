@@ -60,8 +60,7 @@ public abstract class AbstractOpenableStorageBlock extends AbstractStorageBlock 
     @Override
     @SuppressWarnings("deprecation")
     public final InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (player instanceof ServerPlayer) {
-            ServerPlayer serverPlayer = (ServerPlayer) player;
+        if (player instanceof ServerPlayer serverPlayer) {
             ContainerMenuFactory menuFactory = this.createContainerFactory(state, level, pos);
             if (menuFactory != null) {
                 if (menuFactory.canPlayerOpen(serverPlayer)) {
@@ -85,9 +84,8 @@ public abstract class AbstractOpenableStorageBlock extends AbstractStorageBlock 
     @SuppressWarnings("deprecation")
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean bl) {
         if (!state.is(newState.getBlock())) {
-            BlockEntity temp = level.getBlockEntity(pos);
-            if (temp instanceof AbstractOpenableStorageBlockEntity) {
-                Containers.dropContents(level, pos, ((AbstractOpenableStorageBlockEntity) temp));
+            if (level.getBlockEntity(pos) instanceof AbstractOpenableStorageBlockEntity entity) {
+                Containers.dropContents(level, pos, entity);
                 level.updateNeighbourForOutputSignal(pos, this);
             }
             super.onRemove(state, level, pos, newState, bl);
@@ -95,11 +93,9 @@ public abstract class AbstractOpenableStorageBlock extends AbstractStorageBlock 
     }
 
     protected ContainerMenuFactory createContainerFactory(BlockState state, LevelAccessor level, BlockPos pos) {
-        BlockEntity entity = level.getBlockEntity(pos);
-        if (!(entity instanceof AbstractOpenableStorageBlockEntity)) {
+        if (!(level.getBlockEntity(pos) instanceof AbstractOpenableStorageBlockEntity container)) {
             return null;
         }
-        AbstractOpenableStorageBlockEntity container = (AbstractOpenableStorageBlockEntity) entity;
         return new ContainerMenuFactory() {
             @Override
             public void writeClientData(ServerPlayer player, FriendlyByteBuf buffer) {
@@ -132,9 +128,8 @@ public abstract class AbstractOpenableStorageBlock extends AbstractStorageBlock 
 
     @Override // Keep for hoppers.
     public WorldlyContainer getContainer(BlockState state, LevelAccessor level, BlockPos pos) {
-        BlockEntity temp = level.getBlockEntity(pos);
-        if (temp instanceof AbstractOpenableStorageBlockEntity) {
-            return (AbstractOpenableStorageBlockEntity) temp;
+        if (level.getBlockEntity(pos) instanceof AbstractOpenableStorageBlockEntity entity) {
+            return entity;
         }
         return null;
     }

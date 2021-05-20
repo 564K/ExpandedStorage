@@ -14,16 +14,13 @@ public final class LegacyFactory implements Converter<Map<String, Object>, Confi
 
     @Override
     public ConfigV0 fromSource(Map<String, Object> source) {
-        Object containerType = source.get("preferred_container_type");
-        Object restrictiveScrolling = source.get("restrictive_scrolling");
-        if (containerType instanceof String && restrictiveScrolling instanceof Boolean) {
-            String temp = (String) containerType;
+        if (source.get("preferred_container_type") instanceof String temp && source.get("restrictive_scrolling") instanceof Boolean restrictiveScrolling) {
             if ("expandedstorage:paged".equals(temp)) {
                 temp = Utils.PAGE_CONTAINER_TYPE.toString();
             } else if ("expandedstorage:scrollable".equals(temp)) {
                 temp = Utils.SCROLL_CONTAINER_TYPE.toString();
             }
-            return new ConfigV0(ResourceLocation.tryParse(temp), (Boolean) (restrictiveScrolling));
+            return new ConfigV0(ResourceLocation.tryParse(temp), restrictiveScrolling);
         }
         return null;
     }

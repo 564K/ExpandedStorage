@@ -27,9 +27,8 @@ public class ReiCompat implements REIPluginV0 {
     @Override
     public void registerBounds(DisplayHelper displayHelper) {
         BaseBoundsHandler.getInstance().registerExclusionZones(AbstractScreen.class, () -> {
-            Screen screen = Minecraft.getInstance().screen;
-            if (screen instanceof AbstractScreen<?, ?>) {
-                return ((AbstractScreen<?, ?>) screen).getExclusionZones().stream().map(ReiCompat::toReiRect).collect(Collectors.toList());
+            if (Minecraft.getInstance().screen instanceof AbstractScreen<?, ?> screen) {
+                return screen.getExclusionZones().stream().map(ReiCompat::toReiRect).collect(Collectors.toList());
             }
             return Collections.emptyList();
         });

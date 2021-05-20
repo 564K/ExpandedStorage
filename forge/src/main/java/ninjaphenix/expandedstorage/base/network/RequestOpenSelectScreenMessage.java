@@ -28,9 +28,7 @@ public final class RequestOpenSelectScreenMessage {
         NetworkEvent.Context context = wrappedContext.get();
         ServerPlayer player = context.getSender();
         if (player != null) {
-            AbstractContainerMenu temp = player.containerMenu;
-            if (temp instanceof AbstractContainerMenu_<?>) {
-                AbstractContainerMenu_<?> menu = (AbstractContainerMenu_<?>) temp;
+            if (player.containerMenu instanceof AbstractContainerMenu_<?> menu) {
                 context.enqueueWork(() -> NetworkWrapper.getInstance().s2c_openSelectScreen(player, (type) -> NetworkHooks.openGui(player, new MenuProvider() {
                     @Override
                     public Component getDisplayName() {

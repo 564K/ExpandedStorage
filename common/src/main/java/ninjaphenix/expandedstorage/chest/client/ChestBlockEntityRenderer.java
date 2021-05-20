@@ -65,11 +65,9 @@ public final class ChestBlockEntityRenderer extends BlockEntityRenderer<ChestBlo
         ResourceLocation blockId = entity.getBlockId();
         BlockState state = entity.hasLevel() ? entity.getBlockState() :
                 ChestBlockEntityRenderer.DEFAULT_STATE.setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH);
-        Block temp = state.getBlock();
-        if (blockId == null || !(temp instanceof ChestBlock)) {
+        if (blockId == null || !(state.getBlock() instanceof ChestBlock block)) {
             return;
         }
-        ChestBlock block = (ChestBlock) temp;
         CursedChestType chestType = state.getValue(AbstractChestBlock.CURSED_CHEST_TYPE);
         SingleChestModel model = ChestBlockEntityRenderer.MODELS.get(chestType);
         stack.pushPose();

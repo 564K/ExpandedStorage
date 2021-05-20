@@ -165,9 +165,7 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
 
     private void s_handleOpenSelectScreen(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl listener,
                                           FriendlyByteBuf buffer, PacketSender sender) {
-        AbstractContainerMenu temp = player.containerMenu;
-        if (temp instanceof AbstractContainerMenu_<?>) {
-            AbstractContainerMenu_<?> menu = (AbstractContainerMenu_<?>) temp;
+        if (player.containerMenu instanceof AbstractContainerMenu_<?> menu) {
             server.submit(() -> this.s2c_openSelectScreen(player, (type) -> player.openMenu(new ExtendedScreenHandlerFactory() {
                 @Nullable
                 @Override

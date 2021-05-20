@@ -66,8 +66,8 @@ public final class StorageMutator extends Item {
             player.getCooldowns().addCooldown(context.getItemInHand().getItem(), Utils.QUARTER_SECOND);
         }
         Block block = level.getBlockState(context.getClickedPos()).getBlock();
-        if (block instanceof AbstractStorageBlock) {
-            String behaviourKey = ((AbstractStorageBlock) block).blockType().toString();
+        if (block instanceof AbstractStorageBlock storageBlock) {
+            String behaviourKey = storageBlock.blockType().toString();
             if (tag.contains(StorageMutator.BEHAVIOUR_KEY, Utils.NBT_STRING_TYPE)) { // Try continue behaviour usage
                 String readBehaviour = tag.getString(StorageMutator.BEHAVIOUR_KEY);
                 if (readBehaviour.equals(behaviourKey)) { // Continue behaviour usage
