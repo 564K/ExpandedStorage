@@ -13,6 +13,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.IForgeRegistry;
 import ninjaphenix.expandedstorage.base.client.menu.PagedScreen;
 import ninjaphenix.expandedstorage.base.client.menu.PickScreen;
@@ -28,7 +29,7 @@ import java.util.Set;
 @Mod("expandedstorage")
 public final class Main {
     public Main() {
-        BaseCommon.initialize();
+        BaseCommon.initialize(FMLPaths.FMLCONFIG.get().resolve("expandedstorage/page.json"));
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addGenericListener(Item.class, (RegistryEvent.Register<Item> event) -> {
             IForgeRegistry<Item> registry = event.getRegistry();

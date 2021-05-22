@@ -1,5 +1,9 @@
 package ninjaphenix.expandedstorage.base.internal_api;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.KeybindComponent;
@@ -10,6 +14,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import ninjaphenix.expandedstorage.base.config.ResourceLocationTypeAdapter;
 import ninjaphenix.expandedstorage.base.internal_api.tier.Tier;
 import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
 import org.jetbrains.annotations.ApiStatus.Experimental;
@@ -17,6 +22,7 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -81,6 +87,19 @@ public final class Utils {
 
     // Item Cooldown
     public static final int QUARTER_SECOND = 5;
+
+    // Config related
+
+    @Internal
+    public static final Type MAP_TYPE = new TypeToken<Map<String, Object>>() {
+    }.getType();
+
+    @Internal
+    public static final Gson GSON = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocationTypeAdapter())
+                                                     .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                                                     .setPrettyPrinting()
+                                                     .setLenient()
+                                                     .create();
 
     // Container Types
     @Internal

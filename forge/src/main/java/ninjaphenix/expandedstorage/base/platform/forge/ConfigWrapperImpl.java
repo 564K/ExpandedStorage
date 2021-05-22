@@ -25,8 +25,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public final class ConfigWrapperImpl implements ConfigWrapper {
-    private Type mapType;
-    private Gson gson;
     private Path configPath;
     private ConfigV0 config;
 
@@ -39,14 +37,7 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
     }
 
     public void initialise() {
-        mapType = new TypeToken<Map<String, Object>>() {
-        }.getType();
         configPath = FMLPaths.CONFIGDIR.get().resolve("expandedstorage.json");
-        gson = new GsonBuilder().registerTypeAdapter(ResourceLocation.class, new ResourceLocationTypeAdapter())
-                                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                                .setPrettyPrinting()
-                                .setLenient()
-                                .create();
         config = this.getConfig();
     }
 
@@ -80,7 +71,7 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
         try (BufferedWriter writer = Files.newBufferedWriter(configPath)) {
             Map<String, Object> configValues = config.getConverter().toSource(config);
             configValues.put("config_version", config.getVersion());
-            gson.toJson(configValues, mapType, gson.newJsonWriter(writer));
+            Utils.GSON.toJson(configValues, Utils.MAP_TYPE, Utils.GSON.newJsonWriter(writer));
         } catch (IOException e) {
             BaseCommon.LOGGER.warn("Failed to save Expanded Storage's config.", e);
         }
@@ -131,7 +122,7 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
     // essentially converter will need to be decided in this method based on the value of "config_version"
     private <T extends Config> T convertToConfig(String lines, Converter<Map<String, Object>, T> converter, Path configPath) {
         try {
-            Map<String, Object> configMap = gson.fromJson(lines, mapType);
+            Map<String, Object> configMap = Utils.GSON.fromJson(lines, Utils.MAP_TYPE);
             // Do not edit, method returns a Double, we need an integer
             int configVersion = Mth.floor((Double) configMap.getOrDefault("config_version", -1.0D));
             return this.convert(configMap, configVersion, converter);
