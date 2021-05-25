@@ -2,7 +2,63 @@ plugins {
     id 'dev.architectury.loom' // Must be before architectury-plugin
     id 'architectury-plugin'
     id 'com.github.johnrengelman.shadow' version '7.0.0'
+    id 'java'
 }
+
+// <editor-fold desc="# Common Build Logic">
+def MINECRAFT_JAVA_VERSION = JavaLanguageVersion.of(rootProject.properties.minecraft_java_version as int)
+def MOD_JAVA_VERSION = JavaLanguageVersion.of(rootProject.properties.mod_java_version as int)
+
+sourceCompatibility = JavaVersion.toVersion(MOD_JAVA_VERSION.asInt())
+targetCompatibility = JavaVersion.toVersion(MOD_JAVA_VERSION.asInt())
+
+buildDir = rootProject.projectDir.absolutePath + "/build/$project.name"
+archivesBaseName = rootProject.archives_base_name
+version = rootProject.mod_version
+group = rootProject.maven_group
+
+// MIT License, Copyright 2021 shedaniel (https://github.com/shedaniel)
+// https://github.com/shedaniel/cloth-config-lite/blob/615f6ed8ebebb8cb973d4901565558ddc486e44c/build.gradle#L52-L57
+// Saves a few kilobytes, json can always be pretty printed after the fact.
+processResources {
+    doLast {
+        //noinspection SpellCheckingInspection
+        def slurper = Class.forName('groovy.json.JsonSlurper').getDeclaredConstructor().newInstance()
+        def toJson = Class.forName('groovy.json.JsonOutput').getDeclaredMethod('toJson', Map.class)
+        //noinspection GrUnresolvedAccess
+        fileTree(dir: outputs.files.asPath, include: '**/*.json').each {
+            File file ->
+                {
+                    file.text = toJson.invoke(null, slurper.parse(file))
+                }
+        }
+    }
+}
+
+dependencies {
+    annotationProcessor('com.github.bsideup.jabel:jabel-javac-plugin:0.3.0') {
+        exclude group: 'net.bytebuddy'
+    }
+    annotationProcessor('net.bytebuddy:byte-buddy:1.10.22')
+    annotationProcessor('net.bytebuddy:byte-buddy-agent:1.10.22')
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.setFork(true)
+    options.forkOptions.jvmArgs += List.of('--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED', '--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED')
+    if (System.getenv("I_HATE_INTELLIJ_AND_GRADLE")) {
+        options.release.set(MINECRAFT_JAVA_VERSION.asInt())
+    }
+}
+
+tasks.withType(JavaExec).configureEach {
+    javaLauncher.set(javaToolchains.launcherFor {
+        it.languageVersion = JavaLanguageVersion.of(MINECRAFT_JAVA_VERSION.asInt())
+    })
+}
+
+// </editor-fold>
 
 architectury {
     fabric()
@@ -97,8 +153,8 @@ jar {
     classifier 'dev'
 }
 
-sourcesJar {
-    def commonSources = project(':common').sourcesJar
-    dependsOn commonSources
-    from commonSources.archiveFile.map { zipTree(it) } duplicatesStrategy(DuplicatesStrategy.WARN)
-}
+//sourcesJar {
+//    def commonSources = project(':common').sourcesJar
+//    dependsOn commonSources
+//    from commonSources.archiveFile.map { zipTree(it) } duplicatesStrategy(DuplicatesStrategy.WARN)
+//}
