@@ -139,37 +139,23 @@ public abstract class AbstractChestBlock<T extends AbstractOpenableStorageBlockE
     }
 
     public static Direction getDirectionToAttached(BlockState state) {
-        CursedChestType value = state.getValue(AbstractChestBlock.CURSED_CHEST_TYPE);
-        if (value == CursedChestType.TOP) {
-            return Direction.DOWN;
-        } else if (value == CursedChestType.BACK) {
-            return state.getValue(BlockStateProperties.HORIZONTAL_FACING);
-        } else if (value == CursedChestType.RIGHT) {
-            return state.getValue(BlockStateProperties.HORIZONTAL_FACING).getClockWise();
-        } else if (value == CursedChestType.BOTTOM) {
-            return Direction.UP;
-        } else if (value == CursedChestType.FRONT) {
-            return state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
-        } else if (value == CursedChestType.LEFT) {
-            return state.getValue(BlockStateProperties.HORIZONTAL_FACING).getCounterClockWise();
-        }
-        throw new IllegalArgumentException("BaseChestBlock#getDirectionToAttached received an unexpected state.");
+        return switch (state.getValue(AbstractChestBlock.CURSED_CHEST_TYPE)) {
+            case TOP -> Direction.DOWN;
+            case BACK -> state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+            case RIGHT -> state.getValue(BlockStateProperties.HORIZONTAL_FACING).getClockWise();
+            case BOTTOM -> Direction.UP;
+            case FRONT -> state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
+            case LEFT -> state.getValue(BlockStateProperties.HORIZONTAL_FACING).getCounterClockWise();
+            case SINGLE -> throw new IllegalArgumentException("BaseChestBlock#getDirectionToAttached received an unexpected state.");
+        };
     }
 
     public static DoubleBlockCombiner.BlockType getBlockType(BlockState state) {
-        switch (state.getValue(AbstractChestBlock.CURSED_CHEST_TYPE)) {
-            case TOP:
-            case LEFT:
-            case FRONT:
-                return DoubleBlockCombiner.BlockType.FIRST;
-            case BACK:
-            case RIGHT:
-            case BOTTOM:
-                return DoubleBlockCombiner.BlockType.SECOND;
-            case SINGLE:
-                return DoubleBlockCombiner.BlockType.SINGLE;
-        }
-        throw new IllegalArgumentException("BaseChestBlock#getBlockType received an unexpected state.");
+        return switch (state.getValue(AbstractChestBlock.CURSED_CHEST_TYPE)) {
+            case TOP, LEFT, FRONT -> DoubleBlockCombiner.BlockType.FIRST;
+            case BACK, RIGHT, BOTTOM -> DoubleBlockCombiner.BlockType.SECOND;
+            case SINGLE -> DoubleBlockCombiner.BlockType.SINGLE;
+        };
     }
 
     public static CursedChestType getChestType(Direction facing, Direction offset) {
