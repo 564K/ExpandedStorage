@@ -15,7 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import ninjaphenix.expandedstorage.base.internal_api.BaseApi;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.internal_api.block.AbstractStorageBlock;
@@ -65,8 +64,7 @@ public final class StorageMutator extends Item {
         if (player != null) {
             player.getCooldowns().addCooldown(context.getItemInHand().getItem(), Utils.QUARTER_SECOND);
         }
-        Block block = level.getBlockState(context.getClickedPos()).getBlock();
-        if (block instanceof AbstractStorageBlock storageBlock) {
+        if (level.getBlockState(context.getClickedPos()).getBlock() instanceof AbstractStorageBlock storageBlock) {
             String behaviourKey = storageBlock.blockType().toString();
             if (tag.contains(StorageMutator.BEHAVIOUR_KEY, Utils.NBT_STRING_TYPE)) { // Try continue behaviour usage
                 String readBehaviour = tag.getString(StorageMutator.BEHAVIOUR_KEY);
@@ -130,7 +128,7 @@ public final class StorageMutator extends Item {
             CompoundTag tag = stack.getOrCreateTag();
             MutationMode mode = StorageMutator.getMode(tag).next();
             StorageMutator.setMode(tag, mode);
-            player.displayClientMessage(getToolModeComponent(mode), true);
+            player.displayClientMessage(this.getToolModeComponent(mode), true);
             return InteractionResultHolder.success(stack);
         }
         return InteractionResultHolder.pass(stack);
@@ -150,7 +148,7 @@ public final class StorageMutator extends Item {
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
         MutationMode mode = StorageMutator.getMode(stack.getOrCreateTag());
         list.add(new TextComponent("CURRENTLY DISABLED").withStyle(ChatFormatting.RED));
-        list.add(getToolModeComponent(mode).withStyle(ChatFormatting.GRAY));
+        list.add(this.getToolModeComponent(mode).withStyle(ChatFormatting.GRAY));
         list.add(Utils.translation("tooltip.expandedstorage.storage_mutator.description_" + mode, Utils.ALT_USE).withStyle(ChatFormatting.GRAY));
     }
 }
