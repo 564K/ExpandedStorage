@@ -123,6 +123,10 @@ public final class StorageMutator extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (player.isShiftKeyDown()) {
+            if (true) {
+                player.displayClientMessage(new TextComponent("Storage Mutator is not yet implemented"), true);
+                return InteractionResultHolder.fail(stack);
+            }
             CompoundTag tag = stack.getOrCreateTag();
             MutationMode mode = StorageMutator.getMode(tag).next();
             StorageMutator.setMode(tag, mode);
@@ -145,6 +149,7 @@ public final class StorageMutator extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
         MutationMode mode = StorageMutator.getMode(stack.getOrCreateTag());
+        list.add(new TextComponent("CURRENTLY DISABLED").withStyle(ChatFormatting.RED));
         list.add(getToolModeComponent(mode).withStyle(ChatFormatting.GRAY));
         list.add(Utils.translation("tooltip.expandedstorage.storage_mutator.description_" + mode, Utils.ALT_USE).withStyle(ChatFormatting.GRAY));
     }
