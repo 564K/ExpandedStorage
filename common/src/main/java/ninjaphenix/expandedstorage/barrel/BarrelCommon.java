@@ -46,7 +46,9 @@ public final class BarrelCommon {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
         BlockState state = level.getBlockState(pos);
-        if ((state.getBlock() instanceof BarrelBlock barrelBlock && from == barrelBlock.blockTier()) || from == Utils.WOOD_TIER.key()) {
+        Block block = state.getBlock();
+        boolean condition = block instanceof BarrelBlock;
+        if ((condition && ((BarrelBlock) block).blockTier() == from) || !condition && from == Utils.WOOD_TIER.key()) {
             var toBlock = (AbstractOpenableStorageBlock) BaseApi.getInstance().getTieredBlock(BarrelCommon.BLOCK_TYPE, to);
             var inventory = NonNullList.withSize(toBlock.getSlotCount(), ItemStack.EMPTY);
             var tag = level.getBlockEntity(pos).save(new CompoundTag());
