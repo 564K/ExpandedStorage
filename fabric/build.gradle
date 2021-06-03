@@ -108,10 +108,8 @@ dependencies {
     }
 
     // For all modules
-    modCompileOnly('me.shedaniel:RoughlyEnoughItems:5.10.181') {
-        exclude group: 'net.fabricmc'
-    }
-    //modRuntime('me.shedaniel:RoughlyEnoughItems:5.10.181')
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:6.0.245-alpha"
+    modRuntime "me.shedaniel:RoughlyEnoughItems-fabric:6.0.245-alpha"
 
     modCompileOnly('com.terraformersmc:modmenu:1.16.9') {
         exclude group: 'net.fabricmc'

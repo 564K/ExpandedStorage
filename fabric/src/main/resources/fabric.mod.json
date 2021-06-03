@@ -13,7 +13,7 @@
     "main": [
       "ninjaphenix.expandedstorage.base.Main"
     ],
-    "rei_plugins": [
+    "rei": [
       "ninjaphenix.expandedstorage.base.client.ReiCompat"
     ],
     "modmenu": [
