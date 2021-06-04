@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "expandedstorage:netherite_chest"
+            "items": [
+              "expandedstorage:netherite_chest"
+            ]
           }
         ]
       }
