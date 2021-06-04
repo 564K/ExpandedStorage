@@ -6,7 +6,7 @@
     ]
   },
   "criteria": {
-    "has_chest": {
+    "has_old_chest": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -25,7 +25,7 @@
   },
   "requirements": [
     [
-      "has_chest",
+      "has_old_chest",
       "has_the_recipe"
     ]
   ]

@@ -2,11 +2,11 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "expandedstorage:obsidian_barrel"
+      "expandedstorage:netherite_barrel"
     ]
   },
   "criteria": {
-    "has_barrel": {
+    "has_previous_barrel": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
@@ -25,7 +25,7 @@
   },
   "requirements": [
     [
-      "has_barrel",
+      "has_previous_barrel",
       "has_the_recipe"
     ]
   ]
