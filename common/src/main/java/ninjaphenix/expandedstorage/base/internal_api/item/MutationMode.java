@@ -16,9 +16,6 @@ public enum MutationMode {
     ROTATE("rotate", 2);
 
     private static final MutationMode[] VALUES = MutationMode.values();
-    private static final Map<String, MutationMode> MODES_BY_NAME = Arrays
-            .stream(MutationMode.VALUES)
-            .collect(Collectors.toMap(MutationMode::toString, Function.identity()));
     private final String name;
     private final int index;
 
@@ -27,19 +24,15 @@ public enum MutationMode {
         this.index = index;
     }
 
-    public static MutationMode from(String name) {
-        return MutationMode.MODES_BY_NAME.get(name);
-    }
-
-    /**
-     * @deprecated Should only be used for loading legacy storage mutators.
-     */
-    @Deprecated
     public static MutationMode from(byte index) {
         if (index >= 0 && index < MutationMode.VALUES.length) {
             return MutationMode.VALUES[index];
         }
         return null;
+    }
+
+    public byte toByte() {
+        return (byte) index;
     }
 
     @Override

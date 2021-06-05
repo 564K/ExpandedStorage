@@ -8,7 +8,6 @@ import net.minecraft.world.level.block.Block;
 import ninjaphenix.expandedstorage.base.BaseImpl;
 import ninjaphenix.expandedstorage.base.internal_api.block.AbstractStorageBlock;
 import ninjaphenix.expandedstorage.base.internal_api.item.BlockUpgradeBehaviour;
-import ninjaphenix.expandedstorage.base.internal_api.item.MutationBehaviour;
 import ninjaphenix.expandedstorage.base.internal_api.tier.Tier;
 import org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 
@@ -43,12 +42,6 @@ public interface BaseApi {
 
     @Internal
     ItemStack tabIcon();
-
-    @Internal
-    MutationBehaviour getMutationBehaviour(String blockType);
-
-    @Experimental
-    void defineMutationBehaviour(ResourceLocation blockType, MutationBehaviour behaviour);
 
     Optional<BlockUpgradeBehaviour> getBlockUpgradeBehaviour(Block block);
 

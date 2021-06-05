@@ -12,7 +12,6 @@ import ninjaphenix.expandedstorage.base.internal_api.BaseApi;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.internal_api.block.AbstractStorageBlock;
 import ninjaphenix.expandedstorage.base.internal_api.item.BlockUpgradeBehaviour;
-import ninjaphenix.expandedstorage.base.internal_api.item.MutationBehaviour;
 import ninjaphenix.expandedstorage.base.internal_api.tier.Tier;
 import ninjaphenix.expandedstorage.base.item.StorageConversionKit;
 import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
@@ -26,7 +25,6 @@ import java.util.function.Predicate;
 
 public final class BaseImpl implements BaseApi {
     private static BaseImpl instance;
-    private final Map<String, MutationBehaviour> MUTATION_BEHAVIOURS = new HashMap<>();
     private final Map<Predicate<Block>, BlockUpgradeBehaviour> BLOCK_UPGRADE_BEHAVIOURS = new HashMap<>();
     private final Map<Pair<ResourceLocation, ResourceLocation>, AbstractStorageBlock> BLOCKS = new HashMap<>();
     private Map<ResourceLocation, Item> items = new LinkedHashMap<>();
@@ -45,14 +43,6 @@ public final class BaseImpl implements BaseApi {
     }
 
     @Override
-    public void defineMutationBehaviour(ResourceLocation blockType, MutationBehaviour behaviour) {
-        if (MUTATION_BEHAVIOURS.containsKey(blockType.toString())) {
-            throw new IllegalStateException("Tried to register duplicate mutation behaviour for " + blockType);
-        }
-        MUTATION_BEHAVIOURS.put(blockType.toString(), behaviour);
-    }
-
-    @Override
     public Optional<BlockUpgradeBehaviour> getBlockUpgradeBehaviour(Block block) {
         for (Map.Entry<Predicate<Block>, BlockUpgradeBehaviour> entry : BLOCK_UPGRADE_BEHAVIOURS.entrySet()) {
             if (entry.getKey().test(block)) {
@@ -65,12 +55,6 @@ public final class BaseImpl implements BaseApi {
     @Override
     public void defineBlockUpgradeBehaviour(Predicate<Block> target, BlockUpgradeBehaviour behaviour) {
         BLOCK_UPGRADE_BEHAVIOURS.put(target, behaviour);
-    }
-
-    @Override
-    @ApiStatus.Internal
-    public MutationBehaviour getMutationBehaviour(String id) {
-        return MUTATION_BEHAVIOURS.get(id);
     }
 
     @Override
@@ -109,7 +93,7 @@ public final class BaseImpl implements BaseApi {
 
     @Override
     public void registerTieredBlock(AbstractStorageBlock block) {
-        BLOCKS.put(new Pair<>(block.blockType(), block.blockTier()), block);
+        BLOCKS.putIfAbsent(new Pair<>(block.blockType(), block.blockTier()), block);
     }
 
     @Override
