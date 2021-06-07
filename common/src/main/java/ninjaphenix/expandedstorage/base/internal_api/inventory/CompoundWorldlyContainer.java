@@ -9,6 +9,7 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 
 @Internal
 @Experimental
+@SuppressWarnings("ClassCanBeRecord")
 public final class CompoundWorldlyContainer implements WorldlyContainer {
     private final WorldlyContainer first;
     private final WorldlyContainer second;

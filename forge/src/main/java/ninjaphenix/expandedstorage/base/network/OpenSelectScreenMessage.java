@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class OpenSelectScreenMessage {
     private final Set<ResourceLocation> containerTypeOptions;
 

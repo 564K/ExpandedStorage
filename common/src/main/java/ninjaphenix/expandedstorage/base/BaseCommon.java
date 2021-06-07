@@ -6,6 +6,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import ninjaphenix.expandedstorage.base.config.button.ButtonOffset;
 import ninjaphenix.expandedstorage.base.config.button.ButtonOffsetConfig;
 import ninjaphenix.expandedstorage.base.internal_api.BaseApi;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
@@ -28,7 +29,7 @@ public final class BaseCommon {
     public static final MenuType<PagedContainerMenu> PAGE_MENU_TYPE = PlatformUtils.getInstance().createMenuType(Utils.PAGE_CONTAINER_TYPE, new PagedContainerMenu.Factory());
     public static final MenuType<ScrollableContainerMenu> SCROLL_MENU_TYPE = PlatformUtils.getInstance().createMenuType(Utils.SCROLL_CONTAINER_TYPE, new ScrollableContainerMenu.Factory());
     private static final int ICON_SUITABILITY = 0;
-    private static ButtonOffsetConfig pageButtonConfig;
+    private static ButtonOffset[] pageButtonConfig;
     private static Path pageButtonConfigPath;
 
     private BaseCommon() {
@@ -52,16 +53,16 @@ public final class BaseCommon {
             BaseApi.getInstance().registerContainerButtonSettings(Utils.PAGE_CONTAINER_TYPE,
                     Utils.resloc("textures/gui/paged_button.png"),
                     Utils.translation("screen.expandedstorage.paged_screen"));
+            BaseCommon.pageButtonConfigPath = pageButtonConfigPath;
+            BaseCommon.reloadButtonOffsetConfig();
         }
-        BaseCommon.pageButtonConfigPath = pageButtonConfigPath;
-        BaseCommon.reloadButtonOffsetConfig();
     }
 
     private static void reloadButtonOffsetConfig() {
         BaseCommon.pageButtonConfig = ButtonOffsetConfig.loadButtonOffsetConfig(BaseCommon.pageButtonConfigPath);
     }
 
-    public static ButtonOffsetConfig getPageButtonConfig() {
+    public static ButtonOffset[] getPageButtonConfig() {
         return BaseCommon.pageButtonConfig;
     }
 

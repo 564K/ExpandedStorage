@@ -8,21 +8,26 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Collections;
 
 public class ButtonOffsetConfig {
-    private final ButtonOffset[] fabric;
-    private final ButtonOffset[] forge;
-
-    public ButtonOffsetConfig(ButtonOffset[] fabric, ButtonOffset[] forge) {
-        this.fabric = fabric;
-        this.forge = forge;
+    private static ButtonOffset[] getDefaultConfig() {
+        //noinspection OptionalGetWithoutIsPresent
+        switch (Utils.getPlatform().get()) {
+            case "fabric" -> {
+                return new ButtonOffset[] {
+                        new ButtonOffset(Collections.singleton("inventoryprofiles"), -12),
+                        new ButtonOffset(Collections.singleton("inventorysorter"), -18)
+                };
+            }
+            case "forge" -> {
+                return new ButtonOffset[]{};
+            }
+        }
+        throw new IllegalStateException();
     }
 
-    private static ButtonOffsetConfig getDefaultConfig() {
-        return new ButtonOffsetConfig(new ButtonOffset[]{}, new ButtonOffset[]{});
-    }
-
-    public static ButtonOffsetConfig loadButtonOffsetConfig(Path configPath) {
+    public static ButtonOffset[] loadButtonOffsetConfig(Path configPath) {
         Path dir = configPath.getParent();
         if (Files.notExists(dir)) {
             try {
@@ -35,29 +40,21 @@ public class ButtonOffsetConfig {
         }
         if (Files.exists(configPath)) {
             try (BufferedReader reader = Files.newBufferedReader(configPath)) {
-                return Utils.GSON.fromJson(reader, ButtonOffsetConfig.class);
+                return Utils.GSON.fromJson(reader, ButtonOffset[].class);
             } catch (IOException e) {
                 System.err.println("Failed to read page button config, using default.");
                 e.printStackTrace();
                 return ButtonOffsetConfig.getDefaultConfig();
             }
         } else {
-            ButtonOffsetConfig defaultConfig = ButtonOffsetConfig.getDefaultConfig();
+            ButtonOffset[] defaultConfig = ButtonOffsetConfig.getDefaultConfig();
             try (BufferedWriter writer = Files.newBufferedWriter(configPath, StandardOpenOption.CREATE)) {
-                Utils.GSON.toJson(defaultConfig, ButtonOffsetConfig.class, Utils.GSON.newJsonWriter(writer));
+                Utils.GSON.toJson(defaultConfig, ButtonOffset[].class, Utils.GSON.newJsonWriter(writer));
             } catch (IOException e) {
                 System.err.println("Failed to save default page button config.");
                 e.printStackTrace();
             }
             return defaultConfig;
         }
-    }
-
-    public ButtonOffset[] getFabricConfigs() {
-        return fabric;
-    }
-
-    public ButtonOffset[] getForgeConfigs() {
-        return forge;
     }
 }

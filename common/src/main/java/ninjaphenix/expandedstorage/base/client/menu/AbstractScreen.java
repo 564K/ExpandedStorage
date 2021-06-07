@@ -1,5 +1,6 @@
 package ninjaphenix.expandedstorage.base.client.menu;
 
+import com.github.bsideup.jabel.Desugar;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiComponent;
@@ -68,20 +69,8 @@ public abstract class AbstractScreen<T extends AbstractContainerMenu_<R>, R exte
 
     public abstract List<Rect2i> getExclusionZones();
 
-    protected static class Image {
-        public final int x, y, width, height, textureX, textureY, textureWidth, textureHeight;
-
-        public Image(int x, int y, int width, int height, int textureX, int textureY, int textureWidth, int textureHeight) {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-            this.textureX = textureX;
-            this.textureY = textureY;
-            this.textureWidth = textureWidth;
-            this.textureHeight = textureHeight;
-        }
-
+    @Desugar
+    protected record Image(int x, int y, int width, int height, int textureX, int textureY, int textureWidth, int textureHeight) {
         public void render(PoseStack stack) {
             GuiComponent.blit(stack, x, y, textureX, textureY, width, height, textureWidth, textureHeight);
         }

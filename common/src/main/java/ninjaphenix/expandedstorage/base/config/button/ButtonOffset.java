@@ -2,10 +2,12 @@ package ninjaphenix.expandedstorage.base.config.button;
 
 import java.util.Set;
 
-public class ButtonOffset {
+@SuppressWarnings("ClassCanBeRecord")
+public final class ButtonOffset {
     private final Set<String> mods;
     private final int offset;
 
+    // todo: rework into Set<Conditions>, int offset
     public ButtonOffset(Set<String> mods, int offset) {
         this.mods = mods;
         this.offset = offset;
@@ -15,7 +17,7 @@ public class ButtonOffset {
         return loadedMods.containsAll(mods);
     }
 
-    public int getOffset() {
-        return this.offset;
+    public int offset() {
+        return offset;
     }
 }

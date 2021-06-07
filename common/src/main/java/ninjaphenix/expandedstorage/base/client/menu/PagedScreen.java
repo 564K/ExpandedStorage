@@ -100,15 +100,9 @@ public final class PagedScreen extends AbstractScreen<PagedContainerMenu, PagedS
 
     @Override
     protected void init() {
-        //final FabricLoader instance = FabricLoader.getInstance();
-        //final boolean inventoryProfilesLoaded = instance.isModLoaded("inventoryprofiles");
-        //final boolean inventorySorterLoaded = instance.isModLoaded("inventorysorter");
         super.init();
         if (screenMeta.pages != 1) {
             int pageButtonsXOffset = 0;
-            //if (inventoryProfilesLoaded) { pageButtonsXOffset = -12; }
-            //else if (inventorySorterLoaded) { pageButtonsXOffset = -18; }
-            //else { pageButtonsXOffset = 0; }
             page = 1;
             this.setPageText();
             leftPageButton = new PageButton(leftPos + imageWidth - 61 + pageButtonsXOffset, topPos + imageHeight - 96, 0,

@@ -8,6 +8,7 @@ import ninjaphenix.expandedstorage.base.platform.NetworkWrapper;
 
 import java.util.function.Supplier;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class ContainerTypeUpdateMessage {
     private final ResourceLocation containerType;
 

@@ -3,6 +3,7 @@ package ninjaphenix.expandedstorage.chest;
 import net.minecraft.resources.ResourceLocation;
 import ninjaphenix.expandedstorage.base.internal_api.block.misc.CursedChestType;
 
+@SuppressWarnings("ClassCanBeRecord")
 public final class TextureCollection {
     private final ResourceLocation single;
     private final ResourceLocation left;

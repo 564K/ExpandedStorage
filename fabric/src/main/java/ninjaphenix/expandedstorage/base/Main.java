@@ -20,7 +20,7 @@ public final class Main implements ModInitializer {
     @Override
     public void onInitialize() {
         BaseCommon.initialize(FabricLoader.getInstance().getConfigDir().resolve("expandedstorage/page.json"));
-        System.out.println(Arrays.toString(BaseCommon.getPageButtonConfig().getFabricConfigs()));
+        System.out.println(Arrays.toString(BaseCommon.getPageButtonConfig()));
         if (PlatformUtils.getInstance().isClient()) {
             ScreenRegistry.register(BaseCommon.SCROLL_MENU_TYPE, ScrollableScreen::new);
             ScreenRegistry.register(BaseCommon.PAGE_MENU_TYPE, PagedScreen::new);

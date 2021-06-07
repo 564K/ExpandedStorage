@@ -16,12 +16,6 @@ public final class SingleScreen extends AbstractScreen<SingleContainerMenu, Sing
         imageHeight = 17 + 97 + 18 * screenMeta.height;
     }
 
-    @Override
-    protected void init() {
-        super.init();
-        int y = topPos + (screenMeta.width == 9 ? imageHeight - 22 : screenMeta.height * 18 + 12);
-    }
-
     public List<Rect2i> getExclusionZones() {
         return Collections.emptyList();
     }

@@ -26,6 +26,7 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 @Internal
@@ -154,16 +155,19 @@ public final class Utils {
         return Collections.unmodifiableMap(map);
     }
 
-    public static <T> T getClassInstance(Class<T> interfaceClass, String commonPackagePath, String className) {
+    public static Optional<String> getPlatform() {
         String classLoader = Utils.class.getClassLoader().getClass().getName();
-        String platform;
         if ("net.fabricmc.loader.launch.knot.KnotClassLoader".equals(classLoader)) {
-            platform = "fabric";
+            return Optional.of("fabric");
         } else if ("cpw.mods.modlauncher.TransformingClassLoader".equals(classLoader)) {
-            platform = "forge";
-        } else {
-            throw new IllegalStateException("Unable to find mod-loader.");
+            return Optional.of("forge");
         }
+        return Optional.empty();
+    }
+
+    // todo: rework, platform should be supplied from base Main class.
+    public static <T> T getClassInstance(Class<T> interfaceClass, String commonPackagePath, String className) {
+        String platform = Utils.getPlatform().orElseThrow(() -> new IllegalStateException("Unable to find mod-loader."));
         String fullClassPath = commonPackagePath + "." + platform + "." + className;
         try {
             Class<?> clazz = Class.forName(fullClassPath, false, Utils.class.getClassLoader());
