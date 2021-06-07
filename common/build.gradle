@@ -34,18 +34,16 @@ processResources {
     }
 }
 
+repositories {
+    mavenLocal()
+}
+
 dependencies {
-    annotationProcessor('com.github.bsideup.jabel:jabel-javac-plugin:0.3.0') {
-        exclude group: 'net.bytebuddy'
-    }
-    annotationProcessor('net.bytebuddy:byte-buddy:1.10.22')
-    annotationProcessor('net.bytebuddy:byte-buddy-agent:1.10.22')
+    annotationProcessor('com.github.bsideup.jabel:jabel-javac-plugin:0.4.0')
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-    options.setFork(true)
-    options.forkOptions.jvmArgs += List.of('--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED', '--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED')
     if (System.getenv("I_HATE_INTELLIJ_AND_GRADLE")) {
         options.release.set(MINECRAFT_JAVA_VERSION.asInt())
     }
