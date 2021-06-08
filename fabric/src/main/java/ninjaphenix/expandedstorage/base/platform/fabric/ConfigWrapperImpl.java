@@ -17,6 +17,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -140,7 +142,7 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
 
     private void backupFile(Path path, String failureMessage, String contents) {
         try {
-            Path backupPath = path.resolveSibling(path.getFileName().toString() + ".backup");
+            Path backupPath = path.resolveSibling(path.getFileName() + new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss").format(new Date()) + ".backup");
             Files.move(path, backupPath);
         } catch (IOException e2) {
             BaseCommon.LOGGER.warn(failureMessage, e2);

@@ -2,11 +2,7 @@ package ninjaphenix.expandedstorage.base.platform.forge;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
 import com.electronwill.nightconfig.toml.TomlFormat;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
-import com.google.gson.reflect.TypeToken;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -18,9 +14,10 @@ import ninjaphenix.expandedstorage.base.platform.ConfigWrapper;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -152,7 +149,7 @@ public final class ConfigWrapperImpl implements ConfigWrapper {
 
     private void backupFile(Path path, String failureMessage, String contents) {
         try {
-            Path backupPath = path.resolveSibling(path.getFileName().toString() + ".backup");
+            Path backupPath = path.resolveSibling(path.getFileName() + new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss").format(new Date()) + ".backup");
             Files.move(path, backupPath);
         } catch (IOException e2) {
             BaseCommon.LOGGER.warn(failureMessage, e2);
