@@ -12,15 +12,13 @@ import ninjaphenix.expandedstorage.base.internal_api.BaseApi;
 import ninjaphenix.expandedstorage.base.internal_api.ModuleInitializer;
 import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
 public final class Main implements ModInitializer {
     @Override
     public void onInitialize() {
-        BaseCommon.initialize(FabricLoader.getInstance().getConfigDir().resolve("expandedstorage/page.json"));
-        System.out.println(Arrays.toString(BaseCommon.getPageButtonConfig()));
+        BaseCommon.initialize();
         if (PlatformUtils.getInstance().isClient()) {
             ScreenRegistry.register(BaseCommon.SCROLL_MENU_TYPE, ScrollableScreen::new);
             ScreenRegistry.register(BaseCommon.PAGE_MENU_TYPE, PagedScreen::new);

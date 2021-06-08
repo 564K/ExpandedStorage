@@ -12,6 +12,7 @@ import ninjaphenix.expandedstorage.base.client.menu.widget.PageButton;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.inventory.PagedContainerMenu;
 import ninjaphenix.expandedstorage.base.inventory.screen.PagedScreenMeta;
+import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Collections;
@@ -21,6 +22,7 @@ import java.util.Set;
 
 public final class PagedScreen extends AbstractScreen<PagedContainerMenu, PagedScreenMeta> {
     private final Set<Image> blankArea = new LinkedHashSet<>();
+    private final int offset;
     private PageButton leftPageButton;
     private PageButton rightPageButton;
     private int page;
@@ -31,6 +33,17 @@ public final class PagedScreen extends AbstractScreen<PagedContainerMenu, PagedS
         super(screenHandler, playerInventory, title, (screenMeta) -> (screenMeta.width * 18 + 14) / 2 - 80);
         imageWidth = 14 + 18 * screenMeta.width;
         imageHeight = 17 + 97 + 18 * screenMeta.height;
+        int max = 0;
+        var config = PlatformUtils.getInstance().getButtonOffsetConfig();
+        var mods = PlatformUtils.getInstance().getLoadedModIds();
+        for (var buttonOffset : config) {
+            if (buttonOffset.areModsPresent(mods)) {
+                if (buttonOffset.offset() < max) {
+                    max = buttonOffset.offset();
+                }
+            }
+        }
+        this.offset = max;
     }
 
     private void setPage(int oldPage, int newPage) {
@@ -102,7 +115,7 @@ public final class PagedScreen extends AbstractScreen<PagedContainerMenu, PagedS
     protected void init() {
         super.init();
         if (screenMeta.pages != 1) {
-            int pageButtonsXOffset = 0;
+            int pageButtonsXOffset = offset;
             page = 1;
             this.setPageText();
             leftPageButton = new PageButton(leftPos + imageWidth - 61 + pageButtonsXOffset, topPos + imageHeight - 96, 0,
