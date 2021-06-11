@@ -140,7 +140,7 @@ remapJar {
 }
 
 jar {
-    classifier 'dev' + minecraft_version
+    classifier 'dev-' + minecraft_version
 }
 
 //sourcesJar {
