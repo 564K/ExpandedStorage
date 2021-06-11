@@ -130,7 +130,7 @@ shadowJar {
     exclude 'fabric.mod.json'
 
     configurations = [project.configurations.shadowCommon]
-    classifier 'dev-shadow' + minecraft_version
+    classifier 'dev-shadow-' + minecraft_version
 }
 
 remapJar {
@@ -140,7 +140,7 @@ remapJar {
 }
 
 jar {
-    classifier 'dev' + minecraft_version
+    classifier 'dev-' + minecraft_version
 }
 
 //sourcesJar {
