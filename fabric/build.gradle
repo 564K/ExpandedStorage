@@ -145,7 +145,7 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
-    classifier 'fabric'
+    archiveVersion = mod_version + "+" + minecraft_version // Feels hacky but works.
 }
 
 jar {
