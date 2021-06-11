@@ -46,7 +46,7 @@ dependencies {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-    if (System.getenv("I_HATE_INTELLIJ_AND_GRADLE")) {
+    if (System.getenv('I_HATE_INTELLIJ_AND_GRADLE')) {
         options.release.set(MINECRAFT_JAVA_VERSION.asInt())
     }
 }
@@ -70,11 +70,11 @@ loom {
 
     runs {
         client {
-            vmArgs.add("-XX:+IgnoreUnrecognizedVMOptions")
+            vmArgs.add('-XX:+IgnoreUnrecognizedVMOptions')
         }
 
         server {
-            vmArgs.add("-XX:+IgnoreUnrecognizedVMOptions")
+            vmArgs.add('-XX:+IgnoreUnrecognizedVMOptions')
         }
     }
 }
@@ -117,15 +117,15 @@ dependencies {
     }
 
     // For all modules
-    modCompileOnly('me.shedaniel:RoughlyEnoughItems:5.10.181') {
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems:${project.rei_version}") {
         exclude group: 'net.fabricmc'
     }
-    modRuntime('me.shedaniel:RoughlyEnoughItems:5.10.181')
+    modRuntime("me.shedaniel:RoughlyEnoughItems:${project.rei_version}")
 
-    modCompileOnly('com.terraformersmc:modmenu:1.16.9') {
+    modCompileOnly("com.terraformersmc:modmenu:${project.modmenu_version}") {
         exclude group: 'net.fabricmc'
     }
-    modRuntime('com.terraformersmc:modmenu:1.16.9')
+    modRuntime("com.terraformersmc:modmenu:${project.modmenu_version}")
 
     implementation(project(path: ':common')) {
         transitive = false

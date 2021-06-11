@@ -45,7 +45,7 @@ dependencies {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-    if (System.getenv("I_HATE_INTELLIJ_AND_GRADLE")) {
+    if (System.getenv('I_HATE_INTELLIJ_AND_GRADLE')) {
         options.release.set(MINECRAFT_JAVA_VERSION.asInt())
     }
 }
