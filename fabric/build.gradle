@@ -97,12 +97,16 @@ dependencies {
 
     // For all modules
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
-    modRuntime "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
-
-    modCompileOnly('com.terraformersmc:modmenu:1.16.9') {
+    modRuntime("me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}") {
         exclude group: 'net.fabricmc'
     }
-    //modRuntime('com.terraformersmc:modmenu:1.16.9')
+
+    modCompileOnly("com.terraformersmc:modmenu:${project.modmenu_version}") {
+        exclude group: 'net.fabricmc'
+    }
+    modRuntime("com.terraformersmc:modmenu:${project.modmenu_version}") {
+        exclude group: 'net.fabricmc'
+    }
 
     implementation(project(path: ':common')) {
         transitive = false

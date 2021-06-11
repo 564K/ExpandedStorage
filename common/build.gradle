@@ -47,7 +47,7 @@ tasks.withType(JavaExec).configureEach {
 // </editor-fold>
 
 architectury {
-    common(rootProject.properties.minecraft_version == rootProject.properties.next_version)
+    common(rootProject.properties.forge_released.equals('true'))
     injectInjectables = false
 }
 
