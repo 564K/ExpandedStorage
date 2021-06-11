@@ -139,7 +139,6 @@ processResources {
 shadowJar {
     configurations = [project.configurations.shadowCommon]
     classifier 'dev-shadow'
-    exclude("fabric.mod.json", "expandedstorage_base.accessWidener")
 }
 
 remapJar {
