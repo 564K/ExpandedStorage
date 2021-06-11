@@ -96,8 +96,8 @@ dependencies {
     }
 
     // For all modules
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:6.0.245-alpha"
-    modRuntime "me.shedaniel:RoughlyEnoughItems-fabric:6.0.245-alpha"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
+    modRuntime "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
 
     modCompileOnly('com.terraformersmc:modmenu:1.16.9') {
         exclude group: 'net.fabricmc'
@@ -132,7 +132,7 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
-    archiveVersion = mod_version + "+" + minecraft_version // Feels hacky but works.
+    archiveVersion = mod_version + '+' + minecraft_version // Feels hacky but works.
 }
 
 jar {

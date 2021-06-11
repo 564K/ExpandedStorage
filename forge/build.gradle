@@ -64,13 +64,13 @@ configurations {
 repositories {
     maven {
         // JEI maven
-        name "Progwml6 maven"
-        url "https://dvs1.progwml6.com/files/maven/"
+        name 'Progwml6 maven'
+        url 'https://dvs1.progwml6.com/files/maven/'
     }
     maven {
         // JEI maven - fallback
-        name "ModMaven"
-        url "https://modmaven.k-4u.nl"
+        name 'ModMaven'
+        url 'https://modmaven.k-4u.nl'
     }
 }
 
@@ -99,7 +99,7 @@ processResources {
     def props = ['version': project.version]
     inputs.properties props
 
-    filesMatching("META-INF/mods.toml") {
+    filesMatching('META-INF/mods.toml') {
         expand props
     }
 }
@@ -114,7 +114,7 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
-    archiveVersion = mod_version + "+" + minecraft_version // Feels hacky but works.
+    archiveVersion = mod_version + '+' + minecraft_version // Feels hacky but works.
 }
 
 jar {
