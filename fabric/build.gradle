@@ -130,7 +130,7 @@ processResources {
 
 shadowJar {
     configurations = [project.configurations.shadowCommon]
-    classifier 'dev-shadow'
+    classifier 'dev-shadow-' + minecraft_version
 }
 
 remapJar {
@@ -140,7 +140,7 @@ remapJar {
 }
 
 jar {
-    classifier 'dev'
+    classifier 'dev' + minecraft_version
 }
 
 //sourcesJar {
