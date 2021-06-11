@@ -67,6 +67,16 @@ architectury {
 loom {
     silentMojangMappingsLicense()
     useFabricMixin = true
+
+    runs {
+        client {
+            vmArgs.add("-XX:+IgnoreUnrecognizedVMOptions")
+        }
+
+        server {
+            vmArgs.add("-XX:+IgnoreUnrecognizedVMOptions")
+        }
+    }
 }
 
 configurations {
