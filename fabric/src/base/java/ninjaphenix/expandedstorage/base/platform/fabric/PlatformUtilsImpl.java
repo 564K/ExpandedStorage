@@ -5,8 +5,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.core.BlockPos;
 import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -21,10 +21,10 @@ import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.ClientContainerMenuFactory;
 import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
 
-import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
