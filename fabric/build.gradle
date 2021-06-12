@@ -51,13 +51,13 @@ tasks.withType(JavaCompile).configureEach {
     }
 }
 
+// </editor-fold>
+
 tasks.withType(JavaExec).configureEach {
     javaLauncher.set(javaToolchains.launcherFor {
         it.languageVersion = JavaLanguageVersion.of(MINECRAFT_JAVA_VERSION.asInt())
     })
 }
-
-// </editor-fold>
 
 sourceSets {
     main {
