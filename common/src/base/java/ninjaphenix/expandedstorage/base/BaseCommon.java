@@ -1,9 +1,9 @@
 package ninjaphenix.expandedstorage.base;
 
+import com.google.common.base.Suppliers;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -18,11 +18,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.message.FormattedMessage;
 
+import java.util.function.Supplier;
+
 public final class BaseCommon {
     public static final Logger LOGGER = LogManager.getLogger();
-    public static final LazyLoadedValue<MenuType<SingleContainerMenu>> SINGLE_MENU_TYPE = new LazyLoadedValue<>(() -> PlatformUtils.getInstance().createMenuType(Utils.SINGLE_CONTAINER_TYPE, new SingleContainerMenu.Factory()));
-    public static final LazyLoadedValue<MenuType<PagedContainerMenu>> PAGE_MENU_TYPE = new LazyLoadedValue<>(() -> PlatformUtils.getInstance().createMenuType(Utils.PAGE_CONTAINER_TYPE, new PagedContainerMenu.Factory()));
-    public static final LazyLoadedValue<MenuType<ScrollableContainerMenu>> SCROLL_MENU_TYPE = new LazyLoadedValue<>(() -> PlatformUtils.getInstance().createMenuType(Utils.SCROLL_CONTAINER_TYPE, new ScrollableContainerMenu.Factory()));
+    public static final Supplier<MenuType<SingleContainerMenu>> SINGLE_MENU_TYPE = Suppliers.memoize(() -> PlatformUtils.getInstance().createMenuType(Utils.SINGLE_CONTAINER_TYPE, new SingleContainerMenu.Factory()));
+    public static final Supplier<MenuType<PagedContainerMenu>> PAGE_MENU_TYPE = Suppliers.memoize(() -> PlatformUtils.getInstance().createMenuType(Utils.PAGE_CONTAINER_TYPE, new PagedContainerMenu.Factory()));
+    public static final Supplier<MenuType<ScrollableContainerMenu>> SCROLL_MENU_TYPE = Suppliers.memoize(() -> PlatformUtils.getInstance().createMenuType(Utils.SCROLL_CONTAINER_TYPE, new ScrollableContainerMenu.Factory()));
     private static final int ICON_SUITABILITY = 0;
 
     private BaseCommon() {
