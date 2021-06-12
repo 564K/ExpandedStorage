@@ -21,7 +21,6 @@
       "id": "expandedstorage:netherite_barrel",
       "required": true
     },
-
     {
       "id": "expandedstorage:wood_chest",
       "required": true
@@ -46,7 +45,6 @@
       "id": "expandedstorage:netherite_chest",
       "required": true
     },
-
     {
       "id": "expandedstorage:old_wood_chest",
       "required": true

@@ -23,7 +23,7 @@ public final class PickScreen extends Screen {
     private static final Map<ResourceLocation, Tuple<ResourceLocation, Component>> BUTTON_SETTINGS = new HashMap<>();
     private final Set<ResourceLocation> options;
     private final Screen parent;
-    private List<ScreenPickButton> optionWidgets;
+    private final List<ScreenPickButton> optionWidgets;
     private int topPadding;
 
     public PickScreen(Set<ResourceLocation> options, Screen parent) {
