@@ -3,11 +3,6 @@ package ninjaphenix.expandedstorage.base.internal_api.item;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 @Internal
 @Experimental
 public enum MutationMode {

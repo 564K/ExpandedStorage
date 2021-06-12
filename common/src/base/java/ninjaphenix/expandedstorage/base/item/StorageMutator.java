@@ -306,7 +306,7 @@ public class StorageMutator extends Item {
                 tag.remove("pos");
             }
             if (!level.isClientSide()) {
-                player.displayClientMessage(new TranslatableComponent("tooltip.expandedstorage.storage_mutator.description_"+nextMode, Utils.ALT_USE), true);
+                player.displayClientMessage(new TranslatableComponent("tooltip.expandedstorage.storage_mutator.description_" + nextMode, Utils.ALT_USE), true);
             }
             return InteractionResultHolder.success(stack);
         }

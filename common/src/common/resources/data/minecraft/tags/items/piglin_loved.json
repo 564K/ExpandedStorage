@@ -21,17 +21,14 @@
       "id": "expandedstorage:gold_to_netherite_conversion_kit",
       "required": true
     },
-
     {
       "id": "expandedstorage:gold_barrel",
       "required": true
     },
-
     {
       "id": "expandedstorage:gold_chest",
       "required": true
     },
-
     {
       "id": "expandedstorage:old_gold_chest",
       "required": true
