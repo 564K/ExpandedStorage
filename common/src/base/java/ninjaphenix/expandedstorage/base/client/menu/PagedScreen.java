@@ -112,26 +112,6 @@ public final class PagedScreen extends AbstractScreen<PagedContainerMenu, PagedS
     }
 
     @Override
-    protected void init() {
-        super.init();
-        if (screenMeta.pages != 1) {
-            int pageButtonsXOffset = offset;
-            page = 1;
-            this.setPageText();
-            leftPageButton = new PageButton(leftPos + imageWidth - 61 + pageButtonsXOffset, topPos + imageHeight - 96, 0,
-                    new TranslatableComponent("screen.expandedstorage.prev_page"), button -> this.setPage(page, page - 1),
-                    this::renderButtonTooltip);
-            leftPageButton.active = false;
-            this.addRenderableWidget(leftPageButton);
-            rightPageButton = new PageButton(leftPos + imageWidth - 19 + pageButtonsXOffset, topPos + imageHeight - 96, 1,
-                    new TranslatableComponent("screen.expandedstorage.next_page"), button -> this.setPage(page, page + 1),
-                    this::renderButtonTooltip);
-            this.addRenderableWidget(rightPageButton);
-            pageTextX = (1 + leftPageButton.x + rightPageButton.x - rightPageButton.getWidth() / 2F) / 2F;
-        }
-    }
-
-    @Override
     protected void renderBg(PoseStack stack, float delta, int mouseX, int mouseY) {
         super.renderBg(stack, delta, mouseX, mouseY);
         blankArea.forEach(image -> image.render(stack));
@@ -176,5 +156,44 @@ public final class PagedScreen extends AbstractScreen<PagedContainerMenu, PagedS
 
     public List<Rect2i> getExclusionZones() {
         return Collections.emptyList();
+    }
+
+    public int getTopPos() {
+        return topPos;
+    }
+
+    public int getLeftPos() {
+        return leftPos;
+    }
+
+    public int getImageWidth() {
+        return imageWidth;
+    }
+
+    public int getImageHeight() {
+        return imageHeight;
+    }
+
+    public void createPageButtons(boolean isDefault, int x, int y) {
+        page = 1;
+        this.setPageText();
+        // Honestly this is dumb.
+        if (isDefault && PlatformUtils.getInstance().isModLoaded("inventoryprofiles")) {
+            x -= 14;
+        }
+        leftPageButton = new PageButton(x, y, 0,
+                new TranslatableComponent("screen.expandedstorage.prev_page"), button -> this.setPage(page, page - 1),
+                this::renderButtonTooltip);
+        leftPageButton.active = false;
+        this.addRenderableWidget(leftPageButton);
+        rightPageButton = new PageButton(x + 42, y, 1,
+                new TranslatableComponent("screen.expandedstorage.next_page"), button -> this.setPage(page, page + 1),
+                this::renderButtonTooltip);
+        this.addRenderableWidget(rightPageButton);
+        pageTextX = (1 + leftPageButton.x + rightPageButton.x - rightPageButton.getWidth() / 2F) / 2F;
+    }
+
+    public boolean hasPages() {
+        return screenMeta.pages > 1;
     }
 }
