@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import ninjaphenix.expandedstorage.base.BaseImpl;
-import ninjaphenix.expandedstorage.base.config.button.ButtonOffset;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.ClientContainerMenuFactory;
 
 import java.util.Set;
@@ -29,10 +28,6 @@ public interface PlatformUtils {
     boolean isClient();
 
     <T extends AbstractContainerMenu> MenuType<T> createMenuType(ResourceLocation menuType, ClientContainerMenuFactory<T> factory);
-
-    ButtonOffset[] getButtonOffsetConfig();
-
-    Set<String> getLoadedModIds();
 
     <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> blockEntitySupplier, Set<Block> blocks, Type<?> type);
 

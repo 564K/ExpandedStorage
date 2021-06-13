@@ -22,7 +22,6 @@ import java.util.Set;
 
 public final class PagedScreen extends AbstractScreen<PagedContainerMenu, PagedScreenMeta> {
     private final Set<Image> blankArea = new LinkedHashSet<>();
-    private final int offset;
     private PageButton leftPageButton;
     private PageButton rightPageButton;
     private int page;
@@ -33,17 +32,6 @@ public final class PagedScreen extends AbstractScreen<PagedContainerMenu, PagedS
         super(screenHandler, playerInventory, title, (screenMeta) -> (screenMeta.width * 18 + 14) / 2 - 80);
         imageWidth = 14 + 18 * screenMeta.width;
         imageHeight = 17 + 97 + 18 * screenMeta.height;
-        int max = 0;
-        var config = PlatformUtils.getInstance().getButtonOffsetConfig();
-        var mods = PlatformUtils.getInstance().getLoadedModIds();
-        for (var buttonOffset : config) {
-            if (buttonOffset.areModsPresent(mods)) {
-                if (buttonOffset.offset() < max) {
-                    max = buttonOffset.offset();
-                }
-            }
-        }
-        this.offset = max;
     }
 
     private void setPage(int oldPage, int newPage) {

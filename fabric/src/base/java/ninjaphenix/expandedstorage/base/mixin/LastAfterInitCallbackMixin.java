@@ -17,7 +17,6 @@ public abstract class LastAfterInitCallbackMixin {
     private void afterInit(CallbackInfo ci) {
         //noinspection ConstantConditions
         if ((Object) this instanceof PagedScreen screen && screen.hasPages()) {
-            screen.children().forEach(System.out::println);
             int width = 54;
             int x = screen.getLeftPos() + screen.getImageWidth() - 61;
             int originalX = x;
