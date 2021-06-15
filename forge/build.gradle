@@ -1,7 +1,5 @@
 plugins {
-    id 'dev.architectury.loom' // Must be before architectury-plugin
-    id 'architectury-plugin'
-    id 'com.github.johnrengelman.shadow' version '7.0.0'
+    id 'dev.architectury.loom' version '0.8.0-SNAPSHOT'
     id 'java'
 }
 
@@ -60,7 +58,12 @@ sourceSets {
                     "src/barrel/java",
                     "src/base/java",
                     "src/chest/java",
-                    "src/old_chest/java"])
+                    "src/old_chest/java",
+                    rootDir.toPath().resolve("common/src/barrel/java"),
+                    rootDir.toPath().resolve("common/src/base/java"),
+                    rootDir.toPath().resolve("common/src/chest/java"),
+                    rootDir.toPath().resolve("common/src/old_chest/java")
+            ])
         }
         resources {
             srcDirs([
@@ -68,15 +71,16 @@ sourceSets {
                     "src/base/resources",
                     "src/chest/resources",
                     "src/old_chest/resources",
-                    "src/common/resources"
+                    "src/common/resources",
+                    rootDir.toPath().resolve("common/src/barrel/resources"),
+                    rootDir.toPath().resolve("common/src/base/resources"),
+                    rootDir.toPath().resolve("common/src/chest/resources"),
+                    rootDir.toPath().resolve("common/src/old_chest/resources"),
+                    rootDir.toPath().resolve("common/src/common/resources"),
+                    rootDir.toPath().resolve("common/src/chest_compat/resources")
             ])
         }
     }
-}
-
-architectury {
-    forge()
-    injectInjectables = false
 }
 
 loom {
@@ -94,10 +98,6 @@ loom {
                     '--add-opens=java.base/java.util.jar=ALL-UNNAMED'])
         }
     }
-}
-
-configurations {
-    shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
 }
 
 repositories {
@@ -122,16 +122,6 @@ dependencies {
     // For all modules
     modCompileOnly "mezz.jei:jei-${rootProject.minecraft_version}:${project.jei_version}:api"
     modRuntime "mezz.jei:jei-${rootProject.minecraft_version}:${project.jei_version}"
-
-    implementation(project(path: ':common')) {
-        transitive = false
-    }
-    developmentForge(project(path: ':common')) {
-        transitive = false
-    }
-    shadowCommon(project(path: ':common', configuration: 'transformProductionForge')) {
-        transitive = false
-    }
 }
 
 processResources {
@@ -143,16 +133,7 @@ processResources {
     }
 }
 
-shadowJar {
-    exclude 'fabric.mod.json'
-
-    configurations = [project.configurations.shadowCommon]
-    classifier 'dev-shadow-' + minecraft_version
-}
-
 remapJar {
-    input.set shadowJar.archiveFile
-    dependsOn shadowJar
     archiveVersion = mod_version + '+' + minecraft_version // Feels hacky but works.
 }
 
