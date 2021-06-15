@@ -52,7 +52,7 @@ public final class Main {
         if (PlatformUtils.getInstance().isClient()) {
             this.registerConfigGuiHandler();
             MinecraftForge.EVENT_BUS.addListener(EventPriority.LOW, (GuiScreenEvent.InitGuiEvent.Post event) -> {
-                if (event.getGui() instanceof PagedScreen screen) {
+                if (event.getGui() instanceof PagedScreen screen && screen.hasPages()) {
                     int width = 54;
                     int x = screen.getLeftPos() + screen.getImageWidth() - 61;
                     int originalX = x;
