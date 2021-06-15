@@ -29,7 +29,7 @@ import ninjaphenix.expandedstorage.base.internal_api.block.misc.AbstractStorageB
 import ninjaphenix.expandedstorage.base.internal_api.block.misc.CursedChestType;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.CompoundWorldlyContainer;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.ContainerMenuFactory;
-import ninjaphenix.expandedstorage.base.platform.NetworkWrapper;
+import ninjaphenix.expandedstorage.base.wrappers.NetworkWrapper;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;

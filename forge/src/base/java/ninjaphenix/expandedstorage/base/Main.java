@@ -24,7 +24,7 @@ import ninjaphenix.expandedstorage.base.client.menu.ScrollableScreen;
 import ninjaphenix.expandedstorage.base.client.menu.SingleScreen;
 import ninjaphenix.expandedstorage.base.internal_api.BaseApi;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
-import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
+import ninjaphenix.expandedstorage.base.wrappers.PlatformUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -34,7 +34,7 @@ import java.util.Set;
 @Mod("expandedstorage")
 public final class Main {
     public Main() {
-        BaseCommon.initialize("forge");
+        BaseCommon.initialize();
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addGenericListener(Item.class, (RegistryEvent.Register<Item> event) -> {
             IForgeRegistry<Item> registry = event.getRegistry();
@@ -52,7 +52,7 @@ public final class Main {
         if (PlatformUtils.getInstance().isClient()) {
             this.registerConfigGuiHandler();
             MinecraftForge.EVENT_BUS.addListener(EventPriority.LOW, (GuiScreenEvent.InitGuiEvent.Post event) -> {
-                if (event.getGui() instanceof PagedScreen screen) {
+                if (event.getGui() instanceof PagedScreen screen && screen.hasPages()) {
                     int width = 54;
                     int x = screen.getLeftPos() + screen.getImageWidth() - 61;
                     int originalX = x;

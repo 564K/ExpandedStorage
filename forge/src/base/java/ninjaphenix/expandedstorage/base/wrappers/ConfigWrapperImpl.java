@@ -1,4 +1,4 @@
-package ninjaphenix.expandedstorage.base.platform.forge;
+package ninjaphenix.expandedstorage.base.wrappers;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
 import com.electronwill.nightconfig.toml.TomlFormat;
@@ -12,7 +12,7 @@ import ninjaphenix.expandedstorage.base.config.ConfigV0;
 import ninjaphenix.expandedstorage.base.config.Converter;
 import ninjaphenix.expandedstorage.base.config.LegacyFactory;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
-import ninjaphenix.expandedstorage.base.platform.ConfigWrapper;
+import ninjaphenix.expandedstorage.base.wrappers.ConfigWrapper;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -24,16 +24,16 @@ import java.util.Date;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public final class ConfigWrapperImpl implements ConfigWrapper {
+final class ConfigWrapperImpl implements ConfigWrapper {
+    private static ConfigWrapperImpl INSTANCE;
     private Path configPath;
     private ConfigV0 config;
 
-    private ConfigWrapperImpl() {
-
-    }
-
     public static ConfigWrapper getInstance() {
-        return new ConfigWrapperImpl();
+        if (INSTANCE == null) {
+            INSTANCE = new ConfigWrapperImpl();
+        }
+        return INSTANCE;
     }
 
     public void initialise() {

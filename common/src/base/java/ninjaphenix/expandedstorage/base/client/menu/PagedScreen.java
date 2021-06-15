@@ -12,7 +12,7 @@ import ninjaphenix.expandedstorage.base.client.menu.widget.PageButton;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.inventory.PagedContainerMenu;
 import ninjaphenix.expandedstorage.base.inventory.screen.PagedScreenMeta;
-import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
+import ninjaphenix.expandedstorage.base.wrappers.PlatformUtils;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Collections;

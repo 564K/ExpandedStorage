@@ -1,4 +1,4 @@
-package ninjaphenix.expandedstorage.base.platform.forge;
+package ninjaphenix.expandedstorage.base.wrappers;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -31,9 +31,9 @@ import ninjaphenix.expandedstorage.base.network.ContainerTypeUpdateMessage;
 import ninjaphenix.expandedstorage.base.network.OpenSelectScreenMessage;
 import ninjaphenix.expandedstorage.base.network.RemovePlayerPreferenceCallbackMessage;
 import ninjaphenix.expandedstorage.base.network.RequestOpenSelectScreenMessage;
-import ninjaphenix.expandedstorage.base.platform.ConfigWrapper;
-import ninjaphenix.expandedstorage.base.platform.NetworkWrapper;
-import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
+import ninjaphenix.expandedstorage.base.wrappers.ConfigWrapper;
+import ninjaphenix.expandedstorage.base.wrappers.NetworkWrapper;
+import ninjaphenix.expandedstorage.base.wrappers.PlatformUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -42,7 +42,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public final class NetworkWrapperImpl implements NetworkWrapper {
+final class NetworkWrapperImpl implements NetworkWrapper {
+    private static NetworkWrapperImpl INSTANCE;
     private final Map<UUID, Consumer<ResourceLocation>> preferenceCallbacks = new HashMap<>();
     private final Map<UUID, ResourceLocation> playerPreferences = new HashMap<>();
     private final Map<ResourceLocation, ServerContainerMenuFactory> containerFactories = Utils.unmodifiableMap(map -> {
@@ -52,12 +53,11 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
     });
     private SimpleChannel channel;
 
-    private NetworkWrapperImpl() {
-
-    }
-
     public static NetworkWrapperImpl getInstance() {
-        return new NetworkWrapperImpl();
+        if (INSTANCE == null) {
+            INSTANCE = new NetworkWrapperImpl();
+        }
+        return INSTANCE;
     }
 
     @SubscribeEvent

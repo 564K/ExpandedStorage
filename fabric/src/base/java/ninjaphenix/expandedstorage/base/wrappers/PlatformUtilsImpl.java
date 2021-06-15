@@ -1,4 +1,4 @@
-package ninjaphenix.expandedstorage.base.platform.fabric;
+package ninjaphenix.expandedstorage.base.wrappers;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
@@ -11,21 +11,18 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.ClientContainerMenuFactory;
-import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
 
 import java.util.function.Supplier;
 
-@SuppressWarnings("unused")
-public final class PlatformUtilsImpl implements PlatformUtils {
+final class PlatformUtilsImpl implements PlatformUtils {
+    private static PlatformUtilsImpl INSTANCE;
     private Boolean isClient;
 
-    private PlatformUtilsImpl() {
-
-    }
-
-    @SuppressWarnings("unused")
     public static PlatformUtilsImpl getInstance() {
-        return new PlatformUtilsImpl();
+        if (INSTANCE == null) {
+            INSTANCE = new PlatformUtilsImpl();
+        }
+        return INSTANCE;
     }
 
     @Override

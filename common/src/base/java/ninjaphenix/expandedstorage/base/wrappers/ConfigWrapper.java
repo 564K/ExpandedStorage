@@ -1,11 +1,10 @@
-package ninjaphenix.expandedstorage.base.platform;
+package ninjaphenix.expandedstorage.base.wrappers;
 
 import net.minecraft.resources.ResourceLocation;
-import ninjaphenix.expandedstorage.base.BaseImpl;
 
 public interface ConfigWrapper {
     static ConfigWrapper getInstance() {
-        return BaseImpl.getInstance().getConfigWrapper();
+        return ConfigWrapperImpl.getInstance();
     }
 
     void initialise();

@@ -31,7 +31,7 @@ import ninjaphenix.expandedstorage.base.BaseCommon;
 import ninjaphenix.expandedstorage.base.internal_api.BaseApi;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.internal_api.tier.OpenableTier;
-import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
+import ninjaphenix.expandedstorage.base.wrappers.PlatformUtils;
 import ninjaphenix.expandedstorage.chest.block.ChestBlock;
 import ninjaphenix.expandedstorage.chest.block.misc.ChestBlockEntity;
 import ninjaphenix.expandedstorage.chest.client.ChestBlockEntityRenderer;

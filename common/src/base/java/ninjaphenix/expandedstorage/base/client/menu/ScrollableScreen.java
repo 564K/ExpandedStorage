@@ -10,7 +10,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import ninjaphenix.expandedstorage.base.inventory.ScrollableContainerMenu;
 import ninjaphenix.expandedstorage.base.inventory.screen.ScrollableScreenMeta;
-import ninjaphenix.expandedstorage.base.platform.ConfigWrapper;
+import ninjaphenix.expandedstorage.base.wrappers.ConfigWrapper;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Collections;

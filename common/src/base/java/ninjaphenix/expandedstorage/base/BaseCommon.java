@@ -13,7 +13,9 @@ import ninjaphenix.expandedstorage.base.inventory.PagedContainerMenu;
 import ninjaphenix.expandedstorage.base.inventory.ScrollableContainerMenu;
 import ninjaphenix.expandedstorage.base.inventory.SingleContainerMenu;
 import ninjaphenix.expandedstorage.base.item.StorageMutator;
-import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
+import ninjaphenix.expandedstorage.base.wrappers.ConfigWrapper;
+import ninjaphenix.expandedstorage.base.wrappers.NetworkWrapper;
+import ninjaphenix.expandedstorage.base.wrappers.PlatformUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.message.FormattedMessage;
@@ -31,8 +33,9 @@ public final class BaseCommon {
 
     }
 
-    static void initialize(String platform) {
-        BaseImpl.getInstance().setWrapperInstances(platform);
+    static void initialize() {
+        ConfigWrapper.getInstance().initialise();
+        NetworkWrapper.getInstance().initialise();
         BaseApi.getInstance().offerTabIcon(Items.CHEST, ICON_SUITABILITY);
         BaseApi.getInstance().defineTierUpgradePath(Utils.translation("itemGroup.expandedstorage"), Utils.WOOD_TIER, Utils.IRON_TIER,
                 Utils.GOLD_TIER, Utils.DIAMOND_TIER, Utils.OBSIDIAN_TIER, Utils.NETHERITE_TIER);

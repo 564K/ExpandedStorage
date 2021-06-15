@@ -1,4 +1,4 @@
-package ninjaphenix.expandedstorage.base.platform.fabric;
+package ninjaphenix.expandedstorage.base.wrappers;
 
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -28,9 +28,6 @@ import ninjaphenix.expandedstorage.base.internal_api.inventory.ServerContainerMe
 import ninjaphenix.expandedstorage.base.inventory.PagedContainerMenu;
 import ninjaphenix.expandedstorage.base.inventory.ScrollableContainerMenu;
 import ninjaphenix.expandedstorage.base.inventory.SingleContainerMenu;
-import ninjaphenix.expandedstorage.base.platform.ConfigWrapper;
-import ninjaphenix.expandedstorage.base.platform.NetworkWrapper;
-import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -39,7 +36,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public final class NetworkWrapperImpl implements NetworkWrapper {
+final class NetworkWrapperImpl implements NetworkWrapper {
+    private static NetworkWrapperImpl INSTANCE;
     private static final ResourceLocation OPEN_SELECT_SCREEN = Utils.resloc("open_select_screen");
     private static final ResourceLocation UPDATE_PLAYER_PREFERENCE = Utils.resloc("update_player_preference");
     private static final ResourceLocation REMOVE_TYPE_SELECT_CALLBACK = Utils.resloc("remove_type_select_callback");
@@ -52,12 +50,11 @@ public final class NetworkWrapperImpl implements NetworkWrapper {
         map.put(Utils.PAGE_CONTAINER_TYPE, PagedContainerMenu::new);
     });
 
-    private NetworkWrapperImpl() {
-
-    }
-
     public static NetworkWrapper getInstance() {
-        return new NetworkWrapperImpl();
+        if (INSTANCE == null) {
+            INSTANCE = new NetworkWrapperImpl();
+        }
+        return INSTANCE;
     }
 
     public void initialise() {
