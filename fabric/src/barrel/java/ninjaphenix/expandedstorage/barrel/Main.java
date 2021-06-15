@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import ninjaphenix.expandedstorage.barrel.block.BarrelBlock;
 import ninjaphenix.expandedstorage.barrel.block.misc.BarrelBlockEntity;
 import ninjaphenix.expandedstorage.base.internal_api.ModuleInitializer;
-import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
+import ninjaphenix.expandedstorage.base.wrappers.PlatformUtils;
 
 import java.util.Set;
 

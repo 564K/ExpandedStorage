@@ -24,7 +24,7 @@ import ninjaphenix.expandedstorage.base.client.menu.ScrollableScreen;
 import ninjaphenix.expandedstorage.base.client.menu.SingleScreen;
 import ninjaphenix.expandedstorage.base.internal_api.BaseApi;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
-import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
+import ninjaphenix.expandedstorage.base.wrappers.PlatformUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -34,7 +34,7 @@ import java.util.Set;
 @Mod("expandedstorage")
 public final class Main {
     public Main() {
-        BaseCommon.initialize("forge");
+        BaseCommon.initialize();
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addGenericListener(Item.class, (RegistryEvent.Register<Item> event) -> {
             IForgeRegistry<Item> registry = event.getRegistry();

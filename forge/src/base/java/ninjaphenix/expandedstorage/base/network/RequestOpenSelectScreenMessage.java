@@ -10,7 +10,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.AbstractContainerMenu_;
-import ninjaphenix.expandedstorage.base.platform.NetworkWrapper;
+import ninjaphenix.expandedstorage.base.wrappers.NetworkWrapper;
 
 import java.util.function.Supplier;
 

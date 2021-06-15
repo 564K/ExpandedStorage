@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import ninjaphenix.expandedstorage.base.internal_api.ModuleInitializer;
-import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
+import ninjaphenix.expandedstorage.base.wrappers.PlatformUtils;
 import ninjaphenix.expandedstorage.chest.block.ChestBlock;
 import ninjaphenix.expandedstorage.chest.block.misc.ChestBlockEntity;
 import ninjaphenix.expandedstorage.chest.client.ChestBlockEntityRenderer;

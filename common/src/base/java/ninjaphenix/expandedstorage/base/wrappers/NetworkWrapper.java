@@ -1,4 +1,4 @@
-package ninjaphenix.expandedstorage.base.platform;
+package ninjaphenix.expandedstorage.base.wrappers;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -7,14 +7,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import ninjaphenix.expandedstorage.base.BaseImpl;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.ContainerMenuFactory;
 
 import java.util.function.Consumer;
 
 public interface NetworkWrapper {
     static NetworkWrapper getInstance() {
-        return BaseImpl.getInstance().getNetworkWrapper();
+        return NetworkWrapperImpl.getInstance();
     }
 
     void initialise();

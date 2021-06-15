@@ -1,4 +1,4 @@
-package ninjaphenix.expandedstorage.base.platform.forge;
+package ninjaphenix.expandedstorage.base.wrappers;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -11,21 +11,19 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.network.IContainerFactory;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.ClientContainerMenuFactory;
-import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
+import ninjaphenix.expandedstorage.base.wrappers.PlatformUtils;
 
 import java.util.function.Supplier;
 
-@SuppressWarnings("unused")
-public final class PlatformUtilsImpl implements PlatformUtils {
+final class PlatformUtilsImpl implements PlatformUtils {
+    private static PlatformUtilsImpl INSTANCE;
     private static Boolean isClient;
 
-    private PlatformUtilsImpl() {
-
-    }
-
-    @SuppressWarnings("unused")
     public static PlatformUtilsImpl getInstance() {
-        return new PlatformUtilsImpl();
+        if (INSTANCE == null) {
+            INSTANCE = new PlatformUtilsImpl();
+        }
+        return INSTANCE;
     }
 
     @Override

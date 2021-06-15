@@ -30,7 +30,7 @@ import ninjaphenix.expandedstorage.base.internal_api.block.AbstractOpenableStora
 import ninjaphenix.expandedstorage.base.internal_api.block.misc.AbstractOpenableStorageBlockEntity;
 import ninjaphenix.expandedstorage.base.internal_api.block.misc.CursedChestType;
 import ninjaphenix.expandedstorage.base.internal_api.tier.OpenableTier;
-import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
+import ninjaphenix.expandedstorage.base.wrappers.PlatformUtils;
 import ninjaphenix.expandedstorage.chest.block.ChestBlock;
 import ninjaphenix.expandedstorage.chest.block.misc.ChestBlockEntity;
 import ninjaphenix.expandedstorage.chest.internal_api.ChestApi;

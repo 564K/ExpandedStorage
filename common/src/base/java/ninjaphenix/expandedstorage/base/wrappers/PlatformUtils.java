@@ -1,4 +1,4 @@
-package ninjaphenix.expandedstorage.base.platform;
+package ninjaphenix.expandedstorage.base.wrappers;
 
 import com.mojang.datafixers.types.Type;
 import net.minecraft.core.BlockPos;
@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import ninjaphenix.expandedstorage.base.BaseImpl;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.ClientContainerMenuFactory;
 
 import java.util.Set;
@@ -20,7 +19,7 @@ import java.util.function.Supplier;
 
 public interface PlatformUtils {
     static PlatformUtils getInstance() {
-        return BaseImpl.getInstance().getPlatformWrapper();
+        return PlatformUtilsImpl.getInstance();
     }
 
     CreativeModeTab createTab(Supplier<ItemStack> icon);

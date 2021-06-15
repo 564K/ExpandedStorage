@@ -1,4 +1,4 @@
-package ninjaphenix.expandedstorage.base.platform.fabric;
+package ninjaphenix.expandedstorage.base.wrappers;
 
 import com.mojang.datafixers.types.Type;
 import net.fabricmc.api.EnvType;
@@ -17,23 +17,20 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import ninjaphenix.expandedstorage.base.internal_api.Utils;
 import ninjaphenix.expandedstorage.base.internal_api.inventory.ClientContainerMenuFactory;
-import ninjaphenix.expandedstorage.base.platform.PlatformUtils;
 
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-@SuppressWarnings("unused")
-public final class PlatformUtilsImpl implements PlatformUtils {
+final class PlatformUtilsImpl implements PlatformUtils {
+    private static PlatformUtilsImpl INSTANCE;
     private Boolean isClient;
 
-    private PlatformUtilsImpl() {
-
-    }
-
-    @SuppressWarnings("unused")
     public static PlatformUtilsImpl getInstance() {
-        return new PlatformUtilsImpl();
+        if (INSTANCE == null) {
+            INSTANCE = new PlatformUtilsImpl();
+        }
+        return INSTANCE;
     }
 
     @Override
