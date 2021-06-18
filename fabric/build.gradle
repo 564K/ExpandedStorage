@@ -1,21 +1,5 @@
-tasks.withType(JavaExec).configureEach {
-    javaLauncher.set(javaToolchains.launcherFor {
-        it.languageVersion = JavaLanguageVersion.of(rootProject.minecraft_java_version)
-    })
-}
-
 loom {
     accessWidener = file('src/base/resources/expandedstorage_base.accessWidener')
-
-    runs {
-        client {
-            vmArgs('-XX:+IgnoreUnrecognizedVMOptions')
-        }
-
-        server {
-            vmArgs('-XX:+IgnoreUnrecognizedVMOptions')
-        }
-    }
 }
 
 repositories {

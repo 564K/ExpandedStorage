@@ -50,6 +50,16 @@ subprojects {
     loom {
         silentMojangMappingsLicense()
         useFabricMixin = true
+
+        runs {
+            client {
+                vmArgs('-XX:+IgnoreUnrecognizedVMOptions')
+            }
+
+            server {
+                vmArgs('-XX:+IgnoreUnrecognizedVMOptions')
+            }
+        }
     }
 
     repositories {
@@ -69,6 +79,12 @@ subprojects {
         if (System.getenv('I_HATE_INTELLIJ_AND_GRADLE')) {
             options.release.set(rootProject.minecraft_java_version as int)
         }
+    }
+
+    tasks.withType(JavaExec).configureEach {
+        javaLauncher.set(javaToolchains.launcherFor {
+            it.languageVersion = JavaLanguageVersion.of(rootProject.minecraft_java_version)
+        })
     }
 
     remapJar {
