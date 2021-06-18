@@ -1,3 +1,17 @@
+loom {
+    runs {
+        client {
+            vmArgs('--add-exports=java.base/sun.security.util=ALL-UNNAMED',
+                    '--add-opens=java.base/java.util.jar=ALL-UNNAMED')
+        }
+
+        server {
+            vmArgs('--add-exports=java.base/sun.security.util=ALL-UNNAMED',
+                    '--add-opens=java.base/java.util.jar=ALL-UNNAMED')
+        }
+    }
+}
+
 repositories {
     maven {
         // JEI maven
