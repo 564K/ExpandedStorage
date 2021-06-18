@@ -23,10 +23,10 @@ subprojects {
                         "src/base/java",
                         "src/chest/java",
                         "src/old_chest/java",
-                        rootDir.toPath().resolve("common/src/barrel/java"),
-                        rootDir.toPath().resolve("common/src/base/java"),
-                        rootDir.toPath().resolve("common/src/chest/java"),
-                        rootDir.toPath().resolve("common/src/old_chest/java")
+                        rootDir.toPath().resolve("common/${project.name}Src/barrel/java"),
+                        rootDir.toPath().resolve("common/${project.name}Src/base/java"),
+                        rootDir.toPath().resolve("common/${project.name}Src/chest/java"),
+                        rootDir.toPath().resolve("common/${project.name}Src/old_chest/java")
                 ])
             }
             resources {
@@ -36,12 +36,12 @@ subprojects {
                         "src/chest/resources",
                         "src/old_chest/resources",
                         "src/common/resources",
-                        rootDir.toPath().resolve("common/src/barrel/resources"),
-                        rootDir.toPath().resolve("common/src/base/resources"),
-                        rootDir.toPath().resolve("common/src/chest/resources"),
-                        rootDir.toPath().resolve("common/src/old_chest/resources"),
-                        rootDir.toPath().resolve("common/src/common/resources"),
-                        rootDir.toPath().resolve("common/src/chest_compat/resources")
+                        rootDir.toPath().resolve("common/${project.name}Src/barrel/resources"),
+                        rootDir.toPath().resolve("common/${project.name}Src/base/resources"),
+                        rootDir.toPath().resolve("common/${project.name}Src/chest/resources"),
+                        rootDir.toPath().resolve("common/${project.name}Src/old_chest/resources"),
+                        rootDir.toPath().resolve("common/${project.name}Src/common/resources"),
+                        rootDir.toPath().resolve("common/${project.name}Src/chest_compat/resources")
                 ])
             }
         }
