@@ -56,23 +56,29 @@ public final class ChestCommon {
         }
     }
 
-    static Set<ResourceLocation> registerChestTextures(Set<ChestBlock> blocks) {
+    static Set<ResourceLocation> getChestTextures(Set<ChestBlock> blocks) {
         Set<ResourceLocation> textures = new HashSet<>();
-        blocks.forEach(block -> {
-            ResourceLocation id = block.blockId();
-            ChestApi.INSTANCE.declareChestTextures(
-                    id, Utils.resloc("entity/" + id.getPath() + "/single"),
-                    Utils.resloc("entity/" + id.getPath() + "/left"),
-                    Utils.resloc("entity/" + id.getPath() + "/right"),
-                    Utils.resloc("entity/" + id.getPath() + "/top"),
-                    Utils.resloc("entity/" + id.getPath() + "/bottom"),
-                    Utils.resloc("entity/" + id.getPath() + "/front"),
-                    Utils.resloc("entity/" + id.getPath() + "/back"));
-            Arrays.stream(CursedChestType.values())
-                  .map(type -> ChestApi.INSTANCE.getChestTexture(id, type))
-                  .forEach(textures::add);
-        });
+        for (ChestBlock block : blocks) {
+            ResourceLocation blockId = block.blockId();
+            for (CursedChestType type : CursedChestType.values()) {
+                textures.add(ChestApi.INSTANCE.getChestTexture(blockId, type));
+            }
+        }
         return textures;
+    }
+
+    static void registerChestTextures(Set<ChestBlock> blocks) {
+        for (ChestBlock block : blocks) {
+            ResourceLocation blockId = block.blockId();
+            ChestApi.INSTANCE.declareChestTextures(
+                    blockId, Utils.resloc("entity/" + blockId.getPath() + "/single"),
+                    Utils.resloc("entity/" + blockId.getPath() + "/left"),
+                    Utils.resloc("entity/" + blockId.getPath() + "/right"),
+                    Utils.resloc("entity/" + blockId.getPath() + "/top"),
+                    Utils.resloc("entity/" + blockId.getPath() + "/bottom"),
+                    Utils.resloc("entity/" + blockId.getPath() + "/front"),
+                    Utils.resloc("entity/" + blockId.getPath() + "/back"));
+        }
     }
 
     private static boolean tryUpgradeBlock(UseOnContext context, ResourceLocation from, ResourceLocation to) {

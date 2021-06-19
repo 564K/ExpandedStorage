@@ -136,8 +136,8 @@ public final class Main implements ModuleInitializer {
 
     private static class Client {
         private static void initialise(Set<ChestBlock> blocks, Set<BlockItem> items) {
-            Set<ResourceLocation> textures = ChestCommon.registerChestTextures(blocks);
-            ClientSpriteRegistryCallback.event(Sheets.CHEST_SHEET).register((atlasTexture, registry) -> textures.forEach(registry::register));
+            ChestCommon.registerChestTextures(blocks);
+            ClientSpriteRegistryCallback.event(Sheets.CHEST_SHEET).register((atlasTexture, registry) -> ChestCommon.getChestTextures(blocks).forEach(registry::register));
 
             BlockEntityRendererRegistry.INSTANCE.register(ChestCommon.getBlockEntityType(), ChestBlockEntityRenderer::new);
 
