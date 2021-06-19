@@ -126,11 +126,12 @@ public class Main {
             modEventBus.addListener((FMLClientSetupEvent event) -> {
                 ClientRegistry.bindTileEntityRenderer(ChestCommon.getBlockEntityType(), ChestBlockEntityRenderer::new);
             });
+            ChestCommon.registerChestTextures(blocks);
             modEventBus.addListener((TextureStitchEvent.Pre event) -> {
                 if (!event.getMap().location().equals(Sheets.CHEST_SHEET)) {
                     return;
                 }
-                ChestCommon.registerChestTextures(blocks).forEach(event::addSprite);
+                ChestCommon.getChestTextures(blocks).forEach(event::addSprite);
             });
         }
     }
