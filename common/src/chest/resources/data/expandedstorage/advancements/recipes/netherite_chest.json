@@ -23,9 +23,9 @@
       }
     }
   },
-  "has_previous_chest": [
+  "requirements": [
     [
-      "has_chest",
+      "has_previous_chest",
       "has_the_recipe"
     ]
   ]
