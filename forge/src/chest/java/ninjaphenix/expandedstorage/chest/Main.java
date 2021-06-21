@@ -18,6 +18,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -147,6 +149,16 @@ public class Main {
 
     private BlockItem chestItem(OpenableTier tier, ChestBlock block) {
         Item.Properties itemProperties = tier.itemProperties().apply(new Item.Properties().tab(Utils.TAB));
+        if (PlatformUtils.getInstance().isClient()) {
+            this.addItemBlockEntityRenderer(itemProperties, block);
+        }
+        BlockItem item = new BlockItem(block, itemProperties);
+        item.setRegistryName(block.blockId());
+        return item;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void addItemBlockEntityRenderer(Item.Properties itemProperties, ChestBlock block) {
         itemProperties.setISTER(() -> () -> new BlockEntityWithoutLevelRenderer() {
             ChestBlockEntity renderEntity = null;
 
@@ -162,8 +174,5 @@ public class Main {
                 return renderEntity;
             }
         });
-        BlockItem item = new BlockItem(block, itemProperties);
-        item.setRegistryName(block.blockId());
-        return item;
     }
 }
